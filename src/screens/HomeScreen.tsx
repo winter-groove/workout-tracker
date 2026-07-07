@@ -6,6 +6,7 @@ import { listRoutines } from '../db/routines';
 import {
   startSession, getActiveSession, discardSession, listFinishedSessions,
 } from '../db/sessions';
+import { getTodayRoutineId, setTodayRoutineId, clearTodayRoutine } from '../db/todayRoutine';
 
 const DAY_LABELS = ['월', '화', '수', '목', '금', '토', '일'];
 
@@ -43,7 +44,7 @@ function fmtDate(ts: number): string {
 
 export default function HomeScreen() {
   const navigate = useNavigate();
-  const [showRoutinePick, setShowRoutinePick] = useState(false);
+  const [todayId, setTodayId] = useState<string | undefined>(() => getTodayRoutineId());
   const routines = useLiveQuery(() => listRoutines(), []) ?? [];
   const sessions = useLiveQuery(() => listFinishedSessions(), []) ?? [];
   const active = useLiveQuery(() => getActiveSession(), []);
@@ -54,6 +55,17 @@ export default function HomeScreen() {
     sessions.map((s) => new Date(s.startedAt)).map((d) => `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`),
   );
   const next = pickNextRoutine(routines, sessions);
+  const todayRoutine = routines.find((r) => r.id === todayId);
+
+  function chooseToday(r: Routine) {
+    setTodayRoutineId(r.id);
+    setTodayId(r.id);
+  }
+
+  function resetToday() {
+    clearTodayRoutine();
+    setTodayId(undefined);
+  }
 
   async function begin(routine?: Routine) {
     await startSession(routine);
@@ -81,32 +93,41 @@ export default function HomeScreen() {
         </div>
       ) : (
         <div className="startcard">
-          {next ? (
-            <>
-              <div className="t">{next.name}</div>
-              <div className="s">{next.items.length}개 운동</div>
-              <button className="go" onClick={() => begin(next)}>운동 시작하기</button>
-            </>
-          ) : (
+          {routines.length === 0 ? (
             <>
               <div className="t">첫 운동을 시작해보세요</div>
               <div className="s">관리 탭에서 루틴을 만들면 여기에 떠요</div>
               <button className="go" onClick={() => begin()}>빈 세션으로 시작</button>
             </>
-          )}
-          <button
-            className="go" style={{ marginTop: 8, background: 'rgba(255,255,255,0.2)', color: '#fff' }}
-            onClick={() => setShowRoutinePick(!showRoutinePick)}
-          >
-            다른 루틴 선택
-          </button>
-          {showRoutinePick && (
-            <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 6 }}>
-              {routines.map((r) => (
-                <button key={r.id} className="go" onClick={() => begin(r)}>{r.name}</button>
-              ))}
-              <button className="go" onClick={() => begin()}>빈 세션</button>
-            </div>
+          ) : todayRoutine ? (
+            <>
+              <div className="t">오늘은 {todayRoutine.name}</div>
+              <div className="s">{todayRoutine.items.length}개 운동</div>
+              <button className="go" onClick={() => begin(todayRoutine)}>운동 시작하기</button>
+              <button
+                className="go" style={{ marginTop: 8, background: 'rgba(255,255,255,0.2)', color: '#fff' }}
+                onClick={resetToday}
+              >
+                다시 선택
+              </button>
+            </>
+          ) : (
+            <>
+              <div className="t">오늘 뭐 할까요?</div>
+              <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                {routines.map((r) => (
+                  <button key={r.id} className="go" onClick={() => chooseToday(r)}>
+                    {r.name}{next?.id === r.id ? ' ⭐ 추천' : ''}
+                  </button>
+                ))}
+                <button
+                  className="go" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff' }}
+                  onClick={() => begin()}
+                >
+                  빈 세션으로 시작
+                </button>
+              </div>
+            </>
           )}
         </div>
       )}
