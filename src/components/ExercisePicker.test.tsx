@@ -61,6 +61,7 @@ test('dominantBodyPart: 최빈 부위, 동률·빈 배열은 undefined', () => {
   expect(dominantBodyPart([fakeEx('가슴'), fakeEx('가슴'), fakeEx('어깨')])).toBe('가슴');
   expect(dominantBodyPart([fakeEx('가슴'), fakeEx('어깨')])).toBeUndefined();
   expect(dominantBodyPart([])).toBeUndefined();
+  expect(dominantBodyPart([fakeEx('어깨'), fakeEx('하체'), fakeEx('가슴'), fakeEx('가슴')])).toBe('가슴');
 });
 
 test('initialFilter가 주어지면 해당 부위 칩이 켜진 채 열리고 전환도 가능하다', async () => {

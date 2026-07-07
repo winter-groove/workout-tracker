@@ -135,7 +135,7 @@ test('운동 완료 시 요약 화면으로 이동한다', async () => {
   expect(await screen.findByText('요약화면')).toBeInTheDocument();
 });
 
-test('무게가 0이면 입력란이 빈칭으로 보이고 입력하면 그대로 반영된다', async () => {
+test('무게가 0이면 입력란이 빈칸으로 보이고 입력하면 그대로 반영된다', async () => {
   await startSession(routine); // 지난 기록 없음 → 무게 0으로 프리필
   renderScreen();
   await screen.findByText('벤치프레스');
