@@ -39,7 +39,9 @@ test('운동별로 보기에 회차별 증감과 PR이 표시된다', async () =
   await addFinishedSession(1000, 'lib-bench-press', [{ weight: 50, reps: 10 }]);
   await addFinishedSession(2000, 'lib-bench-press', [{ weight: 60, reps: 10 }]);
   renderScreen();
-  fireEvent.change(await screen.findByLabelText('운동별로 보기'), {
+  const select = await screen.findByLabelText('운동별로 보기');
+  await screen.findByRole('option', { name: '벤치프레스' });
+  fireEvent.change(select, {
     target: { value: 'lib-bench-press' },
   });
   expect(await screen.findByText('볼륨 600kg 🔺 +20% · 최고 60kg 🔺 +10kg 🏆')).toBeInTheDocument();
