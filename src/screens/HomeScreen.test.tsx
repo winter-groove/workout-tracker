@@ -58,3 +58,14 @@ test('루틴이 하나도 없으면 기존 첫 운동 안내가 보인다', asyn
   renderScreen();
   expect(await screen.findByText('첫 운동을 시작해보세요')).toBeInTheDocument();
 });
+
+test('앱이 켜진 채 날짜가 바뀌면 다시 선택 화면으로 돌아온다', async () => {
+  await saveRoutine({ id: 'r1', name: '가슴운동', items: [] });
+  setTodayRoutineId('r1');
+  renderScreen();
+  expect(await screen.findByText('오늘은 가슴운동')).toBeInTheDocument();
+  // 자정이 지나 저장된 날짜가 어제가 된 상황을 시뮬레이션
+  localStorage.setItem('wt-today-routine', JSON.stringify({ id: 'r1', date: '2020-01-01' }));
+  fireEvent(document, new Event('visibilitychange'));
+  expect(await screen.findByText('오늘 뭐 할까요?')).toBeInTheDocument();
+});

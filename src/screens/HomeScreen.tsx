@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
 import type { Routine, Session } from '../types';
@@ -44,7 +44,8 @@ function fmtDate(ts: number): string {
 
 export default function HomeScreen() {
   const navigate = useNavigate();
-  const [todayId, setTodayId] = useState<string | undefined>(() => getTodayRoutineId());
+  const [, setTick] = useState(0);
+  const bump = () => setTick((n) => n + 1);
   const routines = useLiveQuery(() => listRoutines(), []) ?? [];
   const sessions = useLiveQuery(() => listFinishedSessions(), []) ?? [];
   const active = useLiveQuery(() => getActiveSession(), []);
@@ -55,17 +56,24 @@ export default function HomeScreen() {
     sessions.map((s) => new Date(s.startedAt)).map((d) => `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`),
   );
   const next = pickNextRoutine(routines, sessions);
+  const todayId = getTodayRoutineId();
   const todayRoutine = routines.find((r) => r.id === todayId);
 
   function chooseToday(r: Routine) {
     setTodayRoutineId(r.id);
-    setTodayId(r.id);
+    bump();
   }
 
   function resetToday() {
     clearTodayRoutine();
-    setTodayId(undefined);
+    bump();
   }
+
+  useEffect(() => {
+    const onVisible = () => bump();
+    document.addEventListener('visibilitychange', onVisible);
+    return () => document.removeEventListener('visibilitychange', onVisible);
+  }, []);
 
   async function begin(routine?: Routine) {
     await startSession(routine);
