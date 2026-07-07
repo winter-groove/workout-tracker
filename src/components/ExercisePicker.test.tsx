@@ -1,7 +1,8 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { db } from '../db/db';
 import { seedLibrary } from '../db/exercises';
-import ExercisePicker from './ExercisePicker';
+import ExercisePicker, { dominantBodyPart } from './ExercisePicker';
+import type { Exercise } from '../types';
 
 beforeEach(async () => {
   await db.delete();
@@ -47,4 +48,26 @@ test('직접 등록 폼으로 커스텀 운동을 만들면 바로 선택된다'
       expect.objectContaining({ name: '스미스머신 벤치', isCustom: true }),
     );
   });
+});
+
+function fakeEx(bodyPart: Exercise['bodyPart']): Exercise {
+  return {
+    id: crypto.randomUUID(), name: 'x', bodyPart,
+    equipment: '바벨', isCustom: false, isHidden: false,
+  };
+}
+
+test('dominantBodyPart: 최빈 부위, 동률·빈 배열은 undefined', () => {
+  expect(dominantBodyPart([fakeEx('가슴'), fakeEx('가슴'), fakeEx('어깨')])).toBe('가슴');
+  expect(dominantBodyPart([fakeEx('가슴'), fakeEx('어깨')])).toBeUndefined();
+  expect(dominantBodyPart([])).toBeUndefined();
+});
+
+test('initialFilter가 주어지면 해당 부위 칩이 켜진 채 열리고 전환도 가능하다', async () => {
+  render(<ExercisePicker onSelect={() => {}} onClose={() => {}} initialFilter="하체" />);
+  expect(await screen.findByText('레그 프레스')).toBeInTheDocument();
+  expect(screen.queryByText('벤치프레스')).not.toBeInTheDocument();
+  expect(screen.getByRole('button', { name: '하체' })).toHaveClass('on');
+  fireEvent.click(screen.getByRole('button', { name: '전체' }));
+  expect(await screen.findByText('벤치프레스')).toBeInTheDocument();
 });

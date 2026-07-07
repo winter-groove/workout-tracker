@@ -6,16 +6,35 @@ import { listExercises } from '../db/exercises';
 import ExerciseImage from './ExerciseImage';
 import AddExerciseForm from './AddExerciseForm';
 
-type Filter = BodyPart | '전체';
+export type Filter = BodyPart | '전체';
+
+export function dominantBodyPart(exercises: Exercise[]): BodyPart | undefined {
+  const counts = new Map<BodyPart, number>();
+  for (const e of exercises) counts.set(e.bodyPart, (counts.get(e.bodyPart) ?? 0) + 1);
+  let best: BodyPart | undefined;
+  let bestCount = 0;
+  let tie = false;
+  for (const [part, count] of counts) {
+    if (count > bestCount) {
+      best = part;
+      bestCount = count;
+      tie = false;
+    } else if (count === bestCount) {
+      tie = true;
+    }
+  }
+  return tie ? undefined : best;
+}
 
 export default function ExercisePicker({
-  onSelect, onClose,
+  onSelect, onClose, initialFilter,
 }: {
   onSelect: (ex: Exercise) => void;
   onClose: () => void;
+  initialFilter?: Filter;
 }) {
   const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState<Filter>('전체');
+  const [filter, setFilter] = useState<Filter>(initialFilter ?? '전체');
   const [adding, setAdding] = useState(false);
   const exercises = useLiveQuery(() => listExercises(), []) ?? [];
 
