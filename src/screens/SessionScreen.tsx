@@ -10,7 +10,7 @@ import { listExercises } from '../db/exercises';
 import { getRestSeconds } from '../db/settings';
 import { volume, maxWeight, fmtVolumeDelta, getPRWeight } from '../db/progress';
 import ExerciseImage from '../components/ExerciseImage';
-import ExercisePicker from '../components/ExercisePicker';
+import ExercisePicker, { dominantBodyPart } from '../components/ExercisePicker';
 import RestTimer from '../components/RestTimer';
 
 function fmtElapsed(startedAt: number, now: number): string {
@@ -168,13 +168,16 @@ export default function SessionScreen() {
                   <input
                     type="number" inputMode="decimal" step="0.5" min="0"
                     aria-label={`세트 ${i + 1} 무게`}
-                    value={s.weight}
+                    value={s.weight === 0 ? '' : s.weight}
+                    placeholder="0"
+                    onFocus={(e) => e.currentTarget.select()}
                     onChange={(e) => patchSet(i, { weight: Number(e.target.value) || 0 })}
                   />
                   <input
                     type="number" inputMode="numeric" min="0"
                     aria-label={`세트 ${i + 1} 횟수`}
                     value={s.reps}
+                    onFocus={(e) => e.currentTarget.select()}
                     onChange={(e) => patchSet(i, { reps: Number(e.target.value) || 0 })}
                   />
                   <button
@@ -202,7 +205,19 @@ export default function SessionScreen() {
           )}
         </div>
       </div>
-      {showPicker && <ExercisePicker onSelect={addExercise} onClose={() => setShowPicker(false)} />}
+      {showPicker && (
+        <ExercisePicker
+          initialFilter={
+            dominantBodyPart(
+              session.entries
+                .map((e) => exMap.get(e.exerciseId))
+                .filter((e): e is Exercise => e !== undefined),
+            ) ?? '전체'
+          }
+          onSelect={addExercise}
+          onClose={() => setShowPicker(false)}
+        />
+      )}
     </>
   );
 }
