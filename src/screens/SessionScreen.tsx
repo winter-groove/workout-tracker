@@ -8,6 +8,7 @@ import {
 } from '../db/sessions';
 import { listExercises } from '../db/exercises';
 import { getRestSeconds } from '../db/settings';
+import { volume, maxWeight, fmtVolumeDelta, getPRWeight } from '../db/progress';
 import ExerciseImage from '../components/ExerciseImage';
 import ExercisePicker from '../components/ExercisePicker';
 import RestTimer from '../components/RestTimer';
@@ -31,6 +32,7 @@ export default function SessionScreen() {
   const [restTotal, setRestTotal] = useState(90);
   const [showPicker, setShowPicker] = useState(false);
   const [lastRecord, setLastRecord] = useState<SetRecord[] | undefined>();
+  const [prWeight, setPrWeight] = useState(0);
   const [now, setNow] = useState(Date.now());
   const exercises = useLiveQuery(() => listExercises({ includeHidden: true }), []) ?? [];
   const exMap = new Map(exercises.map((e) => [e.id, e]));
@@ -50,9 +52,15 @@ export default function SessionScreen() {
   const entry = session?.entries[idx];
 
   useEffect(() => {
-    if (!entry) { setLastRecord(undefined); return; }
-    getLastRecord(entry.exerciseId).then(setLastRecord);
-  }, [entry?.exerciseId]);
+    if (!entry || !session) { setLastRecord(undefined); return; }
+    void Promise.all([
+      getLastRecord(entry.exerciseId),
+      getPRWeight(entry.exerciseId, session.startedAt),
+    ]).then(([last, pr]) => {
+      setLastRecord(last);
+      setPrWeight(pr);
+    });
+  }, [entry?.exerciseId, session?.startedAt]);
 
   if (!session) return null;
 
@@ -112,11 +120,18 @@ export default function SessionScreen() {
     }
     if (!window.confirm('운동을 완료할까요?')) return;
     await finishSession(session);
-    navigate('/', { replace: true });
+    navigate(`/summary/${session.id}`, { replace: true });
   }
 
   const ex = entry ? exMap.get(entry.exerciseId) : undefined;
   const total = session.entries.length;
+  const doneSets = entry?.sets.filter((s) => s.completedAt !== undefined) ?? [];
+  const curVol = volume(doneSets);
+  const lastVol = lastRecord ? volume(lastRecord) : 0;
+  const isPRNow = lastRecord !== undefined && maxWeight(doneSets) > prWeight;
+  const overloadText = curVol > lastVol
+    ? `볼륨 ${curVol}kg ${fmtVolumeDelta(curVol, lastVol)}`
+    : `볼륨 ${curVol} / 지난 ${lastVol}kg`;
 
   return (
     <>
@@ -139,6 +154,11 @@ export default function SessionScreen() {
                 <span className="tag">{ex.equipment}</span>
               </div>
               {lastRecord && <div className="last-pill" style={{ marginTop: 10 }}>🔥 지난번 {fmtLast(lastRecord)}</div>}
+              {lastRecord && (
+                <div className="last-pill" style={{ marginTop: 6, marginLeft: 6 }}>
+                  📈 {overloadText}{isPRNow ? ' · 🏆 PR!' : ''}
+                </div>
+              )}
             </div>
             <div className="card">
               <div className="set-head"><span>세트</span><span>무게(kg)</span><span>횟수</span><span>완료</span></div>
