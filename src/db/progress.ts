@@ -1,4 +1,5 @@
 import type { SetRecord } from '../types';
+import { db } from './db';
 
 export interface EntryProgress {
   volume: number;
@@ -50,4 +51,43 @@ export function annotateHistory(records: SetRecord[][]): EntryProgress[] {
     prevMaxWeight: i < n - 1 ? maxes[i + 1] : undefined,
     isPR: i < n - 1 && maxes[i] > prBefore[i],
   }));
+}
+
+export async function getPreviousRecord(
+  exerciseId: string, before: number,
+): Promise<SetRecord[] | undefined> {
+  const sessions = await db.sessions.orderBy('startedAt').reverse().toArray();
+  for (const s of sessions) {
+    if (s.finishedAt === undefined || s.startedAt >= before) continue;
+    const entry = s.entries.find((e) => e.exerciseId === exerciseId);
+    const done = entry?.sets.filter((x) => x.completedAt !== undefined);
+    if (done && done.length > 0) return done;
+  }
+  return undefined;
+}
+
+export async function getPRWeight(exerciseId: string, before: number): Promise<number> {
+  const sessions = await db.sessions.orderBy('startedAt').toArray();
+  let pr = 0;
+  for (const s of sessions) {
+    if (s.finishedAt === undefined || s.startedAt >= before) continue;
+    const entry = s.entries.find((e) => e.exerciseId === exerciseId);
+    if (!entry) continue;
+    pr = Math.max(pr, maxWeight(entry.sets.filter((x) => x.completedAt !== undefined)));
+  }
+  return pr;
+}
+
+export async function summarizeEntry(
+  exerciseId: string, sets: SetRecord[], sessionStartedAt: number,
+): Promise<EntryProgress> {
+  const prev = await getPreviousRecord(exerciseId, sessionStartedAt);
+  const pr = await getPRWeight(exerciseId, sessionStartedAt);
+  const cur = { volume: volume(sets), maxWeight: maxWeight(sets) };
+  return {
+    ...cur,
+    prevVolume: prev ? volume(prev) : undefined,
+    prevMaxWeight: prev ? maxWeight(prev) : undefined,
+    isPR: prev !== undefined && cur.maxWeight > pr,
+  };
 }
