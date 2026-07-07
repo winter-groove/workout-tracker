@@ -20,6 +20,10 @@ beforeEach(async () => {
   await seedLibrary();
 });
 
+afterEach(() => {
+  vi.restoreAllMocks();
+});
+
 function renderScreen() {
   return render(
     <MemoryRouter initialEntries={['/session']}>
@@ -129,5 +133,4 @@ test('운동 완료 시 요약 화면으로 이동한다', async () => {
   fireEvent.click(screen.getByLabelText('세트 1 완료'));
   fireEvent.click(screen.getByRole('button', { name: '운동 완료' }));
   expect(await screen.findByText('요약화면')).toBeInTheDocument();
-  vi.restoreAllMocks();
 });

@@ -44,7 +44,7 @@ export default function SummaryScreen() {
     <div className="screen">
       <h1 className="screen-title">운동 완료 🎉</h1>
       <div className="card">
-        <div className="card-h">{session.routineName ?? '오늘 운동'} · {fmtDate(session.startedAt)}</div>
+        <div className="card-h">{session.routineName ?? '오늘 운동'} · {fmtDate(session.startedAt)} · {session.entries.length}개 운동</div>
         {session.entries.map((e, i) => {
           const p = progress[i];
           if (!p) return null;

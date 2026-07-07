@@ -42,9 +42,7 @@ export default function HistoryScreen() {
         <select
           id="ex-filter"
           value={filterId}
-          onChange={(e) => {
-            setFilterId(e.target.value);
-          }}
+          onChange={(e) => setFilterId(e.target.value)}
         >
           <option value="">전체 세션</option>
           {exercises.map((ex) => <option key={ex.id} value={ex.id}>{ex.name}</option>)}
