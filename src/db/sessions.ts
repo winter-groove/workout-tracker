@@ -21,6 +21,8 @@ export async function buildEntry(exerciseId: string, defaultSets = 3): Promise<S
 }
 
 export async function startSession(routine?: Routine): Promise<Session> {
+  const existing = await getActiveSession();
+  if (existing) return existing;
   const entries: SessionEntry[] = [];
   if (routine) {
     for (const item of routine.items) {

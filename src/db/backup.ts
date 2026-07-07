@@ -1,4 +1,5 @@
 import { db } from './db';
+import { seedLibrary } from './exercises';
 import type { Exercise, Routine, Session } from '../types';
 
 export interface BackupFile {
@@ -32,12 +33,14 @@ function isBackupFile(raw: unknown): raw is BackupFile {
 
 export async function importData(raw: unknown): Promise<void> {
   if (!isBackupFile(raw)) throw new Error('백업 파일 형식이 올바르지 않습니다.');
-  await db.transaction('rw', db.exercises, db.routines, db.sessions, async () => {
+  await db.transaction('rw', db.exercises, db.routines, db.sessions, db.meta, async () => {
     await db.exercises.clear();
     await db.routines.clear();
     await db.sessions.clear();
     await db.exercises.bulkAdd(raw.exercises);
     await db.routines.bulkAdd(raw.routines);
     await db.sessions.bulkAdd(raw.sessions);
+    await db.meta.delete('libraryVersion');
   });
+  await seedLibrary();
 }

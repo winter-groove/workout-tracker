@@ -51,7 +51,7 @@ export default function HomeScreen() {
   const today = new Date();
   const week = weekDates(today);
   const workoutDays = new Set(
-    sessions.map((s) => new Date(s.startedAt)).map((d) => `${d.getMonth()}-${d.getDate()}`),
+    sessions.map((s) => new Date(s.startedAt)).map((d) => `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`),
   );
   const next = pickNextRoutine(routines, sessions);
 
@@ -115,7 +115,7 @@ export default function HomeScreen() {
         <div className="card-h">이번 주</div>
         <div className="weekrow">
           {week.map((d, i) => {
-            const done = workoutDays.has(`${d.getMonth()}-${d.getDate()}`);
+            const done = workoutDays.has(`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`);
             const isToday = sameDay(d, today);
             return (
               <div key={i} className="day">
