@@ -3,12 +3,17 @@ import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { db } from '../db/db';
 import { seedLibrary } from '../db/exercises';
 import type { Session } from '../types';
+import * as progress from '../db/progress';
 import HistoryScreen from './HistoryScreen';
 
 beforeEach(async () => {
   await db.delete();
   await db.open();
   await seedLibrary();
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
 });
 
 async function addFinishedSession(
@@ -68,4 +73,37 @@ test('펼친 세션을 바꾸면 이전 세션의 요약이 새 세션에 표시
   fireEvent.click(cards[1]); // 벤치 세션으로 전환
   expect(await screen.findByText('볼륨 500kg · 최고 50kg · 첫 기록')).toBeInTheDocument();
   expect(screen.queryByText('볼륨 400kg · 최고 80kg · 첫 기록')).not.toBeInTheDocument();
+});
+
+test('race: 늦게 resolve된 이전 세션 요약이 나중 선택을 덮어쓰지 않는다', async () => {
+  const a = await addFinishedSession(1000, 'lib-bench-press', [{ weight: 50, reps: 10 }]); // vol 500 첫 기록
+  const b = await addFinishedSession(2000, 'lib-squat', [{ weight: 80, reps: 5 }]); // vol 400 첫 기록
+
+  // 세션 id별 resolver를 잡아둬서 순서를 뒤집어 resolve할 수 있게 함
+  const resolvers = new Map<string, (v: progress.EntryProgress[]) => void>();
+  const real = progress.summarizeSession;
+  vi.spyOn(progress, 'summarizeSession').mockImplementation((s: Session) => {
+    return new Promise((resolve) => {
+      resolvers.set(s.id, resolve);
+    });
+  });
+
+  renderScreen();
+  const cards = await screen.findAllByText(/1개 운동/);
+  // cards[0] = 최신 = 스쿼트(b), cards[1] = 벤치(a)
+  fireEvent.click(cards[0]); // b 펼침 → b의 promise 대기
+  fireEvent.click(cards[1]); // a로 전환 → a의 promise 대기, b는 아직 미해결
+
+  // 이미 닫힌 b의 promise를 뒤늦게 resolve — a가 열린 상태를 덮어쓰면 안 됨
+  const realA = await real(a);
+  const realB = await real(b);
+  resolvers.get(b.id)!(realB);
+  await Promise.resolve();
+  await Promise.resolve();
+
+  expect(screen.queryByText('볼륨 400kg · 최고 80kg · 첫 기록')).not.toBeInTheDocument();
+
+  // 현재 선택인 a의 promise를 resolve → 올바른 요약 표시
+  resolvers.get(a.id)!(realA);
+  expect(await screen.findByText('볼륨 500kg · 최고 50kg · 첫 기록')).toBeInTheDocument();
 });
