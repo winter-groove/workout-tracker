@@ -117,3 +117,22 @@ test('summarizeSession은 세션의 모든 entry를 순서대로 판정한다', 
   expect(list[0]).toMatchObject({ volume: 600, prevVolume: 500, isPR: true });
   expect(list[1]).toMatchObject({ volume: 450, prevVolume: undefined, isPR: false });
 });
+
+test('같은 정오의 이중 백데이트: 요약이 서로를 비교하되 자기 자신은 제외한다', async () => {
+  const noon = 1_720_000_000_000;
+  const a: Session = {
+    id: 'noon-a', startedAt: noon, finishedAt: noon + 1,
+    entries: [{ exerciseId: 'ex1', sets: [{ weight: 50, reps: 10, completedAt: noon }] }],
+  };
+  const b: Session = {
+    id: 'noon-b', startedAt: noon, finishedAt: noon + 2,
+    entries: [{ exerciseId: 'ex1', sets: [{ weight: 60, reps: 10, completedAt: noon }] }],
+  };
+  await db.sessions.add(a);
+  await db.sessions.add(b);
+  const [pb] = await summarizeSession(b);
+  expect(pb.prevVolume).toBe(500);  // a를 지난 기록으로 봄 (첫 기록 아님)
+  expect(pb.isPR).toBe(true);        // 60 > 50
+  const [pa] = await summarizeSession(a);
+  expect(pa.isPR).toBe(false);       // PR 뱃지 중복 없음 (b의 60이 PR)
+});

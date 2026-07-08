@@ -54,11 +54,11 @@ export function annotateHistory(records: SetRecord[][]): EntryProgress[] {
 }
 
 export async function getPreviousRecord(
-  exerciseId: string, before: number,
+  exerciseId: string, before: number, excludeId?: string,
 ): Promise<SetRecord[] | undefined> {
   const sessions = await db.sessions.orderBy('startedAt').reverse().toArray();
   for (const s of sessions) {
-    if (s.finishedAt === undefined || s.startedAt >= before) continue;
+    if (s.finishedAt === undefined || s.startedAt >= before || s.id === excludeId) continue;
     const entry = s.entries.find((e) => e.exerciseId === exerciseId);
     const done = entry?.sets.filter((x) => x.completedAt !== undefined);
     if (done && done.length > 0) return done;
@@ -66,11 +66,13 @@ export async function getPreviousRecord(
   return undefined;
 }
 
-export async function getPRWeight(exerciseId: string, before: number): Promise<number> {
+export async function getPRWeight(
+  exerciseId: string, before: number, excludeId?: string,
+): Promise<number> {
   const sessions = await db.sessions.orderBy('startedAt').toArray();
   let pr = 0;
   for (const s of sessions) {
-    if (s.finishedAt === undefined || s.startedAt >= before) continue;
+    if (s.finishedAt === undefined || s.startedAt >= before || s.id === excludeId) continue;
     const entry = s.entries.find((e) => e.exerciseId === exerciseId);
     if (!entry) continue;
     pr = Math.max(pr, maxWeight(entry.sets.filter((x) => x.completedAt !== undefined)));
@@ -79,10 +81,11 @@ export async function getPRWeight(exerciseId: string, before: number): Promise<n
 }
 
 export async function summarizeEntry(
-  exerciseId: string, sets: SetRecord[], sessionStartedAt: number,
+  exerciseId: string, sets: SetRecord[], sessionStartedAt: number, excludeId?: string,
 ): Promise<EntryProgress> {
-  const prev = await getPreviousRecord(exerciseId, sessionStartedAt);
-  const pr = await getPRWeight(exerciseId, sessionStartedAt);
+  // 같은 밀리초(예: 같은 날짜 이중 백데이트 정오)의 다른 세션은 포함하되 자기 자신은 id로 제외
+  const prev = await getPreviousRecord(exerciseId, sessionStartedAt + 1, excludeId);
+  const pr = await getPRWeight(exerciseId, sessionStartedAt + 1, excludeId);
   const cur = { volume: volume(sets), maxWeight: maxWeight(sets) };
   return {
     ...cur,
@@ -94,6 +97,6 @@ export async function summarizeEntry(
 
 export async function summarizeSession(session: Session): Promise<EntryProgress[]> {
   return Promise.all(
-    session.entries.map((e) => summarizeEntry(e.exerciseId, e.sets, session.startedAt)),
+    session.entries.map((e) => summarizeEntry(e.exerciseId, e.sets, session.startedAt, session.id)),
   );
 }
