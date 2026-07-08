@@ -54,9 +54,8 @@ export default function SessionScreen() {
 
   useEffect(() => {
     if (!entry || !session) { setLastRecord(undefined); return; }
-    const backdated = new Date(session.startedAt).toDateString() !== new Date().toDateString();
-    // 오늘 세션은 직전 세션과 같은 밀리초에 생성될 수 있어 +1ms 여유 (백데이트는 엄격히 그 시각 이전)
-    const before = backdated ? session.startedAt : session.startedAt + 1;
+    // 같은 밀리초에 생성된 직전 세션을 놓치지 않도록 +1ms 여유
+    const before = session.startedAt + 1;
     void Promise.all([
       getPreviousRecord(entry.exerciseId, before),
       getPRWeight(entry.exerciseId, before),
@@ -106,7 +105,7 @@ export default function SessionScreen() {
   async function addExercise(ex: Exercise) {
     if (!session) return;
     setShowPicker(false);
-    const newEntry = await buildEntry(ex.id, 3, session.startedAt);
+    const newEntry = await buildEntry(ex.id, 3, session.startedAt + 1);
     const next = { ...session, entries: [...session.entries, newEntry] };
     await update(next);
     setIdx(next.entries.length - 1);

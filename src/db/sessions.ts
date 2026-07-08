@@ -32,7 +32,8 @@ export async function startSession(routine?: Routine, startedAt?: number): Promi
   const entries: SessionEntry[] = [];
   if (routine) {
     for (const item of routine.items) {
-      entries.push(await buildEntry(item.exerciseId, item.defaultSets, start));
+      // 같은 밀리초에 끝난 직전 세션을 놓치지 않도록 +1ms 여유
+      entries.push(await buildEntry(item.exerciseId, item.defaultSets, start + 1));
     }
   }
   const session: Session = {
