@@ -1,15 +1,21 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
+import { vi } from 'vitest';
 import type { Session } from '../types';
 import { db } from '../db/db';
 import { saveRoutine } from '../db/routines';
 import { setTodayRoutineId } from '../db/todayRoutine';
+import { startSession, getActiveSession } from '../db/sessions';
 import HomeScreen from './HomeScreen';
 
 beforeEach(async () => {
   await db.delete();
   await db.open();
   localStorage.clear();
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
 });
 
 function renderScreen() {
@@ -119,4 +125,47 @@ test('최근 운동을 누르면 요약 화면으로 이동한다', async () => 
   renderWithSummary();
   fireEvent.click(await screen.findByText('등 날 · 1개 운동'));
   expect(await screen.findByText('요약화면')).toBeInTheDocument();
+});
+
+test('과거 날짜에 기록 추가 버튼으로 백데이트 세션을 시작한다', async () => {
+  await saveRoutine({ id: 'r1', name: '가슴운동', items: [] });
+  render(
+    <MemoryRouter>
+      <Routes>
+        <Route path="/" element={<HomeScreen />} />
+        <Route path="/session" element={<div>세션화면</div>} />
+        <Route path="/summary/:sessionId" element={<div>요약화면</div>} />
+      </Routes>
+    </MemoryRouter>,
+  );
+  const now = new Date();
+  fireEvent.click(await screen.findByRole('button', { name: `${now.getMonth() + 1}월 1일` }));
+  fireEvent.click(await screen.findByRole('button', { name: '＋ 이 날짜에 기록 추가' }));
+  fireEvent.click(screen.getByRole('button', { name: '가슴운동' }));
+  expect(await screen.findByText('세션화면')).toBeInTheDocument();
+  const s = await getActiveSession();
+  const d = new Date(s!.startedAt);
+  expect(d.getDate()).toBe(1);
+  expect(d.getHours()).toBe(12);
+});
+
+test('미래 날짜에는 기록 추가 버튼이 없다', async () => {
+  renderWithSummary();
+  const now = new Date();
+  fireEvent.click(await screen.findByLabelText('다음 달'));
+  const next = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+  fireEvent.click(await screen.findByRole('button', { name: `${next.getMonth() + 1}월 15일` }));
+  expect(await screen.findByText('이 날은 운동 기록이 없어요')).toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: '＋ 이 날짜에 기록 추가' })).not.toBeInTheDocument();
+});
+
+test('진행 중 세션이 있으면 기록 추가가 차단된다', async () => {
+  vi.spyOn(window, 'alert').mockImplementation(() => {});
+  await startSession();
+  renderWithSummary();
+  const now = new Date();
+  fireEvent.click(await screen.findByRole('button', { name: `${now.getMonth() + 1}월 1일` }));
+  fireEvent.click(await screen.findByRole('button', { name: '＋ 이 날짜에 기록 추가' }));
+  fireEvent.click(screen.getByRole('button', { name: '빈 세션' }));
+  expect(window.alert).toHaveBeenCalledWith('진행 중인 운동을 먼저 완료하세요');
 });

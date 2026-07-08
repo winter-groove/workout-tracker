@@ -33,6 +33,7 @@ export default function HomeScreen() {
   const navigate = useNavigate();
   const [, setTick] = useState(0);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [showBackdatePick, setShowBackdatePick] = useState(false);
   const bump = () => setTick((n) => n + 1);
   const routines = useLiveQuery(() => listRoutines(), []) ?? [];
   const sessions = useLiveQuery(() => listFinishedSessions(), []) ?? [];
@@ -67,6 +68,21 @@ export default function HomeScreen() {
 
   async function begin(routine?: Routine) {
     await startSession(routine);
+    navigate('/session');
+  }
+
+  const canBackdate = selectedDate !== null && selectedDate.getTime() <= today.getTime();
+
+  async function beginBackdate(routine?: Routine) {
+    if (!selectedDate) return;
+    if (active) {
+      window.alert('진행 중인 운동을 먼저 완료하세요');
+      return;
+    }
+    const noon = new Date(
+      selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), 12,
+    ).getTime();
+    await startSession(routine, noon);
     navigate('/session');
   }
 
@@ -132,7 +148,11 @@ export default function HomeScreen() {
 
       <div className="card">
         <div className="card-h">달력</div>
-        <MonthCalendar workoutDays={workoutDays} selectedDate={selectedDate} onSelectDate={setSelectedDate} />
+        <MonthCalendar
+          workoutDays={workoutDays}
+          selectedDate={selectedDate}
+          onSelectDate={(d) => { setSelectedDate(d); setShowBackdatePick(false); }}
+        />
         {selectedDate && (
           <div style={{ marginTop: 12 }}>
             {daySessions.map((s) => (
@@ -145,6 +165,26 @@ export default function HomeScreen() {
               </div>
             ))}
             {daySessions.length === 0 && <div className="empty">이 날은 운동 기록이 없어요</div>}
+            {canBackdate && (
+              <>
+                <button
+                  className="btn btn-ghost" style={{ marginTop: 10 }}
+                  onClick={() => setShowBackdatePick(!showBackdatePick)}
+                >
+                  ＋ 이 날짜에 기록 추가
+                </button>
+                {showBackdatePick && (
+                  <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    {routines.map((r) => (
+                      <button key={r.id} className="btn btn-ghost" onClick={() => void beginBackdate(r)}>
+                        {r.name}
+                      </button>
+                    ))}
+                    <button className="btn btn-ghost" onClick={() => void beginBackdate()}>빈 세션</button>
+                  </div>
+                )}
+              </>
+            )}
           </div>
         )}
       </div>
