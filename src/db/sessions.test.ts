@@ -133,3 +133,22 @@ test('deleteSession과 getExerciseHistory', async () => {
   await deleteSession(a.id);
   expect(await getExerciseHistory('ex1')).toHaveLength(0);
 });
+
+test('startSession은 startedAt 지정 시 그 시각으로 생성하고 프리필도 그 이전 기준이다', async () => {
+  await addFinishedSession(1000, 'ex1', [{ weight: 50, reps: 10 }]);
+  await addFinishedSession(5000, 'ex1', [{ weight: 70, reps: 10 }]); // 백데이트 시점 이후의 기록
+  const routine: Routine = {
+    id: 'r9', name: '가슴 날',
+    items: [{ exerciseId: 'ex1', defaultSets: 3 }],
+  };
+  const s = await startSession(routine, 3000);
+  expect(s.startedAt).toBe(3000);
+  expect(s.entries[0].sets[0].weight).toBe(50); // 3000 이전의 50, 이후의 70 아님
+});
+
+test('buildEntry는 before 지정 시 그 이전 기록으로 프리필한다', async () => {
+  await addFinishedSession(1000, 'ex1', [{ weight: 50, reps: 10 }]);
+  await addFinishedSession(2000, 'ex1', [{ weight: 60, reps: 10 }]);
+  const entry = await buildEntry('ex1', 3, 2000);
+  expect(entry.sets[0].weight).toBe(50);
+});

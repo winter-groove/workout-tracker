@@ -1,4 +1,5 @@
 import { db } from './db';
+import { getPreviousRecord } from './progress';
 import type { Routine, Session, SessionEntry, SetRecord } from '../types';
 
 export async function getLastRecord(exerciseId: string): Promise<SetRecord[] | undefined> {
@@ -12,26 +13,31 @@ export async function getLastRecord(exerciseId: string): Promise<SetRecord[] | u
   return undefined;
 }
 
-export async function buildEntry(exerciseId: string, defaultSets = 3): Promise<SessionEntry> {
-  const last = await getLastRecord(exerciseId);
+export async function buildEntry(
+  exerciseId: string, defaultSets = 3, before?: number,
+): Promise<SessionEntry> {
+  const last = before === undefined
+    ? await getLastRecord(exerciseId)
+    : await getPreviousRecord(exerciseId, before);
   const sets: SetRecord[] = last
     ? last.map((s) => ({ weight: s.weight, reps: s.reps }))
     : Array.from({ length: defaultSets }, () => ({ weight: 0, reps: 10 }));
   return { exerciseId, sets };
 }
 
-export async function startSession(routine?: Routine): Promise<Session> {
+export async function startSession(routine?: Routine, startedAt?: number): Promise<Session> {
   const existing = await getActiveSession();
   if (existing) return existing;
+  const start = startedAt ?? Date.now();
   const entries: SessionEntry[] = [];
   if (routine) {
     for (const item of routine.items) {
-      entries.push(await buildEntry(item.exerciseId, item.defaultSets));
+      entries.push(await buildEntry(item.exerciseId, item.defaultSets, start));
     }
   }
   const session: Session = {
     id: crypto.randomUUID(),
-    startedAt: Date.now(),
+    startedAt: start,
     routineName: routine?.name,
     entries,
   };
