@@ -20,7 +20,7 @@ function fmtSets(sets: SetRecord[]): string {
 export default function HistoryScreen() {
   const [filterId, setFilterId] = useState('');
   const [openId, setOpenId] = useState('');
-  const [openSummary, setOpenSummary] = useState<EntryProgress[] | null>(null);
+  const [openSummary, setOpenSummary] = useState<{ id: string; list: EntryProgress[] } | null>(null);
   const sessions = useLiveQuery(() => listFinishedSessions(), []) ?? [];
   const exercises = useLiveQuery(() => listExercises({ includeHidden: true }), []) ?? [];
   const history = useLiveQuery(
@@ -31,9 +31,16 @@ export default function HistoryScreen() {
   const annotations = history ? annotateHistory(history.map((h) => h.sets)) : [];
 
   useEffect(() => {
-    setOpenSummary(null);
     const s = sessions.find((x) => x.id === openId);
-    if (s) void summarizeSession(s).then(setOpenSummary);
+    if (!s) {
+      setOpenSummary(null);
+      return;
+    }
+    let cancelled = false;
+    void summarizeSession(s).then((list) => {
+      if (!cancelled) setOpenSummary({ id: s.id, list });
+    });
+    return () => { cancelled = true; };
   }, [openId, sessions]);
 
   async function remove(id: string) {
@@ -89,7 +96,7 @@ export default function HistoryScreen() {
               {openId === s.id && (
                 <div style={{ marginTop: 8 }}>
                   {s.entries.map((e, i) => {
-                    const p = openSummary?.[i];
+                    const p = openSummary?.id === s.id ? openSummary.list[i] : undefined;
                     const line = p
                       ? (p.prevVolume === undefined
                           ? `볼륨 ${p.volume}kg · 최고 ${p.maxWeight}kg · 첫 기록`

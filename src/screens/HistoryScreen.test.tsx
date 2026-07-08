@@ -57,3 +57,15 @@ test('세션을 펼치면 운동별 요약이 함께 표시되고 요약 보기 
   expect(screen.getByText(/벤치프레스.*🏆/)).toBeInTheDocument();
   expect(screen.queryByRole('button', { name: '요약 보기' })).not.toBeInTheDocument();
 });
+
+test('펼친 세션을 바꾸면 이전 세션의 요약이 새 세션에 표시되지 않는다', async () => {
+  await addFinishedSession(1000, 'lib-bench-press', [{ weight: 50, reps: 10 }]); // vol 500
+  await addFinishedSession(2000, 'lib-squat', [{ weight: 80, reps: 5 }]);        // vol 400, 첫 기록
+  renderScreen();
+  const cards = await screen.findAllByText(/1개 운동/);
+  fireEvent.click(cards[0]); // 최신: 스쿼트 세션
+  expect(await screen.findByText('볼륨 400kg · 최고 80kg · 첫 기록')).toBeInTheDocument();
+  fireEvent.click(cards[1]); // 벤치 세션으로 전환
+  expect(await screen.findByText('볼륨 500kg · 최고 50kg · 첫 기록')).toBeInTheDocument();
+  expect(screen.queryByText('볼륨 400kg · 최고 80kg · 첫 기록')).not.toBeInTheDocument();
+});
