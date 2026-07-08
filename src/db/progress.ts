@@ -1,4 +1,4 @@
-import type { SetRecord } from '../types';
+import type { SetRecord, Session } from '../types';
 import { db } from './db';
 
 export interface EntryProgress {
@@ -90,4 +90,10 @@ export async function summarizeEntry(
     prevMaxWeight: prev ? maxWeight(prev) : undefined,
     isPR: prev !== undefined && cur.maxWeight > pr,
   };
+}
+
+export async function summarizeSession(session: Session): Promise<EntryProgress[]> {
+  return Promise.all(
+    session.entries.map((e) => summarizeEntry(e.exerciseId, e.sets, session.startedAt)),
+  );
 }

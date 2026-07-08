@@ -1,7 +1,7 @@
 import { db } from './db';
 import {
   volume, maxWeight, fmtVolumeDelta, fmtWeightDelta, annotateHistory,
-  getPreviousRecord, getPRWeight, summarizeEntry,
+  getPreviousRecord, getPRWeight, summarizeEntry, summarizeSession,
 } from './progress';
 import type { Session } from '../types';
 
@@ -101,4 +101,19 @@ test('summarizeEntry: 동일 무게는 PR이 아니다', async () => {
   await addFinishedSession(1000, 'ex1', [{ weight: 60, reps: 10 }]);
   const p = await summarizeEntry('ex1', [{ weight: 60, reps: 10, completedAt: 1 }], 2000);
   expect(p.isPR).toBe(false);
+});
+
+test('summarizeSession은 세션의 모든 entry를 순서대로 판정한다', async () => {
+  await addFinishedSession(1000, 'ex1', [{ weight: 50, reps: 10 }]);
+  const cur: Session = {
+    id: 's2', startedAt: 2000, finishedAt: 3000,
+    entries: [
+      { exerciseId: 'ex1', sets: [{ weight: 60, reps: 10, completedAt: 2001 }] },
+      { exerciseId: 'ex2', sets: [{ weight: 30, reps: 15, completedAt: 2001 }] },
+    ],
+  };
+  const list = await summarizeSession(cur);
+  expect(list).toHaveLength(2);
+  expect(list[0]).toMatchObject({ volume: 600, prevVolume: 500, isPR: true });
+  expect(list[1]).toMatchObject({ volume: 450, prevVolume: undefined, isPR: false });
 });

@@ -4,7 +4,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import type { Session } from '../types';
 import { db } from '../db/db';
 import { listExercises } from '../db/exercises';
-import { summarizeEntry, fmtVolumeDelta, fmtWeightDelta, type EntryProgress } from '../db/progress';
+import { summarizeSession, fmtVolumeDelta, fmtWeightDelta, type EntryProgress } from '../db/progress';
 
 function fmtDate(ts: number): string {
   const d = new Date(ts);
@@ -30,9 +30,7 @@ export default function SummaryScreen() {
         navigate('/', { replace: true });
         return;
       }
-      const list = await Promise.all(
-        s.entries.map((e) => summarizeEntry(e.exerciseId, e.sets, s.startedAt)),
-      );
+      const list = await summarizeSession(s);
       setSession(s);
       setProgress(list);
     });
