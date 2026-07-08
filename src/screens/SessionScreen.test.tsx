@@ -3,6 +3,7 @@ import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { db } from '../db/db';
 import { seedLibrary } from '../db/exercises';
 import { startSession, getActiveSession } from '../db/sessions';
+import * as progress from '../db/progress';
 import type { Routine } from '../types';
 import SessionScreen from './SessionScreen';
 
@@ -190,4 +191,22 @@ test('백데이트 세션의 지난 기록은 세션 날짜 이전 기준이다'
   await startSession(routine, now - 2 * 86_400_000); // 그 사이 날짜로 백데이트
   renderScreen();
   expect(await screen.findByText(/지난번 50kg×10/)).toBeInTheDocument(); // 70이 아닌 50 기준
+});
+
+test('시간이 흘러도 지난 기록을 매초 다시 조회하지 않는다', async () => {
+  const spy = vi.spyOn(progress, 'getPreviousRecord');
+  vi.useFakeTimers({ shouldAdvanceTime: true });
+  try {
+    await startSession(routine);
+    renderScreen();
+    await vi.waitFor(() => {
+      expect(screen.getByText('벤치프레스')).toBeInTheDocument();
+    });
+    const callsAfterMount = spy.mock.calls.length;
+    await vi.advanceTimersByTimeAsync(3000); // 시계 3틱
+    expect(spy.mock.calls.length).toBe(callsAfterMount);
+  } finally {
+    vi.useRealTimers();
+    spy.mockRestore();
+  }
 });

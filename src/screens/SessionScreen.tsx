@@ -54,9 +54,9 @@ export default function SessionScreen() {
 
   useEffect(() => {
     if (!entry || !session) { setLastRecord(undefined); return; }
-    const startDate = new Date(session.startedAt);
-    const isBackdated = startDate.toDateString() !== new Date(now).toDateString();
-    const before = isBackdated ? session.startedAt : session.startedAt + 1;
+    const backdated = new Date(session.startedAt).toDateString() !== new Date().toDateString();
+    // 오늘 세션은 직전 세션과 같은 밀리초에 생성될 수 있어 +1ms 여유 (백데이트는 엄격히 그 시각 이전)
+    const before = backdated ? session.startedAt : session.startedAt + 1;
     void Promise.all([
       getPreviousRecord(entry.exerciseId, before),
       getPRWeight(entry.exerciseId, before),
@@ -64,7 +64,7 @@ export default function SessionScreen() {
       setLastRecord(last);
       setPrWeight(pr);
     });
-  }, [entry?.exerciseId, session?.startedAt, now]);
+  }, [entry?.exerciseId, session?.startedAt]);
 
   if (!session) return null;
 
