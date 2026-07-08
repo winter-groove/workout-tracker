@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
+import type { Session } from '../types';
 import { db } from '../db/db';
 import { saveRoutine } from '../db/routines';
 import { setTodayRoutineId } from '../db/todayRoutine';
@@ -68,4 +69,54 @@ test('앱이 켜진 채 날짜가 바뀌면 다시 선택 화면으로 돌아온
   localStorage.setItem('wt-today-routine', JSON.stringify({ id: 'r1', date: '2020-01-01' }));
   fireEvent(document, new Event('visibilitychange'));
   expect(await screen.findByText('오늘 뭐 할까요?')).toBeInTheDocument();
+});
+
+async function addFinishedSession(startedAt: number, name?: string): Promise<Session> {
+  const s: Session = {
+    id: crypto.randomUUID(),
+    startedAt,
+    finishedAt: startedAt + 3600_000,
+    routineName: name,
+    entries: [{ exerciseId: 'e1', sets: [{ weight: 50, reps: 10, completedAt: startedAt + 1 }] }],
+  };
+  await db.sessions.add(s);
+  return s;
+}
+
+function renderWithSummary() {
+  return render(
+    <MemoryRouter>
+      <Routes>
+        <Route path="/" element={<HomeScreen />} />
+        <Route path="/summary/:sessionId" element={<div>요약화면</div>} />
+      </Routes>
+    </MemoryRouter>,
+  );
+}
+
+test('달력 날짜를 누르면 그날 세션이 표시되고 탭하면 요약으로 이동한다', async () => {
+  const now = new Date();
+  const ts = new Date(now.getFullYear(), now.getMonth(), 15, 10, 0).getTime();
+  await addFinishedSession(ts, '가슴 날');
+  renderWithSummary();
+  fireEvent.click(await screen.findByRole('button', { name: `${now.getMonth() + 1}월 15일` }));
+  // 달력 아래 목록 + 최근 운동 카드 양쪽에 같은 텍스트가 존재
+  const rows = await screen.findAllByText('가슴 날 · 1개 운동');
+  expect(rows).toHaveLength(2);
+  fireEvent.click(rows[0]); // 달력 쪽 행
+  expect(await screen.findByText('요약화면')).toBeInTheDocument();
+});
+
+test('기록 없는 날짜를 누르면 빈 문구가 보인다', async () => {
+  renderWithSummary();
+  const now = new Date();
+  fireEvent.click(await screen.findByRole('button', { name: `${now.getMonth() + 1}월 15일` }));
+  expect(await screen.findByText('이 날은 운동 기록이 없어요')).toBeInTheDocument();
+});
+
+test('최근 운동을 누르면 요약 화면으로 이동한다', async () => {
+  await addFinishedSession(Date.now() - 86_400_000, '등 날');
+  renderWithSummary();
+  fireEvent.click(await screen.findByText('등 날 · 1개 운동'));
+  expect(await screen.findByText('요약화면')).toBeInTheDocument();
 });

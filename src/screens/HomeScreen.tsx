@@ -7,20 +7,7 @@ import {
   startSession, getActiveSession, discardSession, listFinishedSessions,
 } from '../db/sessions';
 import { getTodayRoutineId, setTodayRoutineId, clearTodayRoutine } from '../db/todayRoutine';
-
-const DAY_LABELS = ['월', '화', '수', '목', '금', '토', '일'];
-
-function weekDates(now: Date): Date[] {
-  const monday = new Date(now);
-  const day = (now.getDay() + 6) % 7; // 월=0
-  monday.setDate(now.getDate() - day);
-  monday.setHours(0, 0, 0, 0);
-  return DAY_LABELS.map((_, i) => {
-    const d = new Date(monday);
-    d.setDate(monday.getDate() + i);
-    return d;
-  });
-}
+import MonthCalendar from '../components/MonthCalendar';
 
 function sameDay(a: Date, b: Date): boolean {
   return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
@@ -45,16 +32,19 @@ function fmtDate(ts: number): string {
 export default function HomeScreen() {
   const navigate = useNavigate();
   const [, setTick] = useState(0);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const bump = () => setTick((n) => n + 1);
   const routines = useLiveQuery(() => listRoutines(), []) ?? [];
   const sessions = useLiveQuery(() => listFinishedSessions(), []) ?? [];
   const active = useLiveQuery(() => getActiveSession(), []);
 
   const today = new Date();
-  const week = weekDates(today);
   const workoutDays = new Set(
     sessions.map((s) => new Date(s.startedAt)).map((d) => `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`),
   );
+  const daySessions = selectedDate
+    ? sessions.filter((s) => sameDay(new Date(s.startedAt), selectedDate))
+    : [];
   const next = pickNextRoutine(routines, sessions);
   const todayId = getTodayRoutineId();
   const todayRoutine = routines.find((r) => r.id === todayId);
@@ -141,27 +131,31 @@ export default function HomeScreen() {
       )}
 
       <div className="card">
-        <div className="card-h">이번 주</div>
-        <div className="weekrow">
-          {week.map((d, i) => {
-            const done = workoutDays.has(`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`);
-            const isToday = sameDay(d, today);
-            return (
-              <div key={i} className="day">
-                {DAY_LABELS[i]}
-                <div className={`dot ${done ? 'on' : isToday ? 'today' : ''}`}>
-                  {done ? '✓' : d.getDate()}
-                </div>
+        <div className="card-h">달력</div>
+        <MonthCalendar workoutDays={workoutDays} selectedDate={selectedDate} onSelectDate={setSelectedDate} />
+        {selectedDate && (
+          <div style={{ marginTop: 12 }}>
+            {daySessions.map((s) => (
+              <div
+                key={s.id} className="hist-row" style={{ cursor: 'pointer' }}
+                onClick={() => navigate(`/summary/${s.id}`)}
+              >
+                <span>{s.routineName ?? '오늘 운동'} · {s.entries.length}개 운동</span>
+                <span className="d">보기 ›</span>
               </div>
-            );
-          })}
-        </div>
+            ))}
+            {daySessions.length === 0 && <div className="empty">이 날은 운동 기록이 없어요</div>}
+          </div>
+        )}
       </div>
 
       <div className="card">
         <div className="card-h">최근 운동</div>
         {sessions.slice(0, 5).map((s) => (
-          <div key={s.id} className="hist-row">
+          <div
+            key={s.id} className="hist-row" style={{ cursor: 'pointer' }}
+            onClick={() => navigate(`/summary/${s.id}`)}
+          >
             <span>{s.routineName ?? '오늘 운동'} · {s.entries.length}개 운동</span>
             <span className="d">{fmtDate(s.startedAt)}</span>
           </div>
