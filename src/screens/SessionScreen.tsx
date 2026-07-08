@@ -3,12 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
 import type { Exercise, Session, SetRecord } from '../types';
 import {
-  getActiveSession, saveSession, finishSession, discardSession,
-  buildEntry, getLastRecord,
+  getActiveSession, saveSession, finishSession, discardSession, buildEntry,
 } from '../db/sessions';
 import { listExercises } from '../db/exercises';
 import { getRestSeconds } from '../db/settings';
-import { volume, maxWeight, fmtVolumeDelta, getPRWeight } from '../db/progress';
+import {
+  volume, maxWeight, fmtVolumeDelta, getPRWeight, getPreviousRecord,
+} from '../db/progress';
 import ExerciseImage from '../components/ExerciseImage';
 import ExercisePicker, { dominantBodyPart } from '../components/ExercisePicker';
 import RestTimer from '../components/RestTimer';
@@ -53,14 +54,17 @@ export default function SessionScreen() {
 
   useEffect(() => {
     if (!entry || !session) { setLastRecord(undefined); return; }
+    const startDate = new Date(session.startedAt);
+    const isBackdated = startDate.toDateString() !== new Date(now).toDateString();
+    const before = isBackdated ? session.startedAt : session.startedAt + 1;
     void Promise.all([
-      getLastRecord(entry.exerciseId),
-      getPRWeight(entry.exerciseId, session.startedAt),
+      getPreviousRecord(entry.exerciseId, before),
+      getPRWeight(entry.exerciseId, before),
     ]).then(([last, pr]) => {
       setLastRecord(last);
       setPrWeight(pr);
     });
-  }, [entry?.exerciseId, session?.startedAt]);
+  }, [entry?.exerciseId, session?.startedAt, now]);
 
   if (!session) return null;
 
@@ -102,7 +106,7 @@ export default function SessionScreen() {
   async function addExercise(ex: Exercise) {
     if (!session) return;
     setShowPicker(false);
-    const newEntry = await buildEntry(ex.id);
+    const newEntry = await buildEntry(ex.id, 3, session.startedAt);
     const next = { ...session, entries: [...session.entries, newEntry] };
     await update(next);
     setIdx(next.entries.length - 1);
@@ -133,12 +137,17 @@ export default function SessionScreen() {
     ? `볼륨 ${curVol}kg ${fmtVolumeDelta(curVol, lastVol)}`
     : `볼륨 ${curVol} / 지난 ${lastVol}kg`;
 
+  const startDate = new Date(session.startedAt);
+  const isBackdated = startDate.toDateString() !== new Date(now).toDateString();
+
   return (
     <>
       <div className="topnav">
         <button onClick={finish} aria-label="세션 종료">✕</button>
         <span className="title">{session.routineName ?? '오늘 운동'} · <span>{total > 0 ? `${idx + 1} / ${total}` : '운동 없음'}</span></span>
-        <span className="clock">{fmtElapsed(session.startedAt, now)}</span>
+        <span className="clock">
+          {isBackdated ? `${startDate.getMonth() + 1}/${startDate.getDate()}` : fmtElapsed(session.startedAt, now)}
+        </span>
       </div>
       <div className="progressbar">
         <div style={{ width: total > 0 ? `${((idx + 1) / total) * 100}%` : '0%' }} />

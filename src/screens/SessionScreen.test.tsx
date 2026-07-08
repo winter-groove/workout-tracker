@@ -161,3 +161,33 @@ test('운동 추가 picker가 세션의 최빈 부위로 미리 필터되어 열
   expect(await screen.findByRole('button', { name: '가슴' })).toHaveClass('on');
   await waitFor(() => expect(screen.queryByText('스쿼트')).not.toBeInTheDocument());
 });
+
+async function addFinishedSession(
+  startedAt: number, exerciseId: string, sets: { weight: number; reps: number }[],
+) {
+  await db.sessions.add({
+    id: crypto.randomUUID(),
+    startedAt,
+    finishedAt: startedAt + 3600_000,
+    entries: [{ exerciseId, sets: sets.map((x) => ({ ...x, completedAt: startedAt + 1 })) }],
+  });
+}
+
+test('백데이트 세션은 경과 시계 대신 날짜를 표시한다', async () => {
+  const past = new Date();
+  past.setDate(past.getDate() - 1);
+  const noon = new Date(past.getFullYear(), past.getMonth(), past.getDate(), 12).getTime();
+  await startSession(routine, noon);
+  renderScreen();
+  await screen.findByText('벤치프레스');
+  expect(screen.getByText(`${past.getMonth() + 1}/${past.getDate()}`)).toBeInTheDocument();
+});
+
+test('백데이트 세션의 지난 기록은 세션 날짜 이전 기준이다', async () => {
+  const now = Date.now();
+  await addFinishedSession(now - 3 * 86_400_000, 'lib-bench-press', [{ weight: 50, reps: 10 }]);
+  await addFinishedSession(now - 3_600_000, 'lib-bench-press', [{ weight: 70, reps: 10 }]); // 최근 기록
+  await startSession(routine, now - 2 * 86_400_000); // 그 사이 날짜로 백데이트
+  renderScreen();
+  expect(await screen.findByText(/지난번 50kg×10/)).toBeInTheDocument(); // 70이 아닌 50 기준
+});
