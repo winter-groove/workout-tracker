@@ -1,10 +1,11 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import type { SetRecord } from '../types';
 import { listFinishedSessions, deleteSession, getExerciseHistory } from '../db/sessions';
 import { listExercises } from '../db/exercises';
-import { annotateHistory, fmtVolumeDelta, fmtWeightDelta } from '../db/progress';
+import {
+  annotateHistory, fmtVolumeDelta, fmtWeightDelta, summarizeSession, type EntryProgress,
+} from '../db/progress';
 
 function fmtDate(ts: number): string {
   const d = new Date(ts);
@@ -17,9 +18,9 @@ function fmtSets(sets: SetRecord[]): string {
 }
 
 export default function HistoryScreen() {
-  const navigate = useNavigate();
   const [filterId, setFilterId] = useState('');
   const [openId, setOpenId] = useState('');
+  const [openSummary, setOpenSummary] = useState<EntryProgress[] | null>(null);
   const sessions = useLiveQuery(() => listFinishedSessions(), []) ?? [];
   const exercises = useLiveQuery(() => listExercises({ includeHidden: true }), []) ?? [];
   const history = useLiveQuery(
@@ -28,6 +29,12 @@ export default function HistoryScreen() {
   );
   const exMap = new Map(exercises.map((e) => [e.id, e]));
   const annotations = history ? annotateHistory(history.map((h) => h.sets)) : [];
+
+  useEffect(() => {
+    setOpenSummary(null);
+    const s = sessions.find((x) => x.id === openId);
+    if (s) void summarizeSession(s).then(setOpenSummary);
+  }, [openId, sessions]);
 
   async function remove(id: string) {
     if (window.confirm('이 기록을 삭제할까요?')) await deleteSession(id);
@@ -81,26 +88,29 @@ export default function HistoryScreen() {
               </div>
               {openId === s.id && (
                 <div style={{ marginTop: 8 }}>
-                  {s.entries.map((e, i) => (
-                    <div key={i} className="hist-row">
-                      <span>{exMap.get(e.exerciseId)?.name ?? '삭제된 운동'}</span>
-                      <span className="d">{fmtSets(e.sets)}</span>
-                    </div>
-                  ))}
-                  <div className="btn-row" style={{ marginTop: 10 }}>
-                    <button
-                      className="btn btn-ghost"
-                      onClick={(ev) => { ev.stopPropagation(); navigate(`/summary/${s.id}`); }}
-                    >
-                      요약 보기
-                    </button>
-                    <button
-                      className="btn btn-danger"
-                      onClick={(ev) => { ev.stopPropagation(); void remove(s.id); }}
-                    >
-                      기록 삭제
-                    </button>
-                  </div>
+                  {s.entries.map((e, i) => {
+                    const p = openSummary?.[i];
+                    const line = p
+                      ? (p.prevVolume === undefined
+                          ? `볼륨 ${p.volume}kg · 최고 ${p.maxWeight}kg · 첫 기록`
+                          : `볼륨 ${p.volume}kg ${fmtVolumeDelta(p.volume, p.prevVolume)} · 최고 ${p.maxWeight}kg ${fmtWeightDelta(p.maxWeight, p.prevMaxWeight ?? 0)}`)
+                      : null;
+                    return (
+                      <div key={i} className="hist-row" style={{ display: 'block' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                          <span>{exMap.get(e.exerciseId)?.name ?? '삭제된 운동'}{p?.isPR ? ' 🏆' : ''}</span>
+                          <span className="d">{fmtSets(e.sets)}</span>
+                        </div>
+                        {line && <div className="d" style={{ fontSize: 12, marginTop: 2 }}>{line}</div>}
+                      </div>
+                    );
+                  })}
+                  <button
+                    className="btn btn-danger" style={{ marginTop: 10 }}
+                    onClick={(ev) => { ev.stopPropagation(); void remove(s.id); }}
+                  >
+                    기록 삭제
+                  </button>
                 </div>
               )}
             </div>
