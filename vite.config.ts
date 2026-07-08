@@ -14,8 +14,8 @@ export default defineConfig({
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
       },
       manifest: {
-        name: '운동기록',
-        short_name: '운동기록',
+        name: '명품보쌈',
+        short_name: '명품보쌈',
         description: '점진적 과부하를 위한 운동 기록',
         lang: 'ko',
         theme_color: '#3182F6',
@@ -25,7 +25,7 @@ export default defineConfig({
         scope: '.',
         icons: [
           { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png' },
-          { src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' },
+          { src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
         ],
       },
     }),

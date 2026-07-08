@@ -11,6 +11,12 @@ const svg = `
     <rect x="72" y="200" width="32" height="112" rx="12"/>
     <rect x="408" y="200" width="32" height="112" rx="12"/>
   </g>
+  <g fill="#fff" font-family="'Apple SD Gothic Neo', 'AppleGothic', sans-serif" font-weight="800" font-size="88">
+    <text x="52" y="132" text-anchor="start">명</text>
+    <text x="460" y="132" text-anchor="end">보</text>
+    <text x="52" y="472" text-anchor="start">품</text>
+    <text x="460" y="472" text-anchor="end">쌈</text>
+  </g>
 </svg>`;
 
 await mkdir('public/icons', { recursive: true });
