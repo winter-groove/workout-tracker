@@ -210,3 +210,32 @@ test('시간이 흘러도 지난 기록을 매초 다시 조회하지 않는다'
     spy.mockRestore();
   }
 });
+
+test('세트 삭제 버튼이 마지막 미완료 세트를 즉시 삭제하고 1개 남으면 비활성화된다', async () => {
+  await startSession(routine); // 벤치프레스 defaultSets 2
+  renderScreen();
+  await screen.findByText('벤치프레스');
+  fireEvent.click(screen.getByRole('button', { name: '− 세트 삭제' }));
+  await waitFor(async () => {
+    const s = await getActiveSession();
+    expect(s?.entries[0].sets).toHaveLength(1);
+  });
+  expect(screen.getByRole('button', { name: '− 세트 삭제' })).toBeDisabled();
+});
+
+test('완료된 마지막 세트는 confirm 취소 시 유지, 수락 시 삭제된다', async () => {
+  await startSession(routine);
+  renderScreen();
+  await screen.findByText('벤치프레스');
+  fireEvent.click(screen.getByLabelText('세트 2 완료'));
+  const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(false);
+  fireEvent.click(screen.getByRole('button', { name: '− 세트 삭제' }));
+  expect(confirmSpy).toHaveBeenCalledWith('완료한 세트예요. 삭제할까요?');
+  expect((await getActiveSession())?.entries[0].sets).toHaveLength(2);
+  confirmSpy.mockReturnValue(true);
+  fireEvent.click(screen.getByRole('button', { name: '− 세트 삭제' }));
+  await waitFor(async () => {
+    const s = await getActiveSession();
+    expect(s?.entries[0].sets).toHaveLength(1);
+  });
+});

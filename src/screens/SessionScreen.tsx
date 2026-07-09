@@ -102,6 +102,16 @@ export default function SessionScreen() {
     void update({ ...session, entries });
   }
 
+  function removeSet() {
+    if (!session || !entry || entry.sets.length <= 1) return;
+    const last = entry.sets[entry.sets.length - 1];
+    if (last.completedAt && !window.confirm('완료한 세트예요. 삭제할까요?')) return;
+    const entries = session.entries.map((e, i) =>
+      i !== idx ? e : { ...e, sets: e.sets.slice(0, -1) },
+    );
+    void update({ ...session, entries });
+  }
+
   async function addExercise(ex: Exercise) {
     if (!session) return;
     setShowPicker(false);
@@ -196,7 +206,14 @@ export default function SessionScreen() {
                   </button>
                 </div>
               ))}
-              <button className="btn btn-ghost" style={{ marginTop: 10 }} onClick={addSet}>＋ 세트 추가</button>
+              <div className="btn-row" style={{ marginTop: 10 }}>
+                <button className="btn btn-ghost" onClick={addSet}>＋ 세트 추가</button>
+                <button
+                  className="btn btn-ghost" disabled={entry.sets.length <= 1} onClick={removeSet}
+                >
+                  − 세트 삭제
+                </button>
+              </div>
             </div>
           </>
         ) : (
