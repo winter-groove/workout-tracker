@@ -33,5 +33,7 @@ test('기존 55개의 id·libId·이름이 보존된다', () => {
     const cur = byId.get(l.id);
     expect(cur?.libId).toBe(l.libId);
     expect(cur?.name).toBe(l.name);
+    expect(cur?.bodyPart).toBe(l.bodyPart);
+    expect(cur?.equipment).toBe(l.equipment);
   }
 });
