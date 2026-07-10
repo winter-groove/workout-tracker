@@ -16,6 +16,7 @@ test('운동 목록을 이름으로 검색할 수 있다', async () => {
   fireEvent.change(screen.getByPlaceholderText('운동 이름 검색'), { target: { value: '스쿼트' } });
   await waitFor(() => {
     expect(screen.getByText('스쿼트')).toBeInTheDocument();
+    expect(screen.queryByText('벤치프레스')).not.toBeInTheDocument();
   });
 });
 

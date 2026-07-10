@@ -99,6 +99,7 @@ export default function ManageScreen() {
             background: 'none', border: 'none', padding: 0, cursor: 'pointer', textAlign: 'left',
           }}
           onClick={() => setListOpen(!listOpen)}
+          aria-expanded={listOpen}
         >
           <span>내 운동 목록 ({exercises.length}개)</span>
           <span>{listOpen ? '▴' : '▾'}</span>
