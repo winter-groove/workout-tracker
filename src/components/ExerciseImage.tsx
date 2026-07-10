@@ -7,13 +7,13 @@ export function exerciseImageUrl(ex: Exercise): string | undefined {
 }
 
 export default function ExerciseImage({ exercise, className }: { exercise: Exercise; className?: string }) {
-  const [failed, setFailed] = useState(false);
+  const [failedUrl, setFailedUrl] = useState<string | null>(null);
   const url = exerciseImageUrl(exercise);
-  if (url && !failed) {
+  if (url && failedUrl !== url) {
     return (
       <img
         src={url} alt={exercise.name} className={className} loading="lazy"
-        onError={() => setFailed(true)}
+        onError={() => setFailedUrl(url)}
       />
     );
   }
