@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
-import type { Routine } from '../types';
+import { BODY_PARTS } from '../types';
+import type { BodyPart, Routine } from '../types';
 import { listExercises, setExerciseHidden, deleteCustomExercise } from '../db/exercises';
 import { listRoutines, deleteRoutine, newRoutine } from '../db/routines';
 import { exportData, importData } from '../db/backup';
@@ -14,13 +15,33 @@ export default function ManageScreen() {
   const [addingEx, setAddingEx] = useState(false);
   const [showHidden, setShowHidden] = useState(false);
   const [exQuery, setExQuery] = useState('');
+  const [listOpen, setListOpen] = useState(false);
+  const [exFilter, setExFilter] = useState<BodyPart | '전체'>('전체');
+  const [visibleCount, setVisibleCount] = useState(30);
   const [rest, setRest] = useState(getRestSeconds());
   const fileRef = useRef<HTMLInputElement>(null);
   const routines = useLiveQuery(() => listRoutines(), []) ?? [];
   const exercises = useLiveQuery(() => listExercises({ includeHidden: true }), []) ?? [];
 
-  const visibleExercises = (showHidden ? exercises : exercises.filter((e) => !e.isHidden))
+  function changeQuery(q: string) {
+    setExQuery(q);
+    setVisibleCount(30);
+  }
+
+  function changeFilter(f: BodyPart | '전체') {
+    setExFilter(f);
+    setVisibleCount(30);
+  }
+
+  function changeShowHidden(v: boolean) {
+    setShowHidden(v);
+    setVisibleCount(30);
+  }
+
+  const filteredExercises = (showHidden ? exercises : exercises.filter((e) => !e.isHidden))
+    .filter((e) => exFilter === '전체' || e.bodyPart === exFilter)
     .filter((e) => exQuery.trim() === '' || e.name.includes(exQuery.trim()));
+  const shownExercises = filteredExercises.slice(0, visibleCount);
 
   async function doExport() {
     const data = await exportData();
@@ -71,47 +92,80 @@ export default function ManageScreen() {
       </div>
 
       <div className="card">
-        <div className="card-h">내 운동 목록</div>
-        <label style={{ fontSize: 12, color: 'var(--gray-5)' }}>
-          <input type="checkbox" checked={showHidden} onChange={(e) => setShowHidden(e.target.checked)} /> 숨긴 운동 표시
-        </label>
-        <input
-          className="search" placeholder="운동 이름 검색" style={{ marginTop: 8 }}
-          value={exQuery} onChange={(e) => setExQuery(e.target.value)}
-        />
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 8 }}>
-          {visibleExercises.map((ex) => (
-            <div key={ex.id} className="ex-row" style={{ boxShadow: 'none', border: '1px solid var(--gray-1)' }}>
-              <ExerciseImage exercise={ex} />
-              <div>
-                <div className="nm">{ex.name}{ex.isHidden ? ' (숨김)' : ''}</div>
-                <div className="sb">{ex.bodyPart} · {ex.equipment}{ex.isCustom ? ' · 직접 등록' : ''}</div>
-              </div>
-              <div className="right">
-                {ex.isCustom ? (
-                  <button
-                    className="btn-sm btn btn-danger"
-                    onClick={() => window.confirm(`'${ex.name}'을(를) 삭제할까요?`) && void deleteCustomExercise(ex.id)}
-                  >
-                    삭제
-                  </button>
-                ) : (
-                  <button className="btn-sm btn btn-ghost" onClick={() => void setExerciseHidden(ex.id, !ex.isHidden)}>
-                    {ex.isHidden ? '보이기' : '숨기기'}
-                  </button>
-                )}
-              </div>
+        <button
+          className="card-h"
+          style={{
+            display: 'flex', justifyContent: 'space-between', width: '100%',
+            background: 'none', border: 'none', padding: 0, cursor: 'pointer', textAlign: 'left',
+          }}
+          onClick={() => setListOpen(!listOpen)}
+        >
+          <span>내 운동 목록 ({exercises.length}개)</span>
+          <span>{listOpen ? '▴' : '▾'}</span>
+        </button>
+        {listOpen && (
+          <>
+            <label style={{ fontSize: 12, color: 'var(--gray-5)' }}>
+              <input
+                type="checkbox" checked={showHidden}
+                onChange={(e) => changeShowHidden(e.target.checked)}
+              /> 숨긴 운동 표시
+            </label>
+            <input
+              className="search" placeholder="운동 이름 검색" style={{ marginTop: 8 }}
+              value={exQuery} onChange={(e) => changeQuery(e.target.value)}
+            />
+            <div className="chips" style={{ marginTop: 8 }}>
+              {(['전체', ...BODY_PARTS] as const).map((b) => (
+                <button key={b} className={`chip ${exFilter === b ? 'on' : ''}`} onClick={() => changeFilter(b)}>
+                  {b}
+                </button>
+              ))}
             </div>
-          ))}
-        </div>
-        {addingEx ? (
-          <div style={{ marginTop: 10 }}>
-            <AddExerciseForm onSaved={() => setAddingEx(false)} />
-          </div>
-        ) : (
-          <button className="btn btn-ghost" style={{ marginTop: 10 }} onClick={() => setAddingEx(true)}>
-            ＋ 운동 직접 등록
-          </button>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 8 }}>
+              {shownExercises.map((ex) => (
+                <div key={ex.id} className="ex-row" style={{ boxShadow: 'none', border: '1px solid var(--gray-1)' }}>
+                  <ExerciseImage exercise={ex} />
+                  <div>
+                    <div className="nm">{ex.name}{ex.isHidden ? ' (숨김)' : ''}</div>
+                    <div className="sb">{ex.bodyPart} · {ex.equipment}{ex.isCustom ? ' · 직접 등록' : ''}</div>
+                  </div>
+                  <div className="right">
+                    {ex.isCustom ? (
+                      <button
+                        className="btn-sm btn btn-danger"
+                        onClick={() => window.confirm(`'${ex.name}'을(를) 삭제할까요?`) && void deleteCustomExercise(ex.id)}
+                      >
+                        삭제
+                      </button>
+                    ) : (
+                      <button className="btn-sm btn btn-ghost" onClick={() => void setExerciseHidden(ex.id, !ex.isHidden)}>
+                        {ex.isHidden ? '보이기' : '숨기기'}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+            {filteredExercises.length === 0 && <div className="empty">검색 결과가 없어요</div>}
+            {filteredExercises.length > visibleCount && (
+              <button
+                className="btn btn-ghost" style={{ marginTop: 10 }}
+                onClick={() => setVisibleCount(visibleCount + 30)}
+              >
+                더보기 ({filteredExercises.length - visibleCount}개 남음)
+              </button>
+            )}
+            {addingEx ? (
+              <div style={{ marginTop: 10 }}>
+                <AddExerciseForm onSaved={() => setAddingEx(false)} />
+              </div>
+            ) : (
+              <button className="btn btn-ghost" style={{ marginTop: 10 }} onClick={() => setAddingEx(true)}>
+                ＋ 운동 직접 등록
+              </button>
+            )}
+          </>
         )}
       </div>
 
