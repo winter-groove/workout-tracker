@@ -13,12 +13,14 @@ export default function ManageScreen() {
   const [editing, setEditing] = useState<Routine | null>(null);
   const [addingEx, setAddingEx] = useState(false);
   const [showHidden, setShowHidden] = useState(false);
+  const [exQuery, setExQuery] = useState('');
   const [rest, setRest] = useState(getRestSeconds());
   const fileRef = useRef<HTMLInputElement>(null);
   const routines = useLiveQuery(() => listRoutines(), []) ?? [];
   const exercises = useLiveQuery(() => listExercises({ includeHidden: true }), []) ?? [];
 
-  const visibleExercises = showHidden ? exercises : exercises.filter((e) => !e.isHidden);
+  const visibleExercises = (showHidden ? exercises : exercises.filter((e) => !e.isHidden))
+    .filter((e) => exQuery.trim() === '' || e.name.includes(exQuery.trim()));
 
   async function doExport() {
     const data = await exportData();
@@ -73,6 +75,10 @@ export default function ManageScreen() {
         <label style={{ fontSize: 12, color: 'var(--gray-5)' }}>
           <input type="checkbox" checked={showHidden} onChange={(e) => setShowHidden(e.target.checked)} /> 숨긴 운동 표시
         </label>
+        <input
+          className="search" placeholder="운동 이름 검색" style={{ marginTop: 8 }}
+          value={exQuery} onChange={(e) => setExQuery(e.target.value)}
+        />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 8 }}>
           {visibleExercises.map((ex) => (
             <div key={ex.id} className="ex-row" style={{ boxShadow: 'none', border: '1px solid var(--gray-1)' }}>
