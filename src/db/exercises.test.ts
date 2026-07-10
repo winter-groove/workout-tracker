@@ -4,6 +4,8 @@ import {
   setExerciseHidden, deleteCustomExercise,
 } from './exercises';
 import library from '../data/exercise-library.json';
+import legacy from '../data/legacy-55.json';
+import type { BodyPart, Equipment } from '../types';
 
 beforeEach(async () => {
   await db.delete();
@@ -52,4 +54,23 @@ test('내장 운동은 deleteCustomExercise로 지울 수 없다', async () => {
   await seedLibrary();
   await expect(deleteCustomExercise('lib-squat')).rejects.toThrow();
   expect(await db.exercises.get('lib-squat')).toBeDefined();
+});
+
+test('v1 사용자 재시드: 신규만 추가되고 기존 행(숨김 포함)은 유지된다', async () => {
+  await db.exercises.bulkAdd(legacy.map((x) => ({
+    id: `lib-${x.id}`,
+    name: x.name,
+    bodyPart: x.bodyPart as BodyPart,
+    equipment: x.equipment as Equipment,
+    imagePath: `exercises/${x.id}.webp`,
+    isCustom: false,
+    isHidden: false,
+  })));
+  await db.exercises.update('lib-bench-press', { isHidden: true });
+  await db.meta.put({ key: 'libraryVersion', value: 1 });
+  await seedLibrary();
+  expect(await db.exercises.count()).toBe(library.length);
+  const bench = await db.exercises.get('lib-bench-press');
+  expect(bench?.isHidden).toBe(true);
+  expect((await db.meta.get('libraryVersion'))?.value).toBe(2);
 });

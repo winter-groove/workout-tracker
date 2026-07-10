@@ -2,7 +2,7 @@ import { db } from './db';
 import library from '../data/exercise-library.json';
 import type { BodyPart, Equipment, Exercise, IconKey } from '../types';
 
-export const LIBRARY_VERSION = 1;
+export const LIBRARY_VERSION = 2;
 
 export async function seedLibrary(): Promise<void> {
   const meta = await db.meta.get('libraryVersion');
