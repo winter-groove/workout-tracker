@@ -11,6 +11,8 @@
     "test:watch": "vitest",
     "fetch-images": "node scripts/fetch-exercise-images.mjs",
     "icons": "node scripts/generate-icons.mjs",
+    "build-library": "node scripts/build-library.mjs",
+    "verify-images": "node scripts/verify-images.mjs",
     "deploy": "npm run build && gh-pages -d dist"
   },
   "dependencies": {
