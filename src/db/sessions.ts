@@ -90,3 +90,14 @@ export async function getExerciseHistory(
   }
   return result;
 }
+
+export async function resumeSession(id: string): Promise<boolean> {
+  const existing = await getActiveSession();
+  if (existing) return false;
+  const s = await db.sessions.get(id);
+  if (!s || s.finishedAt === undefined) return false;
+  const active: Session = { ...s };
+  delete active.finishedAt;
+  await db.sessions.put(active);
+  return true;
+}

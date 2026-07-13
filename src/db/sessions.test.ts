@@ -2,7 +2,7 @@ import { db } from './db';
 import {
   getLastRecord, buildEntry, startSession, getActiveSession,
   saveSession, finishSession, discardSession,
-  listFinishedSessions, deleteSession, getExerciseHistory,
+  listFinishedSessions, deleteSession, getExerciseHistory, resumeSession,
 } from './sessions';
 import type { Routine, Session } from '../types';
 
@@ -151,4 +151,25 @@ test('buildEntry는 before 지정 시 그 이전 기록으로 프리필한다', 
   await addFinishedSession(2000, 'ex1', [{ weight: 60, reps: 10 }]);
   const entry = await buildEntry('ex1', 3, 2000);
   expect(entry.sets[0].weight).toBe(50);
+});
+
+test('resumeSession은 완료 세션을 다시 활성화한다', async () => {
+  const a = await addFinishedSession(1000, 'ex1', [{ weight: 50, reps: 10 }]);
+  expect(await resumeSession(a.id)).toBe(true);
+  const active = await getActiveSession();
+  expect(active?.id).toBe(a.id);
+  expect(active?.finishedAt).toBeUndefined();
+});
+
+test('resumeSession은 활성 세션이 있으면 거부하고 아무것도 바꾸지 않는다', async () => {
+  const a = await addFinishedSession(1000, 'ex1', [{ weight: 50, reps: 10 }]);
+  await startSession();
+  expect(await resumeSession(a.id)).toBe(false);
+  expect((await db.sessions.get(a.id))?.finishedAt).toBeDefined();
+});
+
+test('resumeSession은 없는 id·미완료 세션에 false', async () => {
+  expect(await resumeSession('없는세션')).toBe(false);
+  const s = await startSession();
+  expect(await resumeSession(s.id)).toBe(false);
 });

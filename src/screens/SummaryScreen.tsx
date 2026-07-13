@@ -5,6 +5,7 @@ import type { Session } from '../types';
 import { db } from '../db/db';
 import { listExercises } from '../db/exercises';
 import { summarizeSession, fmtVolumeDelta, fmtWeightDelta, type EntryProgress } from '../db/progress';
+import { resumeSession } from '../db/sessions';
 
 function fmtDate(ts: number): string {
   const d = new Date(ts);
@@ -38,6 +39,19 @@ export default function SummaryScreen() {
 
   if (!session) return null;
 
+  const canResume = session.finishedAt !== undefined
+    && new Date(session.finishedAt).toDateString() === new Date().toDateString();
+
+  async function resume() {
+    if (!session) return;
+    const ok = await resumeSession(session.id);
+    if (!ok) {
+      window.alert('진행 중인 운동을 먼저 완료하세요');
+      return;
+    }
+    navigate('/session', { replace: true });
+  }
+
   return (
     <div className="screen">
       <h1 className="screen-title">운동 완료 🎉</h1>
@@ -60,7 +74,12 @@ export default function SummaryScreen() {
           );
         })}
       </div>
-      <button className="btn btn-primary" onClick={() => navigate('/')}>확인</button>
+      <div className="btn-row">
+        <button className="btn btn-primary" onClick={() => navigate('/')}>확인</button>
+        {canResume && (
+          <button className="btn btn-ghost" onClick={() => void resume()}>이어서 하기</button>
+        )}
+      </div>
     </div>
   );
 }

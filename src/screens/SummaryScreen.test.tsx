@@ -1,7 +1,8 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { db } from '../db/db';
 import { seedLibrary } from '../db/exercises';
+import { getActiveSession } from '../db/sessions';
 import type { Session } from '../types';
 import SummaryScreen from './SummaryScreen';
 
@@ -29,6 +30,7 @@ function renderAt(path: string) {
     <MemoryRouter initialEntries={[path]}>
       <Routes>
         <Route path="/" element={<div>홈화면</div>} />
+        <Route path="/session" element={<div>세션화면</div>} />
         <Route path="/summary/:sessionId" element={<SummaryScreen />} />
       </Routes>
     </MemoryRouter>,
@@ -54,4 +56,19 @@ test('첫 기록이면 비교 없이 표시하고 PR 뱃지가 없다', async ()
 test('세션이 없으면 홈으로 리다이렉트한다', async () => {
   renderAt('/summary/no-such-id');
   expect(await screen.findByText('홈화면')).toBeInTheDocument();
+});
+
+test('오늘 완료한 세션은 이어서 하기로 재개된다', async () => {
+  const cur = await addFinishedSession(Date.now() - 3_600_000, 'lib-bench-press', [{ weight: 60, reps: 10 }]);
+  renderAt(`/summary/${cur.id}`);
+  fireEvent.click(await screen.findByRole('button', { name: '이어서 하기' }));
+  expect(await screen.findByText('세션화면')).toBeInTheDocument();
+  expect((await getActiveSession())?.id).toBe(cur.id);
+});
+
+test('과거에 완료한 세션에는 이어서 하기가 없다', async () => {
+  const old = await addFinishedSession(Date.now() - 2 * 86_400_000, 'lib-squat', [{ weight: 80, reps: 5 }]);
+  renderAt(`/summary/${old.id}`);
+  await screen.findByText('스쿼트');
+  expect(screen.queryByRole('button', { name: '이어서 하기' })).not.toBeInTheDocument();
 });
