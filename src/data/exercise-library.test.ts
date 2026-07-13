@@ -26,6 +26,10 @@ test('근력 계열 전체 확장 — 600개 이상', () => {
   expect(library.length).toBeGreaterThanOrEqual(600);
 });
 
+test('리버스 펙덱 플라이가 존재한다', () => {
+  expect(library.some((x) => x.name === '리버스 펙덱 플라이')).toBe(true);
+});
+
 test('기존 55개의 id·libId·이름이 보존된다', () => {
   const byId = new Map(library.map((x) => [x.id, x]));
   expect(legacy.length).toBe(55);
