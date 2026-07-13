@@ -1,8 +1,8 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { db } from '../db/db';
 import { seedLibrary } from '../db/exercises';
-import { getActiveSession } from '../db/sessions';
+import { getActiveSession, startSession } from '../db/sessions';
 import type { Session } from '../types';
 import SummaryScreen from './SummaryScreen';
 
@@ -71,4 +71,25 @@ test('과거에 완료한 세션에는 이어서 하기가 없다', async () => 
   renderAt(`/summary/${old.id}`);
   await screen.findByText('스쿼트');
   expect(screen.queryByRole('button', { name: '이어서 하기' })).not.toBeInTheDocument();
+});
+
+test('다른 세션이 진행 중이면 이어서 하기가 차단된다', async () => {
+  const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {});
+  const cur = await addFinishedSession(Date.now() - 3_600_000, 'lib-bench-press', [{ weight: 60, reps: 10 }]);
+  await startSession(); // 활성 세션
+  render(
+    <MemoryRouter initialEntries={[`/summary/${cur.id}`]}>
+      <Routes>
+        <Route path="/" element={<div>홈화면</div>} />
+        <Route path="/session" element={<div>세션화면</div>} />
+        <Route path="/summary/:sessionId" element={<SummaryScreen />} />
+      </Routes>
+    </MemoryRouter>,
+  );
+  fireEvent.click(await screen.findByRole('button', { name: '이어서 하기' }));
+  await waitFor(() => {
+    expect(alertSpy).toHaveBeenCalledWith('진행 중인 운동을 먼저 완료하세요');
+  });
+  expect((await db.sessions.get(cur.id))?.finishedAt).toBeDefined(); // 무변경
+  alertSpy.mockRestore();
 });

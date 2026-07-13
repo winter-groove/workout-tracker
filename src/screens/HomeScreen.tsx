@@ -87,7 +87,7 @@ export default function HomeScreen() {
   }
 
   async function discardActive() {
-    if (active && window.confirm('진행 중이던 세션을 버릴까요?')) await discardSession(active.id);
+    if (active && window.confirm('진행 중이던 세션을 버릴까요? 기록한 세트는 완전히 삭제돼요.')) await discardSession(active.id);
   }
 
   return (

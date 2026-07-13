@@ -125,7 +125,7 @@ export default function SessionScreen() {
     if (!session) return;
     const doneCount = session.entries.flatMap((e) => e.sets).filter((s) => s.completedAt).length;
     if (doneCount === 0) {
-      if (window.confirm('완료한 세트가 없어요. 세션을 버릴까요?')) {
+      if (window.confirm('완료한 세트가 없어요. 세션을 버릴까요? 되돌릴 수 없어요.')) {
         await discardSession(session.id);
         navigate('/', { replace: true });
       }
