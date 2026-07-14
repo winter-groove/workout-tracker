@@ -1,5 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
-import { flushSync } from 'react-dom';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
 import type { Exercise, Session, SessionEntry, SetRecord } from '../types';
@@ -14,7 +13,7 @@ export default function EditSessionScreen() {
   const [session, setSession] = useState<Session | null>(null);
   const [entries, setEntries] = useState<SessionEntry[]>([]);
   const [showPicker, setShowPicker] = useState(false);
-  const buildingRef = useRef<Array<{ promise: Promise<SessionEntry>; entry?: SessionEntry }>>([]);
+  const [pendingAdds, setPendingAdds] = useState(0);
   const exercises = useLiveQuery(() => listExercises({ includeHidden: true }), []) ?? [];
   const exMap = new Map(exercises.map((e) => [e.id, e]));
 
@@ -59,32 +58,21 @@ export default function EditSessionScreen() {
     setEntries(entries.filter((_, i) => i !== entryIdx));
   }
 
-  function addExercise(ex: Exercise) {
+  async function addExercise(ex: Exercise) {
     if (!session) return;
     setShowPicker(false);
-    const promise = buildEntry(ex.id, 3, session.startedAt + 1);
-    const item = { promise, entry: undefined as SessionEntry | undefined };
-    buildingRef.current.push(item);
-    promise.then((entry) => {
-      item.entry = entry;
-      flushSync(() => setEntries((prev) => [...prev, entry]));
-    });
+    setPendingAdds((n) => n + 1);
+    try {
+      const entry = await buildEntry(ex.id, 3, session.startedAt + 1);
+      setEntries((prev) => [...prev, entry]);
+    } finally {
+      setPendingAdds((n) => n - 1);
+    }
   }
 
   async function save() {
     if (!session) return;
-    // Wait for all pending buildEntry operations to complete
-    const pendingPromises = buildingRef.current.map((item) => item.promise);
-    if (pendingPromises.length > 0) {
-      await Promise.all(pendingPromises);
-    }
-    // Merge pending entries with current entries
-    const allEntries = [
-      ...entries,
-      ...buildingRef.current.map((item) => item.entry).filter((e): e is SessionEntry => e !== undefined),
-    ];
-    buildingRef.current = [];
-    const cleaned = allEntries
+    const cleaned = entries
       .map((e) => ({
         ...e,
         sets: e.sets.map((s) => ({ ...s, completedAt: s.completedAt ?? session.startedAt + 1 })),
@@ -145,12 +133,16 @@ export default function EditSessionScreen() {
         <button className="btn btn-ghost" onClick={() => navigate(`/summary/${session.id}`, { replace: true })}>
           취소
         </button>
-        <button className="btn btn-primary" onClick={() => void save()}>저장</button>
+        <button className="btn btn-primary" disabled={pendingAdds > 0} onClick={() => void save()}>저장</button>
       </div>
       {showPicker && (
         <ExercisePicker
-          initialFilter="전체"
-          onSelect={addExercise}
+          initialFilter={
+            dominantBodyPart(
+              entries.map((e) => exMap.get(e.exerciseId)).filter((e): e is Exercise => e !== undefined),
+            ) ?? '전체'
+          }
+          onSelect={(ex) => void addExercise(ex)}
           onClose={() => setShowPicker(false)}
         />
       )}
