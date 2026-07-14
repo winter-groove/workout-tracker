@@ -153,6 +153,18 @@ test('취소하면 DB가 바뀌지 않는다', async () => {
   expect((await db.sessions.get(s.id))?.entries[0].sets[0].weight).toBe(50);
 });
 
+test('다른 곳에서 세션이 삭제되면 저장이 차단된다', async () => {
+  const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {});
+  const s = await addFinishedSession(1000, ['lib-bench-press']);
+  renderAt(`/edit/${s.id}`);
+  await screen.findByText('벤치프레스');
+  await db.sessions.delete(s.id); // 멀티탭 삭제 시뮬레이션
+  fireEvent.click(screen.getByRole('button', { name: '저장' }));
+  expect(await screen.findByText('홈화면')).toBeInTheDocument();
+  expect(alertSpy).toHaveBeenCalled();
+  alertSpy.mockRestore();
+});
+
 test('미완료 세션이면 홈으로 리다이렉트한다', async () => {
   await db.sessions.add({
     id: 'active-1', startedAt: 1000,

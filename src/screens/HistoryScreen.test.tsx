@@ -35,6 +35,7 @@ function renderScreen() {
       <Routes>
         <Route path="/history" element={<HistoryScreen />} />
         <Route path="/summary/:sessionId" element={<div>요약화면</div>} />
+        <Route path="/edit/:sessionId" element={<div>편집화면</div>} />
       </Routes>
     </MemoryRouter>,
   );
@@ -51,6 +52,14 @@ test('운동별로 보기에 회차별 증감과 PR이 표시된다', async () =
   });
   expect(await screen.findByText('볼륨 600kg 🔺 +20% · 최고 60kg 🔺 +10kg 🏆')).toBeInTheDocument();
   expect(screen.getByText('볼륨 500kg · 첫 기록')).toBeInTheDocument();
+});
+
+test('세션 상세에서 수정하기로 편집 화면에 간다', async () => {
+  await addFinishedSession(1000, 'lib-bench-press', [{ weight: 50, reps: 10 }]);
+  renderScreen();
+  fireEvent.click(await screen.findByText(/1개 운동/));
+  fireEvent.click(screen.getByRole('button', { name: '수정하기' }));
+  expect(await screen.findByText('편집화면')).toBeInTheDocument();
 });
 
 test('세션을 펼치면 운동별 요약이 함께 표시되고 요약 보기 버튼은 없다', async () => {

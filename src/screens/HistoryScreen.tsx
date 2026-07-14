@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
 import type { SetRecord } from '../types';
 import { listFinishedSessions, deleteSession, getExerciseHistory } from '../db/sessions';
@@ -18,6 +19,7 @@ function fmtSets(sets: SetRecord[]): string {
 }
 
 export default function HistoryScreen() {
+  const navigate = useNavigate();
   const [filterId, setFilterId] = useState('');
   const [openId, setOpenId] = useState('');
   const [openSummary, setOpenSummary] = useState<{ id: string; list: EntryProgress[] } | null>(null);
@@ -112,12 +114,20 @@ export default function HistoryScreen() {
                       </div>
                     );
                   })}
-                  <button
-                    className="btn btn-danger" style={{ marginTop: 10 }}
-                    onClick={(ev) => { ev.stopPropagation(); void remove(s.id); }}
-                  >
-                    기록 삭제
-                  </button>
+                  <div className="btn-row" style={{ marginTop: 10 }}>
+                    <button
+                      className="btn btn-ghost"
+                      onClick={(ev) => { ev.stopPropagation(); navigate(`/edit/${s.id}`); }}
+                    >
+                      수정하기
+                    </button>
+                    <button
+                      className="btn btn-danger"
+                      onClick={(ev) => { ev.stopPropagation(); void remove(s.id); }}
+                    >
+                      기록 삭제
+                    </button>
+                  </div>
                 </div>
               )}
             </div>

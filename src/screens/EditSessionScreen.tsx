@@ -14,6 +14,7 @@ export default function EditSessionScreen() {
   const [entries, setEntries] = useState<SessionEntry[]>([]);
   const [showPicker, setShowPicker] = useState(false);
   const [pendingAdds, setPendingAdds] = useState(0);
+  const [saving, setSaving] = useState(false);
   const exercises = useLiveQuery(() => listExercises({ includeHidden: true }), []) ?? [];
   const exMap = new Map(exercises.map((e) => [e.id, e]));
 
@@ -71,19 +72,30 @@ export default function EditSessionScreen() {
   }
 
   async function save() {
-    if (!session) return;
-    const cleaned = entries
-      .map((e) => ({
-        ...e,
-        sets: e.sets.map((s) => ({ ...s, completedAt: s.completedAt ?? session.startedAt + 1 })),
-      }))
-      .filter((e) => e.sets.length > 0);
-    if (cleaned.length === 0) {
-      window.alert('운동이 최소 1개는 있어야 해요. 기록 삭제는 기록 탭에서 할 수 있어요.');
-      return;
+    if (!session || saving) return;
+    setSaving(true);
+    try {
+      const fresh = await db.sessions.get(session.id);
+      if (!fresh || fresh.finishedAt === undefined) {
+        window.alert('세션 상태가 바뀌어 저장할 수 없어요. 다시 열어주세요.');
+        navigate('/', { replace: true });
+        return;
+      }
+      const cleaned = entries
+        .map((e) => ({
+          ...e,
+          sets: e.sets.map((s) => ({ ...s, completedAt: s.completedAt ?? session.startedAt + 1 })),
+        }))
+        .filter((e) => e.sets.length > 0);
+      if (cleaned.length === 0) {
+        window.alert('운동이 최소 1개는 있어야 해요. 기록 삭제는 기록 탭에서 할 수 있어요.');
+        return;
+      }
+      await saveSession({ ...session, entries: cleaned });
+      navigate(`/summary/${session.id}`, { replace: true });
+    } finally {
+      setSaving(false);
     }
-    await saveSession({ ...session, entries: cleaned });
-    navigate(`/summary/${session.id}`, { replace: true });
   }
 
   return (
@@ -130,10 +142,13 @@ export default function EditSessionScreen() {
       ))}
       <button className="btn btn-ghost" onClick={() => setShowPicker(true)}>＋ 운동 추가</button>
       <div className="btn-row">
-        <button className="btn btn-ghost" onClick={() => navigate(`/summary/${session.id}`, { replace: true })}>
+        <button
+          className="btn btn-ghost" disabled={saving}
+          onClick={() => navigate(`/summary/${session.id}`, { replace: true })}
+        >
           취소
         </button>
-        <button className="btn btn-primary" disabled={pendingAdds > 0} onClick={() => void save()}>저장</button>
+        <button className="btn btn-primary" disabled={saving || pendingAdds > 0} onClick={() => void save()}>저장</button>
       </div>
       {showPicker && (
         <ExercisePicker
