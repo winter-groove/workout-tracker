@@ -189,19 +189,6 @@ export default function HomeScreen() {
         )}
       </div>
 
-      <div className="card">
-        <div className="card-h">최근 운동</div>
-        {sessions.slice(0, 5).map((s) => (
-          <div
-            key={s.id} className="hist-row" style={{ cursor: 'pointer' }}
-            onClick={() => navigate(`/summary/${s.id}`)}
-          >
-            <span>{s.routineName ?? '오늘 운동'} · {s.entries.length}개 운동</span>
-            <span className="d">{fmtDate(s.startedAt)}</span>
-          </div>
-        ))}
-        {sessions.length === 0 && <div className="empty">아직 기록이 없어요</div>}
-      </div>
     </div>
   );
 }
