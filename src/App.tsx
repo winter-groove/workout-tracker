@@ -5,6 +5,7 @@ import SessionScreen from './screens/SessionScreen';
 import HistoryScreen from './screens/HistoryScreen';
 import ManageScreen from './screens/ManageScreen';
 import SummaryScreen from './screens/SummaryScreen';
+import EditSessionScreen from './screens/EditSessionScreen';
 
 function Shell() {
   const location = useLocation();
@@ -17,6 +18,7 @@ function Shell() {
         <Route path="/history" element={<HistoryScreen />} />
         <Route path="/manage" element={<ManageScreen />} />
         <Route path="/summary/:sessionId" element={<SummaryScreen />} />
+        <Route path="/edit/:sessionId" element={<EditSessionScreen />} />
       </Routes>
       {!inSession && <TabBar />}
     </div>

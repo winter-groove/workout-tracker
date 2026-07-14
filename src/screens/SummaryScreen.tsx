@@ -76,6 +76,7 @@ export default function SummaryScreen() {
       </div>
       <div className="btn-row">
         <button className="btn btn-primary" onClick={() => navigate('/')}>확인</button>
+        <button className="btn btn-ghost" onClick={() => navigate(`/edit/${session.id}`)}>수정하기</button>
         {canResume && (
           <button className="btn btn-ghost" onClick={() => void resume()}>이어서 하기</button>
         )}

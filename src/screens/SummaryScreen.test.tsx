@@ -93,3 +93,18 @@ test('다른 세션이 진행 중이면 이어서 하기가 차단된다', async
   expect((await db.sessions.get(cur.id))?.finishedAt).toBeDefined(); // 무변경
   alertSpy.mockRestore();
 });
+
+test('수정하기를 누르면 편집 화면으로 이동한다', async () => {
+  const cur = await addFinishedSession(1000, 'lib-bench-press', [{ weight: 50, reps: 10 }]);
+  render(
+    <MemoryRouter initialEntries={[`/summary/${cur.id}`]}>
+      <Routes>
+        <Route path="/" element={<div>홈화면</div>} />
+        <Route path="/summary/:sessionId" element={<SummaryScreen />} />
+        <Route path="/edit/:sessionId" element={<div>편집화면</div>} />
+      </Routes>
+    </MemoryRouter>,
+  );
+  fireEvent.click(await screen.findByRole('button', { name: '수정하기' }));
+  expect(await screen.findByText('편집화면')).toBeInTheDocument();
+});
