@@ -4,6 +4,7 @@ import {
   saveSession, finishSession, discardSession,
   listFinishedSessions, deleteSession, getExerciseHistory, resumeSession, getLastDoneMap,
 } from './sessions';
+import { exportData, importData } from './backup';
 import type { Routine, Session } from '../types';
 
 beforeEach(async () => {
@@ -181,4 +182,18 @@ test('getLastDoneMap은 운동별 마지막 완료 세션 시각을 준다 (진�
   const map = await getLastDoneMap();
   expect(map.get('ex1')).toBe(2000);
   expect(map.size).toBe(1);
+});
+
+test('백업 왕복에 pairedWithNext가 보존된다', async () => {
+  const s = await startSession();
+  s.entries = [
+    { exerciseId: 'ex1', sets: [{ weight: 50, reps: 10, completedAt: 1 }], pairedWithNext: true },
+    { exerciseId: 'ex2', sets: [{ weight: 20, reps: 10, completedAt: 1 }] },
+  ];
+  await saveSession(s);
+  await finishSession(s);
+  const dump = JSON.parse(JSON.stringify(await exportData()));
+  await importData(dump);
+  const restored = (await listFinishedSessions())[0];
+  expect(restored.entries[0].pairedWithNext).toBe(true);
 });

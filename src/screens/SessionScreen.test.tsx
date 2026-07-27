@@ -2,10 +2,10 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { db } from '../db/db';
 import { seedLibrary } from '../db/exercises';
-import { startSession, getActiveSession } from '../db/sessions';
+import { startSession, getActiveSession, saveSession } from '../db/sessions';
 import * as progress from '../db/progress';
 import type { Routine } from '../types';
-import SessionScreen from './SessionScreen';
+import SessionScreen, { groupsOf } from './SessionScreen';
 
 const routine: Routine = {
   id: 'r1', name: '가슴 날',
@@ -238,4 +238,103 @@ test('완료된 마지막 세트는 confirm 취소 시 유지, 수락 시 삭제
     const s = await getActiveSession();
     expect(s?.entries[0].sets).toHaveLength(1);
   });
+});
+
+test('groupsOf: 연속 pairedWithNext를 묶고 dangling flag는 무시한다', () => {
+  expect(groupsOf([{ pairedWithNext: true }, {}, {}])).toEqual([[0, 1], [2]]);
+  expect(groupsOf([{ pairedWithNext: true }, { pairedWithNext: true }, {}])).toEqual([[0, 1, 2]]);
+  expect(groupsOf([{}, { pairedWithNext: true }])).toEqual([[0], [1]]);
+  expect(groupsOf([])).toEqual([]);
+});
+
+test('다음 운동과 묶으면 두 운동이 한 화면에 보이고 각각 기록된다', async () => {
+  await startSession(routine);
+  renderScreen();
+  await screen.findByText('벤치프레스');
+  fireEvent.click(screen.getByRole('button', { name: '🔗 다음 운동과 묶기' }));
+  expect(await screen.findByText('스쿼트')).toBeInTheDocument();
+  expect(screen.getByText('벤치프레스')).toBeInTheDocument();
+  expect(screen.getByText('1 / 1')).toBeInTheDocument();
+  fireEvent.click(screen.getAllByLabelText('세트 1 완료')[1]); // 스쿼트의 세트 1
+  await waitFor(async () => {
+    const s = await getActiveSession();
+    expect(s?.entries[1].sets[0].completedAt).toBeDefined();
+    expect(s?.entries[0].pairedWithNext).toBe(true);
+  });
+});
+
+test('묶음은 저장되어 재마운트해도 유지된다', async () => {
+  const s = await startSession(routine);
+  s.entries[0].pairedWithNext = true;
+  await saveSession(s);
+  renderScreen();
+  expect(await screen.findByText('벤치프레스')).toBeInTheDocument();
+  expect(screen.getByText('스쿼트')).toBeInTheDocument();
+});
+
+test('묶기 해제하면 한 운동씩 보인다', async () => {
+  const s = await startSession(routine);
+  s.entries[0].pairedWithNext = true;
+  await saveSession(s);
+  renderScreen();
+  await screen.findByText('스쿼트');
+  fireEvent.click(screen.getByRole('button', { name: '묶기 해제' }));
+  await waitFor(() => expect(screen.queryByText('스쿼트')).not.toBeInTheDocument());
+  expect(screen.getByText('1 / 2')).toBeInTheDocument();
+});
+
+test('묶음 단위로 이동한다', async () => {
+  const three: Routine = {
+    id: 'r3', name: '3종',
+    items: [
+      { exerciseId: 'lib-bench-press', defaultSets: 1 },
+      { exerciseId: 'lib-squat', defaultSets: 1 },
+      { exerciseId: 'lib-pec-deck', defaultSets: 1 },
+    ],
+  };
+  const s = await startSession(three);
+  s.entries[0].pairedWithNext = true;
+  await saveSession(s);
+  renderScreen();
+  await screen.findByText('벤치프레스');
+  expect(screen.getByText('1 / 2')).toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', { name: '다음 운동' }));
+  expect(await screen.findByText('펙덱 플라이')).toBeInTheDocument();
+  expect(screen.getByText('2 / 2')).toBeInTheDocument();
+});
+
+test('운동 빼기: 완료 세트 없으면 즉시 제거된다', async () => {
+  await startSession(routine);
+  renderScreen();
+  await screen.findByText('벤치프레스');
+  fireEvent.click(screen.getByRole('button', { name: '운동 빼기' }));
+  expect(await screen.findByText('스쿼트')).toBeInTheDocument();
+  await waitFor(async () => {
+    expect((await getActiveSession())?.entries).toHaveLength(1);
+  });
+});
+
+test('운동 빼기: 완료 세트가 있으면 confirm을 거친다', async () => {
+  vi.spyOn(window, 'confirm').mockReturnValue(false);
+  await startSession(routine);
+  renderScreen();
+  await screen.findByText('벤치프레스');
+  fireEvent.click(screen.getByLabelText('세트 1 완료'));
+  fireEvent.click(screen.getByRole('button', { name: '운동 빼기' }));
+  expect(window.confirm).toHaveBeenCalledWith('완료한 세트가 있어요. 이 운동을 뺄까요?');
+  expect((await getActiveSession())?.entries).toHaveLength(2);
+});
+
+test('묶인 운동을 빼면 남은 운동이 단독 그룹이 된다', async () => {
+  const s = await startSession(routine);
+  s.entries[0].pairedWithNext = true;
+  await saveSession(s);
+  renderScreen();
+  await screen.findByText('스쿼트');
+  fireEvent.click(screen.getAllByRole('button', { name: '운동 빼기' })[1]); // 스쿼트 빼기
+  await waitFor(() => expect(screen.queryByText('스쿼트')).not.toBeInTheDocument());
+  expect(screen.getByText('1 / 1')).toBeInTheDocument();
+  const cur = await getActiveSession();
+  expect(cur?.entries).toHaveLength(1);
+  expect(cur?.entries[0].pairedWithNext).toBeUndefined();
 });
