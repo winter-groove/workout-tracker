@@ -56,7 +56,9 @@ export default function EditSessionScreen() {
   }
 
   function removeEntry(entryIdx: number) {
-    setEntries(entries.filter((_, i) => i !== entryIdx));
+    setEntries(entries
+      .map((e, i) => (i === entryIdx - 1 && e.pairedWithNext ? { ...e, pairedWithNext: undefined } : e))
+      .filter((_, i) => i !== entryIdx));
   }
 
   async function addExercise(ex: Exercise) {
@@ -81,12 +83,17 @@ export default function EditSessionScreen() {
         navigate('/', { replace: true });
         return;
       }
-      const cleaned = entries
-        .map((e) => ({
-          ...e,
-          sets: e.sets.map((s) => ({ ...s, completedAt: s.completedAt ?? session.startedAt + 1 })),
-        }))
-        .filter((e) => e.sets.length > 0);
+      const withCompleted = entries.map((e) => ({
+        ...e,
+        sets: e.sets.map((s) => ({ ...s, completedAt: s.completedAt ?? session.startedAt + 1 })),
+      }));
+      const keep = withCompleted.map((e) => e.sets.length > 0);
+      const cleaned = withCompleted
+        .map((e, i) => {
+          if (!keep[i]) return null;
+          return e.pairedWithNext && keep[i + 1] !== true ? { ...e, pairedWithNext: undefined } : e;
+        })
+        .filter((e): e is (typeof withCompleted)[number] => e !== null);
       if (cleaned.length === 0) {
         window.alert('운동이 최소 1개는 있어야 해요. 기록 삭제는 기록 탭에서 할 수 있어요.');
         return;

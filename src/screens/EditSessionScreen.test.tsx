@@ -173,3 +173,41 @@ test('미완료 세션이면 홈으로 리다이렉트한다', async () => {
   renderAt('/edit/active-1');
   expect(await screen.findByText('홈화면')).toBeInTheDocument();
 });
+
+test('묶인 운동을 편집에서 삭제하면 dangling flag가 남지 않는다', async () => {
+  const s: Session = {
+    id: crypto.randomUUID(), startedAt: 1000, finishedAt: 2000,
+    entries: [
+      { exerciseId: 'lib-bench-press', sets: [{ weight: 50, reps: 10, completedAt: 1001 }], pairedWithNext: true },
+      { exerciseId: 'lib-squat', sets: [{ weight: 80, reps: 5, completedAt: 1001 }] },
+    ],
+  };
+  await db.sessions.add(s);
+  renderAt(`/edit/${s.id}`);
+  await screen.findByText('스쿼트');
+  fireEvent.click(screen.getAllByRole('button', { name: '운동 삭제' })[1]); // 스쿼트(그룹 마지막) 삭제
+  fireEvent.click(screen.getByRole('button', { name: '저장' }));
+  await screen.findByText('요약화면');
+  const saved = await db.sessions.get(s.id);
+  expect(saved?.entries).toHaveLength(1);
+  expect(saved?.entries[0].pairedWithNext).toBeUndefined();
+});
+
+test('세트를 전부 지워 제거되는 운동 뒤의 flag도 저장 시 정리된다', async () => {
+  const s: Session = {
+    id: crypto.randomUUID(), startedAt: 1000, finishedAt: 2000,
+    entries: [
+      { exerciseId: 'lib-bench-press', sets: [{ weight: 50, reps: 10, completedAt: 1001 }], pairedWithNext: true },
+      { exerciseId: 'lib-squat', sets: [{ weight: 80, reps: 5, completedAt: 1001 }] },
+    ],
+  };
+  await db.sessions.add(s);
+  renderAt(`/edit/${s.id}`);
+  await screen.findByText('스쿼트');
+  fireEvent.click(screen.getAllByRole('button', { name: /세트 \d+ 삭제/ })[1]); // 스쿼트의 유일 세트 삭제 → 저장 시 entry 제거
+  fireEvent.click(screen.getByRole('button', { name: '저장' }));
+  await screen.findByText('요약화면');
+  const saved = await db.sessions.get(s.id);
+  expect(saved?.entries).toHaveLength(1);
+  expect(saved?.entries[0].pairedWithNext).toBeUndefined();
+});
