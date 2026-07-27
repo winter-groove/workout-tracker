@@ -101,3 +101,15 @@ export async function resumeSession(id: string): Promise<boolean> {
   await db.sessions.put(active);
   return true;
 }
+
+// exerciseId → 마지막으로 완료한 세션의 startedAt (listFinishedSessions가 최신순이라 첫 등장이 최신)
+export async function getLastDoneMap(): Promise<Map<string, number>> {
+  const sessions = await listFinishedSessions();
+  const map = new Map<string, number>();
+  for (const s of sessions) {
+    for (const e of s.entries) {
+      if (!map.has(e.exerciseId)) map.set(e.exerciseId, s.startedAt);
+    }
+  }
+  return map;
+}

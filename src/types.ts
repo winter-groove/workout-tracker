@@ -38,6 +38,7 @@ export interface SetRecord {
 export interface SessionEntry {
   exerciseId: string;
   sets: SetRecord[];
+  pairedWithNext?: boolean; // true면 다음 entry와 같은 화면에 묶어 표시 (슈퍼세트)
 }
 
 export interface Session {

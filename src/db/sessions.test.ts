@@ -2,7 +2,7 @@ import { db } from './db';
 import {
   getLastRecord, buildEntry, startSession, getActiveSession,
   saveSession, finishSession, discardSession,
-  listFinishedSessions, deleteSession, getExerciseHistory, resumeSession,
+  listFinishedSessions, deleteSession, getExerciseHistory, resumeSession, getLastDoneMap,
 } from './sessions';
 import type { Routine, Session } from '../types';
 
@@ -172,4 +172,13 @@ test('resumeSession은 없는 id·미완료 세션에 false', async () => {
   expect(await resumeSession('없는세션')).toBe(false);
   const s = await startSession();
   expect(await resumeSession(s.id)).toBe(false);
+});
+
+test('getLastDoneMap은 운동별 마지막 완료 세션 시각을 준다 (진행 중 제외)', async () => {
+  await addFinishedSession(1000, 'ex1', [{ weight: 50, reps: 10 }]);
+  await addFinishedSession(2000, 'ex1', [{ weight: 60, reps: 10 }]);
+  await startSession(); // 진행 중 — 제외
+  const map = await getLastDoneMap();
+  expect(map.get('ex1')).toBe(2000);
+  expect(map.size).toBe(1);
 });
