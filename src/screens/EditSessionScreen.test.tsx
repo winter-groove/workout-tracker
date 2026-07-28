@@ -213,6 +213,34 @@ test('편집에서 묶인 그룹의 짝을 삭제하면 오묶임 없이 flag가
   expect(saved?.entries[0].pairedWithNext).toBeUndefined(); // 펙덱과 오묶임 금지
 });
 
+test('세션 이름을 지정해 저장하면 반영되고 placeholder는 자동 이름이다', async () => {
+  const s = await addFinishedSession(1000, ['lib-bench-press']);
+  renderAt(`/edit/${s.id}`);
+  const nameInput = await screen.findByLabelText('세션 이름');
+  await screen.findByText('벤치프레스'); // exercises loaded
+  expect((nameInput as HTMLInputElement).placeholder).toBe('가슴 운동');
+  fireEvent.change(nameInput, { target: { value: '아침 가슴' } });
+  fireEvent.click(screen.getByRole('button', { name: '저장' }));
+  await screen.findByText('요약화면');
+  expect((await db.sessions.get(s.id))?.routineName).toBe('아침 가슴');
+});
+
+test('세션 이름을 비우고 저장하면 자동 이름으로 돌아간다', async () => {
+  const s: Session = {
+    id: crypto.randomUUID(), startedAt: 1000, finishedAt: 2000, routineName: '내 이름',
+    entries: [{ exerciseId: 'lib-bench-press', sets: [{ weight: 50, reps: 10, completedAt: 1001 }] }],
+  };
+  await db.sessions.add(s);
+  renderAt(`/edit/${s.id}`);
+  const nameInput = await screen.findByLabelText('세션 이름');
+  await screen.findByText('벤치프레스'); // exercises loaded
+  expect((nameInput as HTMLInputElement).value).toBe('내 이름');
+  fireEvent.change(nameInput, { target: { value: '' } });
+  fireEvent.click(screen.getByRole('button', { name: '저장' }));
+  await screen.findByText('요약화면');
+  expect((await db.sessions.get(s.id))?.routineName).toBeUndefined();
+});
+
 test('세트를 전부 지워 제거되는 운동 뒤의 flag도 저장 시 정리된다', async () => {
   const s: Session = {
     id: crypto.randomUUID(), startedAt: 1000, finishedAt: 2000,

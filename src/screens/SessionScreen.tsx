@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
 import type { Exercise, Session, SetRecord } from '../types';
 import {
-  getActiveSession, saveSession, finishSession, discardSession, buildEntry,
+  getActiveSession, saveSession, finishSession, discardSession, buildEntry, sessionTitle,
 } from '../db/sessions';
 import { listExercises } from '../db/exercises';
 import { getRestSeconds } from '../db/settings';
@@ -220,7 +220,7 @@ export default function SessionScreen() {
     <>
       <div className="topnav">
         <button onClick={finish} aria-label="세션 종료">✕</button>
-        <span className="title">{session.routineName ?? '오늘 운동'} · <span>{total > 0 ? `${gPos + 1} / ${total}` : '운동 없음'}</span></span>
+        <span className="title">{sessionTitle(session, exMap)} · <span>{total > 0 ? `${gPos + 1} / ${total}` : '운동 없음'}</span></span>
         <span className="clock">
           {isBackdated ? `${startDate.getMonth() + 1}/${startDate.getDate()}` : fmtElapsed(session.startedAt, now)}
         </span>

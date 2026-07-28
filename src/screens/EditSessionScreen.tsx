@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
 import type { Exercise, Session, SessionEntry, SetRecord } from '../types';
 import { db } from '../db/db';
-import { saveSession, buildEntry } from '../db/sessions';
+import { saveSession, buildEntry, sessionTitle } from '../db/sessions';
 import { listExercises } from '../db/exercises';
 import ExercisePicker, { dominantBodyPart } from '../components/ExercisePicker';
 
@@ -12,6 +12,7 @@ export default function EditSessionScreen() {
   const navigate = useNavigate();
   const [session, setSession] = useState<Session | null>(null);
   const [entries, setEntries] = useState<SessionEntry[]>([]);
+  const [name, setName] = useState('');
   const [showPicker, setShowPicker] = useState(false);
   const [pendingAdds, setPendingAdds] = useState(0);
   const [saving, setSaving] = useState(false);
@@ -29,6 +30,7 @@ export default function EditSessionScreen() {
         return;
       }
       setSession(s);
+      setName(s.routineName ?? '');
       setEntries(s.entries.map((e) => ({ ...e, sets: e.sets.map((x) => ({ ...x })) })));
     });
   }, [sessionId, navigate]);
@@ -98,7 +100,11 @@ export default function EditSessionScreen() {
         window.alert('운동이 최소 1개는 있어야 해요. 기록 삭제는 기록 탭에서 할 수 있어요.');
         return;
       }
-      await saveSession({ ...session, entries: cleaned });
+      await saveSession({
+        ...session,
+        routineName: name.trim() === '' ? undefined : name.trim(),
+        entries: cleaned,
+      });
       navigate(`/summary/${session.id}`, { replace: true });
     } finally {
       setSaving(false);
@@ -108,6 +114,15 @@ export default function EditSessionScreen() {
   return (
     <div className="screen">
       <h1 className="screen-title">기록 수정</h1>
+      <div className="field">
+        <label htmlFor="session-name">세션 이름</label>
+        <input
+          id="session-name"
+          placeholder={sessionTitle({ ...session, routineName: undefined }, exMap)}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </div>
       {entries.map((e, i) => (
         <div key={i} className="card">
           <div className="hist-row" style={{ borderBottom: 'none' }}>
