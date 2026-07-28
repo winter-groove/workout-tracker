@@ -5,8 +5,7 @@ import {
   listFinishedSessions, deleteSession, getExerciseHistory, resumeSession, getLastDoneMap, sessionTitle,
 } from './sessions';
 import { exportData, importData } from './backup';
-import type { Routine, Session } from '../types';
-import type { Exercise } from '../types';
+import type { Routine, Session, Exercise } from '../types';
 
 beforeEach(async () => {
   await db.delete();

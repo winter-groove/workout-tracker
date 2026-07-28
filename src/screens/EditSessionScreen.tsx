@@ -118,7 +118,7 @@ export default function EditSessionScreen() {
         <label htmlFor="session-name">세션 이름</label>
         <input
           id="session-name"
-          placeholder={sessionTitle({ ...session, routineName: undefined }, exMap)}
+          placeholder={sessionTitle({ ...session, routineName: undefined, entries }, exMap)}
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
