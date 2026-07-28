@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
 import type { SetRecord } from '../types';
-import { listFinishedSessions, deleteSession, getExerciseHistory } from '../db/sessions';
+import { listFinishedSessions, deleteSession, getExerciseHistory, sessionTitle } from '../db/sessions';
 import { listExercises } from '../db/exercises';
 import {
   annotateHistory, fmtVolumeDelta, fmtWeightDelta, summarizeSession, type EntryProgress,
@@ -92,7 +92,7 @@ export default function HistoryScreen() {
           {sessions.map((s) => (
             <div key={s.id} className="card" onClick={() => setOpenId(openId === s.id ? '' : s.id)}>
               <div className="hist-row" style={{ borderBottom: openId === s.id ? undefined : 'none' }}>
-                <span>{s.routineName ?? '오늘 운동'} · {s.entries.length}개 운동</span>
+                <span>{sessionTitle(s, exMap)} · {s.entries.length}개 운동</span>
                 <span className="d">{fmtDate(s.startedAt)}</span>
               </div>
               {openId === s.id && (

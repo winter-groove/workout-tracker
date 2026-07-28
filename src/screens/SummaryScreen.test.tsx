@@ -108,3 +108,9 @@ test('수정하기를 누르면 편집 화면으로 이동한다', async () => {
   fireEvent.click(await screen.findByRole('button', { name: '수정하기' }));
   expect(await screen.findByText('편집화면')).toBeInTheDocument();
 });
+
+test('이름 없는 세션의 요약 헤더는 부위 이름이다', async () => {
+  const cur = await addFinishedSession(1000, 'lib-squat', [{ weight: 80, reps: 5 }]);
+  renderAt(`/summary/${cur.id}`);
+  expect(await screen.findByText(/하체 운동 · /)).toBeInTheDocument();
+});

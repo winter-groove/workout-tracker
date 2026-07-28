@@ -5,7 +5,7 @@ import type { Session } from '../types';
 import { db } from '../db/db';
 import { listExercises } from '../db/exercises';
 import { summarizeSession, fmtVolumeDelta, fmtWeightDelta, type EntryProgress } from '../db/progress';
-import { resumeSession } from '../db/sessions';
+import { resumeSession, sessionTitle } from '../db/sessions';
 
 function fmtDate(ts: number): string {
   const d = new Date(ts);
@@ -56,7 +56,7 @@ export default function SummaryScreen() {
     <div className="screen">
       <h1 className="screen-title">운동 완료 🎉</h1>
       <div className="card">
-        <div className="card-h">{session.routineName ?? '오늘 운동'} · {fmtDate(session.startedAt)} · {session.entries.length}개 운동</div>
+        <div className="card-h">{sessionTitle(session, exMap)} · {fmtDate(session.startedAt)} · {session.entries.length}개 운동</div>
         {session.entries.map((e, i) => {
           const p = progress[i];
           if (!p) return null;

@@ -2,10 +2,11 @@ import { db } from './db';
 import {
   getLastRecord, buildEntry, startSession, getActiveSession,
   saveSession, finishSession, discardSession,
-  listFinishedSessions, deleteSession, getExerciseHistory, resumeSession, getLastDoneMap,
+  listFinishedSessions, deleteSession, getExerciseHistory, resumeSession, getLastDoneMap, sessionTitle,
 } from './sessions';
 import { exportData, importData } from './backup';
 import type { Routine, Session } from '../types';
+import type { Exercise } from '../types';
 
 beforeEach(async () => {
   await db.delete();
@@ -225,4 +226,25 @@ test('백업 왕복에 pairedWithNext가 보존된다', async () => {
   await importData(dump);
   const restored = (await listFinishedSessions())[0];
   expect(restored.entries[0].pairedWithNext).toBe(true);
+});
+
+function mkEx(id: string, bodyPart: Exercise['bodyPart']): Exercise {
+  return { id, name: id, bodyPart, equipment: '바벨', isCustom: false, isHidden: false };
+}
+
+test('sessionTitle: 루틴명 우선, 부위 구성 자동, fallback', () => {
+  const exMap = new Map<string, Exercise>([
+    ['e1', mkEx('e1', '가슴')],
+    ['e2', mkEx('e2', '등')],
+    ['e3', mkEx('e3', '가슴')],
+    ['e4', mkEx('e4', '하체')],
+  ]);
+  const E = (id: string) => ({ exerciseId: id, sets: [] });
+  const base = { id: 's', startedAt: 1 };
+  expect(sessionTitle({ ...base, routineName: '가슴 날', entries: [E('e1')] }, exMap)).toBe('가슴 날');
+  expect(sessionTitle({ ...base, entries: [E('e1')] }, exMap)).toBe('가슴 운동');
+  expect(sessionTitle({ ...base, entries: [E('e1'), E('e2')] }, exMap)).toBe('가슴·등 운동');
+  expect(sessionTitle({ ...base, entries: [E('e1'), E('e3'), E('e2'), E('e4')] }, exMap)).toBe('가슴·등 운동');
+  expect(sessionTitle({ ...base, entries: [E('없는운동')] }, exMap)).toBe('오늘 운동');
+  expect(sessionTitle({ ...base, entries: [] }, exMap)).toBe('오늘 운동');
 });

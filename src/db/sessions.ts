@@ -1,6 +1,6 @@
 import { db } from './db';
 import { getPreviousRecord } from './progress';
-import type { Routine, Session, SessionEntry, SetRecord } from '../types';
+import type { Routine, Session, SessionEntry, SetRecord, Exercise } from '../types';
 
 export async function getLastRecord(exerciseId: string): Promise<SetRecord[] | undefined> {
   const sessions = await db.sessions.orderBy('startedAt').reverse().toArray();
@@ -117,4 +117,19 @@ export async function getLastDoneMap(): Promise<Map<string, number>> {
     }
   }
   return map;
+}
+
+// 표시용 세션 이름: 루틴명 > 부위 구성(최다 2개, 동수는 등장순) > '오늘 운동'. 저장하지 않는 표시 전용 값.
+export function sessionTitle(session: Session, exMap: Map<string, Exercise>): string {
+  if (session.routineName) return session.routineName;
+  const counts = new Map<string, number>();
+  for (const e of session.entries) {
+    const part = exMap.get(e.exerciseId)?.bodyPart;
+    if (part) counts.set(part, (counts.get(part) ?? 0) + 1);
+  }
+  const parts = [...counts.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 2)
+    .map(([p]) => p);
+  return parts.length > 0 ? `${parts.join('·')} 운동` : '오늘 운동';
 }

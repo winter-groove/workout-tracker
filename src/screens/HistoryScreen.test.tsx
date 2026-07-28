@@ -116,3 +116,9 @@ test('race: 늦게 resolve된 이전 세션 요약이 나중 선택을 덮어쓰
   resolvers.get(a.id)!(realA);
   expect(await screen.findByText('볼륨 500kg · 최고 50kg · 첫 기록')).toBeInTheDocument();
 });
+
+test('이름 없는 세션은 부위 기반 자동 이름으로 표시된다', async () => {
+  await addFinishedSession(1000, 'lib-bench-press', [{ weight: 50, reps: 10 }]);
+  renderScreen();
+  expect(await screen.findByText(/가슴 운동 · 1개 운동/)).toBeInTheDocument();
+});

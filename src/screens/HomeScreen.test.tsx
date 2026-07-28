@@ -3,6 +3,7 @@ import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { vi } from 'vitest';
 import type { Session } from '../types';
 import { db } from '../db/db';
+import { seedLibrary } from '../db/exercises';
 import { saveRoutine } from '../db/routines';
 import { setTodayRoutineId } from '../db/todayRoutine';
 import { startSession, getActiveSession } from '../db/sessions';
@@ -165,4 +166,18 @@ test('홈에 최근 운동 카드가 없다', async () => {
   renderWithSummary();
   await screen.findByText('달력');
   expect(screen.queryByText('최근 운동')).not.toBeInTheDocument();
+});
+
+test('이름 없는 세션은 달력 목록에서 부위 이름으로 표시된다', async () => {
+  await seedLibrary();
+  const now = new Date();
+  const ts = new Date(now.getFullYear(), now.getMonth(), 15, 10).getTime();
+  const s: Session = {
+    id: crypto.randomUUID(), startedAt: ts, finishedAt: ts + 3600_000,
+    entries: [{ exerciseId: 'lib-bench-press', sets: [{ weight: 50, reps: 10, completedAt: ts + 1 }] }],
+  };
+  await db.sessions.add(s);
+  renderWithSummary();
+  fireEvent.click(await screen.findByRole('button', { name: `${now.getMonth() + 1}월 15일` }));
+  expect(await screen.findByText('가슴 운동 · 1개 운동')).toBeInTheDocument();
 });

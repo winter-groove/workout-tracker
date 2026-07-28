@@ -4,8 +4,9 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import type { Routine, Session } from '../types';
 import { listRoutines } from '../db/routines';
 import {
-  startSession, getActiveSession, discardSession, listFinishedSessions,
+  startSession, getActiveSession, discardSession, listFinishedSessions, sessionTitle,
 } from '../db/sessions';
+import { listExercises } from '../db/exercises';
 import { getTodayRoutineId, setTodayRoutineId, clearTodayRoutine } from '../db/todayRoutine';
 import MonthCalendar from '../components/MonthCalendar';
 
@@ -38,6 +39,8 @@ export default function HomeScreen() {
   const routines = useLiveQuery(() => listRoutines(), []) ?? [];
   const sessions = useLiveQuery(() => listFinishedSessions(), []) ?? [];
   const active = useLiveQuery(() => getActiveSession(), []);
+  const allExercises = useLiveQuery(() => listExercises({ includeHidden: true }), []) ?? [];
+  const exMap = new Map(allExercises.map((e) => [e.id, e]));
 
   const today = new Date();
   const workoutDays = new Set(
@@ -99,7 +102,7 @@ export default function HomeScreen() {
       {active ? (
         <div className="startcard">
           <div className="t">진행 중인 운동이 있어요</div>
-          <div className="s">{active.routineName ?? '오늘 운동'} · {fmtDate(active.startedAt)} 시작</div>
+          <div className="s">{sessionTitle(active, exMap)} · {fmtDate(active.startedAt)} 시작</div>
           <button className="go" onClick={() => navigate('/session')}>이어서 하기</button>
           <button className="go" style={{ marginTop: 8, background: 'rgba(255,255,255,0.2)', color: '#fff' }} onClick={discardActive}>
             버리기
@@ -160,7 +163,7 @@ export default function HomeScreen() {
                 key={s.id} className="hist-row" style={{ cursor: 'pointer' }}
                 onClick={() => navigate(`/summary/${s.id}`)}
               >
-                <span>{s.routineName ?? '오늘 운동'} · {s.entries.length}개 운동</span>
+                <span>{sessionTitle(s, exMap)} · {s.entries.length}개 운동</span>
                 <span className="d">보기 ›</span>
               </div>
             ))}
