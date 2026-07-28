@@ -110,3 +110,12 @@ test('검색은 최근 구간에도 적용된다', async () => {
     expect(screen.queryByText('최근 한 운동')).not.toBeInTheDocument(); // 스쿼트가 걸러짐
   });
 });
+
+test('최근 한 운동 행을 탭하면 onSelect가 불린다', async () => {
+  await addDone(new Date(2026, 5, 1, 12).getTime(), 'lib-squat');
+  const onSelect = vi.fn();
+  render(<ExercisePicker onSelect={onSelect} onClose={() => {}} />);
+  await screen.findByText('최근 한 운동');
+  fireEvent.click(screen.getByText('스쿼트'));
+  expect(onSelect).toHaveBeenCalledWith(expect.objectContaining({ id: 'lib-squat' }));
+});

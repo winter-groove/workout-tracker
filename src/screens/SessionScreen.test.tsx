@@ -303,11 +303,13 @@ test('묶음 단위로 이동한다', async () => {
   expect(screen.getByText('2 / 2')).toBeInTheDocument();
 });
 
-test('운동 빼기: 완료 세트 없으면 즉시 제거된다', async () => {
+test('운동 빼기: 확인 후 제거된다', async () => {
+  vi.spyOn(window, 'confirm').mockReturnValue(true);
   await startSession(routine);
   renderScreen();
   await screen.findByText('벤치프레스');
   fireEvent.click(screen.getByRole('button', { name: '운동 빼기' }));
+  expect(window.confirm).toHaveBeenCalledWith('이 운동을 뺄까요?');
   expect(await screen.findByText('스쿼트')).toBeInTheDocument();
   await waitFor(async () => {
     expect((await getActiveSession())?.entries).toHaveLength(1);
@@ -326,6 +328,7 @@ test('운동 빼기: 완료 세트가 있으면 confirm을 거친다', async () 
 });
 
 test('묶인 운동을 빼면 남은 운동이 단독 그룹이 된다', async () => {
+  vi.spyOn(window, 'confirm').mockReturnValue(true);
   const s = await startSession(routine);
   s.entries[0].pairedWithNext = true;
   await saveSession(s);
@@ -337,4 +340,52 @@ test('묶인 운동을 빼면 남은 운동이 단독 그룹이 된다', async (
   const cur = await getActiveSession();
   expect(cur?.entries).toHaveLength(1);
   expect(cur?.entries[0].pairedWithNext).toBeUndefined();
+});
+
+test('세 운동까지 묶고 한 번에 해제할 수 있다', async () => {
+  const three: Routine = {
+    id: 'r3x', name: '3종',
+    items: [
+      { exerciseId: 'lib-bench-press', defaultSets: 1 },
+      { exerciseId: 'lib-squat', defaultSets: 1 },
+      { exerciseId: 'lib-pec-deck', defaultSets: 1 },
+    ],
+  };
+  await startSession(three);
+  renderScreen();
+  await screen.findByText('벤치프레스');
+  fireEvent.click(screen.getByRole('button', { name: '🔗 다음 운동과 묶기' }));
+  await screen.findByText('스쿼트');
+  fireEvent.click(screen.getByRole('button', { name: '🔗 다음 운동과 묶기' })); // 그룹 확장 (M1)
+  expect(await screen.findByText('펙덱 플라이')).toBeInTheDocument();
+  expect(screen.getByText('1 / 1')).toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', { name: '묶기 해제' })); // 전체 해제 (M2)
+  await waitFor(() => expect(screen.queryByText('스쿼트')).not.toBeInTheDocument());
+  expect(screen.getByText('1 / 3')).toBeInTheDocument();
+  const s = await getActiveSession();
+  expect(s?.entries.every((e) => !e.pairedWithNext)).toBe(true);
+});
+
+test('트라이세트 중간 운동을 빼면 남은 둘의 묶음이 유지된다', async () => {
+  vi.spyOn(window, 'confirm').mockReturnValue(true);
+  const three: Routine = {
+    id: 'r3y', name: '3종',
+    items: [
+      { exerciseId: 'lib-bench-press', defaultSets: 1 },
+      { exerciseId: 'lib-squat', defaultSets: 1 },
+      { exerciseId: 'lib-pec-deck', defaultSets: 1 },
+    ],
+  };
+  const s = await startSession(three);
+  s.entries[0].pairedWithNext = true;
+  s.entries[1].pairedWithNext = true;
+  await saveSession(s);
+  renderScreen();
+  await screen.findByText('스쿼트');
+  fireEvent.click(screen.getAllByRole('button', { name: '운동 빼기' })[1]); // 중간(스쿼트)
+  await waitFor(() => expect(screen.queryByText('스쿼트')).not.toBeInTheDocument());
+  expect(screen.getByText('벤치프레스')).toBeInTheDocument();
+  expect(screen.getByText('펙덱 플라이')).toBeInTheDocument(); // A-C 묶음 유지
+  expect(screen.getByText('1 / 1')).toBeInTheDocument();
+  expect((await getActiveSession())?.entries[0].pairedWithNext).toBe(true);
 });

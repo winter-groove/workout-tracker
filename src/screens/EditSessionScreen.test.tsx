@@ -193,6 +193,26 @@ test('묶인 운동을 편집에서 삭제하면 dangling flag가 남지 않는�
   expect(saved?.entries[0].pairedWithNext).toBeUndefined();
 });
 
+test('편집에서 묶인 그룹의 짝을 삭제하면 오묶임 없이 flag가 정리된다', async () => {
+  const s: Session = {
+    id: crypto.randomUUID(), startedAt: 1000, finishedAt: 2000,
+    entries: [
+      { exerciseId: 'lib-bench-press', sets: [{ weight: 50, reps: 10, completedAt: 1001 }], pairedWithNext: true },
+      { exerciseId: 'lib-squat', sets: [{ weight: 80, reps: 5, completedAt: 1001 }] },
+      { exerciseId: 'lib-pec-deck', sets: [{ weight: 40, reps: 12, completedAt: 1001 }] },
+    ],
+  };
+  await db.sessions.add(s);
+  renderAt(`/edit/${s.id}`);
+  await screen.findByText('스쿼트');
+  fireEvent.click(screen.getAllByRole('button', { name: '운동 삭제' })[1]); // 벤치의 짝(스쿼트) 삭제
+  fireEvent.click(screen.getByRole('button', { name: '저장' }));
+  await screen.findByText('요약화면');
+  const saved = await db.sessions.get(s.id);
+  expect(saved?.entries.map((e) => e.exerciseId)).toEqual(['lib-bench-press', 'lib-pec-deck']);
+  expect(saved?.entries[0].pairedWithNext).toBeUndefined(); // 펙덱과 오묶임 금지
+});
+
 test('세트를 전부 지워 제거되는 운동 뒤의 flag도 저장 시 정리된다', async () => {
   const s: Session = {
     id: crypto.randomUUID(), startedAt: 1000, finishedAt: 2000,

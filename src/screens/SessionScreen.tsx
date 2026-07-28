@@ -152,7 +152,8 @@ export default function SessionScreen() {
     if (!session) return;
     const target = session.entries[entryIdx];
     const hasDone = target.sets.some((s) => s.completedAt !== undefined);
-    if (hasDone && !window.confirm('완료한 세트가 있어요. 이 운동을 뺄까요?')) return;
+    const msg = hasDone ? '완료한 세트가 있어요. 이 운동을 뺄까요?' : '이 운동을 뺄까요?';
+    if (!window.confirm(msg)) return;
     // 그룹 마지막을 빼면 직전 flag 해제(엉뚱한 다음 운동과 묶임 방지), 중간이면 유지(그룹 축소)
     const entries = session.entries
       .map((e, i) =>

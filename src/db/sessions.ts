@@ -56,13 +56,18 @@ export async function saveSession(session: Session): Promise<void> {
 }
 
 export async function finishSession(session: Session): Promise<void> {
-  const cleaned: Session = {
-    ...session,
-    finishedAt: Date.now(),
-    entries: session.entries
-      .map((e) => ({ ...e, sets: e.sets.filter((s) => s.completedAt !== undefined) }))
-      .filter((e) => e.sets.length > 0),
-  };
+  const withDone = session.entries.map((e) => ({
+    ...e,
+    sets: e.sets.filter((s) => s.completedAt !== undefined),
+  }));
+  const keep = withDone.map((e) => e.sets.length > 0);
+  const entries = withDone
+    .map((e, i) => {
+      if (!keep[i]) return null;
+      return e.pairedWithNext && keep[i + 1] !== true ? { ...e, pairedWithNext: undefined } : e;
+    })
+    .filter((e): e is SessionEntry => e !== null);
+  const cleaned: Session = { ...session, finishedAt: Date.now(), entries };
   await db.sessions.put(cleaned);
 }
 

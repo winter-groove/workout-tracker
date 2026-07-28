@@ -95,6 +95,35 @@ test('finishSession은 미완료 세트와 빈 entry를 정리하고 완료 처�
   expect(await getActiveSession()).toBeUndefined();
 });
 
+test('finishSession: 미완료 entry 제거 시 오묶임이 생기지 않게 flag를 정리한다', async () => {
+  const s = await startSession();
+  s.entries = [
+    { exerciseId: 'a', sets: [{ weight: 50, reps: 10, completedAt: 1 }], pairedWithNext: true },
+    { exerciseId: 'b', sets: [{ weight: 20, reps: 10 }] },
+    { exerciseId: 'c', sets: [{ weight: 30, reps: 10, completedAt: 1 }] },
+  ];
+  await saveSession(s);
+  await finishSession(s);
+  const saved = await db.sessions.get(s.id);
+  expect(saved?.entries.map((e) => e.exerciseId)).toEqual(['a', 'c']);
+  expect(saved?.entries[0].pairedWithNext).toBeUndefined();
+});
+
+test('finishSession: 살아남은 인접 쌍의 묶음은 유지되고 trailing flag는 정리된다', async () => {
+  const s = await startSession();
+  s.entries = [
+    { exerciseId: 'a', sets: [{ weight: 50, reps: 10, completedAt: 1 }], pairedWithNext: true },
+    { exerciseId: 'b', sets: [{ weight: 20, reps: 10, completedAt: 1 }], pairedWithNext: true },
+    { exerciseId: 'c', sets: [{ weight: 30, reps: 10 }] },
+  ];
+  await saveSession(s);
+  await finishSession(s);
+  const saved = await db.sessions.get(s.id);
+  expect(saved?.entries.map((e) => e.exerciseId)).toEqual(['a', 'b']);
+  expect(saved?.entries[0].pairedWithNext).toBe(true);
+  expect(saved?.entries[1].pairedWithNext).toBeUndefined();
+});
+
 test('startSession을 연속 호출해도 활성 세션이 이미 있으면 같은 세션을 반환한다', async () => {
   const routine: Routine = {
     id: 'r1', name: '가슴 날',
