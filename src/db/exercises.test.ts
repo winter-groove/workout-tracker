@@ -1,8 +1,9 @@
 import { db } from './db';
 import {
   seedLibrary, listExercises, addCustomExercise,
-  setExerciseHidden, deleteCustomExercise, LIBRARY_VERSION,
+  setExerciseHidden, setExerciseFavorite, deleteCustomExercise, LIBRARY_VERSION,
 } from './exercises';
+import { exportData, importData } from './backup';
 import library from '../data/exercise-library.json';
 import legacy from '../data/legacy-55.json';
 import type { BodyPart, Equipment } from '../types';
@@ -94,4 +95,36 @@ test('이름 동기화: 옛 이름 내장 행이 갱신되고 숨김·커스텀�
   expect(r?.isHidden).toBe(true);
   expect((await db.exercises.get('custom-1'))?.name).toBe('내 커스텀 운동');
   expect((await db.meta.get('libraryVersion'))?.value).toBe(3);
+});
+
+test('setExerciseFavorite 토글과 숨김 시 자동 해제', async () => {
+  await seedLibrary();
+  await setExerciseFavorite('lib-bench-press', true);
+  expect((await db.exercises.get('lib-bench-press'))?.isFavorite).toBe(true);
+  await setExerciseHidden('lib-bench-press', true);
+  const hidden = await db.exercises.get('lib-bench-press');
+  expect(hidden?.isHidden).toBe(true);
+  expect(hidden?.isFavorite).toBe(false);
+  await setExerciseHidden('lib-bench-press', false);
+  expect((await db.exercises.get('lib-bench-press'))?.isFavorite).toBe(false); // 복원해도 해제 유지
+});
+
+test('시드 이름 동기화에서 isFavorite이 보존된다', async () => {
+  await db.exercises.add({
+    id: 'lib-reverse-machine-flyes', name: '옛 이름', bodyPart: '어깨', equipment: '머신',
+    imagePath: 'exercises/reverse-machine-flyes.webp', isCustom: false, isHidden: false, isFavorite: true,
+  });
+  await db.meta.put({ key: 'libraryVersion', value: 2 });
+  await seedLibrary();
+  const r = await db.exercises.get('lib-reverse-machine-flyes');
+  expect(r?.name).toBe('리버스 펙덱 플라이');
+  expect(r?.isFavorite).toBe(true);
+});
+
+test('백업 왕복에 isFavorite이 보존된다', async () => {
+  await seedLibrary();
+  await setExerciseFavorite('lib-squat', true);
+  const dump = JSON.parse(JSON.stringify(await exportData()));
+  await importData(dump);
+  expect((await db.exercises.get('lib-squat'))?.isFavorite).toBe(true);
 });

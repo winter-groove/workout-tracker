@@ -21,7 +21,7 @@ export async function seedLibrary(): Promise<void> {
     }))
     .filter((r) => !byId.has(r.id));
   await db.exercises.bulkAdd(rows);
-  // 내장 운동의 이름·부위·기구를 라이브러리와 동기화 (숨김 상태는 사용자 것 유지)
+  // 내장 운동의 이름·부위·기구를 라이브러리와 동기화 (숨김·즐겨찾기 상태는 사용자 것 유지)
   const updates: Exercise[] = [];
   for (const x of library) {
     const cur = byId.get(`lib-${x.id}`);
@@ -64,8 +64,16 @@ export async function addCustomExercise(input: {
   return ex;
 }
 
+export async function setExerciseFavorite(id: string, favorite: boolean): Promise<void> {
+  await db.exercises.update(id, { isFavorite: favorite });
+}
+
 export async function setExerciseHidden(id: string, hidden: boolean): Promise<void> {
-  await db.exercises.update(id, { isHidden: hidden });
+  if (hidden) {
+    await db.exercises.update(id, { isHidden: true, isFavorite: false });
+  } else {
+    await db.exercises.update(id, { isHidden: false });
+  }
 }
 
 export async function deleteCustomExercise(id: string): Promise<void> {

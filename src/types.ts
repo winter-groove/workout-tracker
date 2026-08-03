@@ -16,6 +16,7 @@ export interface Exercise {
   iconKey?: IconKey;     // 커스텀 운동용 픽토그램
   isCustom: boolean;
   isHidden: boolean;
+  isFavorite?: boolean;
 }
 
 export interface RoutineItem {
