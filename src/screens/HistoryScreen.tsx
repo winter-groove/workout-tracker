@@ -1,13 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
 import type { SetRecord } from '../types';
 import { listFinishedSessions, deleteSession, getExerciseHistory, sessionTitle } from '../db/sessions';
 import { listExercises } from '../db/exercises';
-import {
-  annotateHistory, fmtVolumeDelta, fmtWeightDelta, summarizeSession, type EntryProgress,
-} from '../db/progress';
+import { annotateHistory, fmtVolumeDelta, fmtWeightDelta } from '../db/progress';
 import { getWeightUnit, kgToDisplay } from '../db/weightUnit';
+import SessionDetails from '../components/SessionDetails';
 
 function fmtDate(ts: number): string {
   const d = new Date(ts);
@@ -23,7 +22,6 @@ export default function HistoryScreen() {
   const navigate = useNavigate();
   const [filterId, setFilterId] = useState('');
   const [openId, setOpenId] = useState('');
-  const [openSummary, setOpenSummary] = useState<{ id: string; list: EntryProgress[] } | null>(null);
   const sessions = useLiveQuery(() => listFinishedSessions(), []) ?? [];
   const exercises = useLiveQuery(() => listExercises({ includeHidden: true }), []) ?? [];
   const history = useLiveQuery(
@@ -33,19 +31,6 @@ export default function HistoryScreen() {
   const exMap = new Map(exercises.map((e) => [e.id, e]));
   const annotations = history ? annotateHistory(history.map((h) => h.sets)) : [];
   const unit = getWeightUnit();
-
-  useEffect(() => {
-    const s = sessions.find((x) => x.id === openId);
-    if (!s) {
-      setOpenSummary(null);
-      return;
-    }
-    let cancelled = false;
-    void summarizeSession(s).then((list) => {
-      if (!cancelled) setOpenSummary({ id: s.id, list });
-    });
-    return () => { cancelled = true; };
-  }, [openId, sessions]);
 
   async function remove(id: string) {
     if (window.confirm('이 기록을 삭제할까요?')) await deleteSession(id);
@@ -99,32 +84,7 @@ export default function HistoryScreen() {
               </div>
               {openId === s.id && (
                 <div style={{ marginTop: 8 }}>
-                  {s.entries.map((e, i) => {
-                    const p = openSummary?.id === s.id ? openSummary.list[i] : undefined;
-                    const line = p
-                      ? (p.prevVolume === undefined
-                          ? `볼륨 ${kgToDisplay(p.volume)}${unit} · 최고 ${kgToDisplay(p.maxWeight)}${unit} · 첫 기록`
-                          : `볼륨 ${kgToDisplay(p.volume)}${unit} ${fmtVolumeDelta(p.volume, p.prevVolume)} · 최고 ${kgToDisplay(p.maxWeight)}${unit} ${fmtWeightDelta(p.maxWeight, p.prevMaxWeight ?? 0)}`)
-                      : null;
-                    return (
-                      <div key={i} className="hist-row" style={{ display: 'block' }}>
-                        <div style={{ fontWeight: 700 }}>
-                          {exMap.get(e.exerciseId)?.name ?? '삭제된 운동'}{p?.isPR ? ' 🏆' : ''}
-                        </div>
-                        <div className="set-view d" style={{ marginTop: 6 }}>
-                          <span>세트</span><span>무게({unit})</span><span>횟수</span>
-                        </div>
-                        {e.sets.map((set, j) => (
-                          <div key={j} className="set-view" style={{ marginTop: 4 }}>
-                            <span className="d">{j + 1}</span>
-                            <span>{kgToDisplay(set.weight)}</span>
-                            <span>{set.reps}</span>
-                          </div>
-                        ))}
-                        {line && <div className="d" style={{ fontSize: 12, marginTop: 6 }}>{line}</div>}
-                      </div>
-                    );
-                  })}
+                  <SessionDetails key={s.id} session={s} exMap={exMap} />
                   <div className="btn-row" style={{ marginTop: 10 }}>
                     <button
                       className="btn btn-ghost"
