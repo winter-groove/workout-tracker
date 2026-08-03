@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { db } from '../db/db';
-import { seedLibrary } from '../db/exercises';
+import { seedLibrary, setExerciseHidden } from '../db/exercises';
 import ManageScreen from './ManageScreen';
 
 beforeEach(async () => {
@@ -69,5 +69,13 @@ test('관리 탭에서 별을 탭하면 즐겨찾기가 토글된다', async () 
   fireEvent.click(await screen.findByLabelText('스쿼트 즐겨찾기'));
   await waitFor(async () => {
     expect((await db.exercises.get('lib-squat'))?.isFavorite).toBe(true);
+  });
+
+  // 숨긴 운동에는 별이 없다
+  await setExerciseHidden('lib-squat', true);
+  fireEvent.click(screen.getByLabelText(/숨긴 운동 표시/));
+  await screen.findByText(/스쿼트.*숨김/);
+  await waitFor(() => {
+    expect(screen.queryByLabelText('스쿼트 즐겨찾기')).not.toBeInTheDocument();
   });
 });

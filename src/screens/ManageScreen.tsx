@@ -132,13 +132,15 @@ export default function ManageScreen() {
                     <div className="sb">{ex.bodyPart} · {ex.equipment}{ex.isCustom ? ' · 직접 등록' : ''}</div>
                   </div>
                   <div className="right">
-                    <button
-                      className="btn-sm btn btn-ghost"
-                      aria-label={`${ex.name} 즐겨찾기`}
-                      onClick={() => void setExerciseFavorite(ex.id, !ex.isFavorite)}
-                    >
-                      {ex.isFavorite ? '★' : '☆'}
-                    </button>{' '}
+                    {!ex.isHidden && (
+                      <button
+                        className="btn-sm btn btn-ghost"
+                        aria-label={`${ex.name} 즐겨찾기`}
+                        onClick={() => void setExerciseFavorite(ex.id, !ex.isFavorite)}
+                      >
+                        {ex.isFavorite ? '★' : '☆'}
+                      </button>
+                    )}{' '}
                     {ex.isCustom ? (
                       <button
                         className="btn-sm btn btn-danger"
