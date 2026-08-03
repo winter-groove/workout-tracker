@@ -2,6 +2,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { db } from '../db/db';
 import { seedLibrary, setExerciseHidden } from '../db/exercises';
+import { getWeightUnit } from '../db/weightUnit';
 import ManageScreen from './ManageScreen';
 
 beforeEach(async () => {
@@ -78,4 +79,14 @@ test('관리 탭에서 별을 탭하면 즐겨찾기가 토글된다', async () 
   await waitFor(() => {
     expect(screen.queryByLabelText('스쿼트 즐겨찾기')).not.toBeInTheDocument();
   });
+});
+
+test('설정에서 무게 단위를 lb로 바꿀 수 있다', async () => {
+  try {
+    render(<MemoryRouter><ManageScreen /></MemoryRouter>);
+    fireEvent.change(await screen.findByLabelText('무게 단위'), { target: { value: 'lb' } });
+    expect(getWeightUnit()).toBe('lb');
+  } finally {
+    localStorage.removeItem('wt-weight-unit');
+  }
 });

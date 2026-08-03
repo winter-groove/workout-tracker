@@ -6,6 +6,7 @@ import { db } from '../db/db';
 import { listExercises } from '../db/exercises';
 import { summarizeSession, fmtVolumeDelta, fmtWeightDelta, type EntryProgress } from '../db/progress';
 import { resumeSession, sessionTitle } from '../db/sessions';
+import { getWeightUnit, kgToDisplay } from '../db/weightUnit';
 
 function fmtDate(ts: number): string {
   const d = new Date(ts);
@@ -39,6 +40,7 @@ export default function SummaryScreen() {
 
   if (!session) return null;
 
+  const unit = getWeightUnit();
   const canResume = session.finishedAt !== undefined
     && new Date(session.finishedAt).toDateString() === new Date().toDateString();
 
@@ -61,8 +63,8 @@ export default function SummaryScreen() {
           const p = progress[i];
           if (!p) return null;
           const line = p.prevVolume === undefined
-            ? `볼륨 ${p.volume}kg · 최고 ${p.maxWeight}kg · 첫 기록`
-            : `볼륨 ${p.volume}kg ${fmtVolumeDelta(p.volume, p.prevVolume)} · 최고 ${p.maxWeight}kg ${fmtWeightDelta(p.maxWeight, p.prevMaxWeight ?? 0)}`;
+            ? `볼륨 ${kgToDisplay(p.volume)}${unit} · 최고 ${kgToDisplay(p.maxWeight)}${unit} · 첫 기록`
+            : `볼륨 ${kgToDisplay(p.volume)}${unit} ${fmtVolumeDelta(p.volume, p.prevVolume)} · 최고 ${kgToDisplay(p.maxWeight)}${unit} ${fmtWeightDelta(p.maxWeight, p.prevMaxWeight ?? 0)}`;
           return (
             <div key={i} className="hist-row" style={{ display: 'block' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>

@@ -3,6 +3,7 @@ import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { db } from '../db/db';
 import { seedLibrary } from '../db/exercises';
 import { getActiveSession, startSession } from '../db/sessions';
+import { setWeightUnit } from '../db/weightUnit';
 import type { Session } from '../types';
 import SummaryScreen from './SummaryScreen';
 
@@ -113,4 +114,16 @@ test('이름 없는 세션의 요약 헤더는 부위 이름이다', async () =>
   const cur = await addFinishedSession(1000, 'lib-squat', [{ weight: 80, reps: 5 }]);
   renderAt(`/summary/${cur.id}`);
   expect(await screen.findByText(/하체 운동 · /)).toBeInTheDocument();
+});
+
+test('lb 모드: 요약 볼륨·최고가 파운드로 표시된다', async () => {
+  setWeightUnit('lb');
+  try {
+    const cur = await addFinishedSession(1000, 'lib-bench-press', [{ weight: 60, reps: 10 }]);
+    renderAt(`/summary/${cur.id}`);
+    // 볼륨 600kg → 1322.8lb, 최고 60kg → 132.3lb
+    expect(await screen.findByText('볼륨 1322.8lb · 최고 132.3lb · 첫 기록')).toBeInTheDocument();
+  } finally {
+    localStorage.removeItem('wt-weight-unit');
+  }
 });

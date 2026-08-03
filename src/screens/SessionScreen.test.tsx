@@ -4,6 +4,7 @@ import { db } from '../db/db';
 import { seedLibrary } from '../db/exercises';
 import { startSession, getActiveSession, saveSession } from '../db/sessions';
 import * as progress from '../db/progress';
+import { setWeightUnit } from '../db/weightUnit';
 import type { Routine } from '../types';
 import SessionScreen, { groupsOf } from './SessionScreen';
 
@@ -388,4 +389,27 @@ test('트라이세트 중간 운동을 빼면 남은 둘의 묶음이 유지된�
   expect(screen.getByText('펙덱 플라이')).toBeInTheDocument(); // A-C 묶음 유지
   expect(screen.getByText('1 / 1')).toBeInTheDocument();
   expect((await getActiveSession())?.entries[0].pairedWithNext).toBe(true);
+});
+
+test('lb 모드: 표시는 파운드, 저장은 kg', async () => {
+  setWeightUnit('lb');
+  try {
+    const prev = await startSession(routine);
+    prev.entries[0].sets = [{ weight: 60, reps: 10, completedAt: Date.now() }];
+    const { finishSession } = await import('../db/sessions');
+    await finishSession(prev);
+
+    await startSession(routine);
+    renderScreen();
+    expect(await screen.findByText(/지난번 132.3lb×10/)).toBeInTheDocument();
+    expect(screen.getAllByText('무게(lb)').length).toBeGreaterThan(0);
+    const w = screen.getAllByLabelText(/세트 1 무게/)[0] as HTMLInputElement;
+    expect(w.value).toBe('132.3');
+    fireEvent.change(w, { target: { value: '135' } });
+    await waitFor(async () => {
+      expect((await getActiveSession())?.entries[0].sets[0].weight).toBeCloseTo(61.23, 2);
+    });
+  } finally {
+    localStorage.removeItem('wt-weight-unit');
+  }
 });

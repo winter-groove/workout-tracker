@@ -5,6 +5,7 @@ import type { Exercise, Session, SessionEntry, SetRecord } from '../types';
 import { db } from '../db/db';
 import { saveSession, buildEntry, sessionTitle } from '../db/sessions';
 import { listExercises } from '../db/exercises';
+import { getWeightUnit, kgToDisplay, displayToKg } from '../db/weightUnit';
 import ExercisePicker, { dominantBodyPart } from '../components/ExercisePicker';
 
 export default function EditSessionScreen() {
@@ -36,6 +37,8 @@ export default function EditSessionScreen() {
   }, [sessionId, navigate]);
 
   if (!session) return null;
+
+  const unit = getWeightUnit();
 
   function patchSet(entryIdx: number, setIdx: number, patch: Partial<SetRecord>) {
     setEntries(entries.map((e, i) =>
@@ -138,12 +141,12 @@ export default function EditSessionScreen() {
             <div key={j} className="set-row" style={{ marginTop: 8 }}>
               <span className="n">{j + 1}</span>
               <input
-                type="number" inputMode="decimal" step="0.5" min="0"
+                type="number" inputMode="decimal" step={unit === 'lb' ? 2.5 : 0.5} min="0"
                 aria-label={`세트 ${j + 1} 무게`}
-                value={s.weight === 0 ? '' : s.weight}
+                value={s.weight === 0 ? '' : kgToDisplay(s.weight)}
                 placeholder="0"
                 onFocus={(ev) => ev.currentTarget.select()}
-                onChange={(ev) => patchSet(i, j, { weight: Number(ev.target.value) || 0 })}
+                onChange={(ev) => patchSet(i, j, { weight: displayToKg(Number(ev.target.value) || 0) })}
               />
               <input
                 type="number" inputMode="numeric" min="0"

@@ -10,6 +10,7 @@ import { getRestSeconds } from '../db/settings';
 import {
   volume, maxWeight, fmtVolumeDelta, getPRWeight, getPreviousRecord,
 } from '../db/progress';
+import { getWeightUnit, kgToDisplay, displayToKg } from '../db/weightUnit';
 import ExerciseImage from '../components/ExerciseImage';
 import ExercisePicker, { dominantBodyPart } from '../components/ExercisePicker';
 import RestTimer from '../components/RestTimer';
@@ -22,7 +23,10 @@ function fmtElapsed(startedAt: number, now: number): string {
 }
 
 function fmtLast(sets: SetRecord[]): string {
-  return sets.map((s, i) => (i === 0 ? `${s.weight}kg×${s.reps}` : `${s.weight}×${s.reps}`)).join(' · ');
+  const unit = getWeightUnit();
+  return sets
+    .map((s, i) => (i === 0 ? `${kgToDisplay(s.weight)}${unit}×${s.reps}` : `${kgToDisplay(s.weight)}×${s.reps}`))
+    .join(' · ');
 }
 
 // 연속된 pairedWithNext로 이어지는 entry 인덱스 묶음. 마지막 entry의 flag는 무시(짝이 빠진 경우 자가 치유)
@@ -211,6 +215,7 @@ export default function SessionScreen() {
     navigate(`/summary/${session.id}`, { replace: true });
   }
 
+  const unit = getWeightUnit();
   const total = groups.length;
   const startDate = new Date(session.startedAt);
   const isBackdated = startDate.toDateString() !== new Date(now).toDateString();
@@ -239,8 +244,8 @@ export default function SessionScreen() {
             const lastVol = rec?.last ? volume(rec.last) : 0;
             const isPRNow = rec?.last !== undefined && maxWeight(doneSets) > (rec?.pr ?? 0);
             const overloadText = curVol > lastVol
-              ? `볼륨 ${curVol}kg ${fmtVolumeDelta(curVol, lastVol)}`
-              : `볼륨 ${curVol} / 지난 ${lastVol}kg`;
+              ? `볼륨 ${kgToDisplay(curVol)}${unit} ${fmtVolumeDelta(curVol, lastVol)}`
+              : `볼륨 ${kgToDisplay(curVol)} / 지난 ${kgToDisplay(lastVol)}${unit}`;
             return (
               <div key={entryIdx} className="card">
                 {group.length === 1 && gex && <ExerciseImage exercise={gex} className="hero-img" />}
@@ -262,18 +267,18 @@ export default function SessionScreen() {
                   </div>
                 )}
                 <div className="set-head" style={{ marginTop: 10 }}>
-                  <span>세트</span><span>무게(kg)</span><span>횟수</span><span>완료</span>
+                  <span>세트</span><span>무게({unit})</span><span>횟수</span><span>완료</span>
                 </div>
                 {e.sets.map((s, j) => (
                   <div key={j} className={`set-row ${s.completedAt ? 'done' : ''}`} style={{ marginTop: 8 }}>
                     <span className="n">{j + 1}</span>
                     <input
-                      type="number" inputMode="decimal" step="0.5" min="0"
+                      type="number" inputMode="decimal" step={unit === 'lb' ? 2.5 : 0.5} min="0"
                       aria-label={`세트 ${j + 1} 무게`}
-                      value={s.weight === 0 ? '' : s.weight}
+                      value={s.weight === 0 ? '' : kgToDisplay(s.weight)}
                       placeholder="0"
                       onFocus={(ev) => ev.currentTarget.select()}
-                      onChange={(ev) => patchSet(entryIdx, j, { weight: Number(ev.target.value) || 0 })}
+                      onChange={(ev) => patchSet(entryIdx, j, { weight: displayToKg(Number(ev.target.value) || 0) })}
                     />
                     <input
                       type="number" inputMode="numeric" min="0"

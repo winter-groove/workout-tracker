@@ -7,6 +7,7 @@ import { listExercises } from '../db/exercises';
 import {
   annotateHistory, fmtVolumeDelta, fmtWeightDelta, summarizeSession, type EntryProgress,
 } from '../db/progress';
+import { getWeightUnit, kgToDisplay } from '../db/weightUnit';
 
 function fmtDate(ts: number): string {
   const d = new Date(ts);
@@ -15,7 +16,7 @@ function fmtDate(ts: number): string {
 }
 
 function fmtSets(sets: SetRecord[]): string {
-  return sets.map((s) => `${s.weight}×${s.reps}`).join(', ');
+  return sets.map((s) => `${kgToDisplay(s.weight)}×${s.reps}`).join(', ');
 }
 
 export default function HistoryScreen() {
@@ -31,6 +32,7 @@ export default function HistoryScreen() {
   );
   const exMap = new Map(exercises.map((e) => [e.id, e]));
   const annotations = history ? annotateHistory(history.map((h) => h.sets)) : [];
+  const unit = getWeightUnit();
 
   useEffect(() => {
     const s = sessions.find((x) => x.id === openId);
@@ -71,8 +73,8 @@ export default function HistoryScreen() {
           {history.map(({ session, sets }, i) => {
             const a = annotations[i];
             const line = a.prevVolume === undefined
-              ? `볼륨 ${a.volume}kg · 첫 기록`
-              : `볼륨 ${a.volume}kg ${fmtVolumeDelta(a.volume, a.prevVolume)} · 최고 ${a.maxWeight}kg ${fmtWeightDelta(a.maxWeight, a.prevMaxWeight ?? 0)}`;
+              ? `볼륨 ${kgToDisplay(a.volume)}${unit} · 첫 기록`
+              : `볼륨 ${kgToDisplay(a.volume)}${unit} ${fmtVolumeDelta(a.volume, a.prevVolume)} · 최고 ${kgToDisplay(a.maxWeight)}${unit} ${fmtWeightDelta(a.maxWeight, a.prevMaxWeight ?? 0)}`;
             return (
               <div key={session.id} className="hist-row" style={{ display: 'block' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -101,8 +103,8 @@ export default function HistoryScreen() {
                     const p = openSummary?.id === s.id ? openSummary.list[i] : undefined;
                     const line = p
                       ? (p.prevVolume === undefined
-                          ? `볼륨 ${p.volume}kg · 최고 ${p.maxWeight}kg · 첫 기록`
-                          : `볼륨 ${p.volume}kg ${fmtVolumeDelta(p.volume, p.prevVolume)} · 최고 ${p.maxWeight}kg ${fmtWeightDelta(p.maxWeight, p.prevMaxWeight ?? 0)}`)
+                          ? `볼륨 ${kgToDisplay(p.volume)}${unit} · 최고 ${kgToDisplay(p.maxWeight)}${unit} · 첫 기록`
+                          : `볼륨 ${kgToDisplay(p.volume)}${unit} ${fmtVolumeDelta(p.volume, p.prevVolume)} · 최고 ${kgToDisplay(p.maxWeight)}${unit} ${fmtWeightDelta(p.maxWeight, p.prevMaxWeight ?? 0)}`)
                       : null;
                     return (
                       <div key={i} className="hist-row" style={{ display: 'block' }}>

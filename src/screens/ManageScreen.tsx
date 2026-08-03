@@ -6,6 +6,8 @@ import { listExercises, setExerciseHidden, deleteCustomExercise, setExerciseFavo
 import { listRoutines, deleteRoutine, newRoutine } from '../db/routines';
 import { exportData, importData } from '../db/backup';
 import { getRestSeconds, setRestSeconds } from '../db/settings';
+import { getWeightUnit, setWeightUnit } from '../db/weightUnit';
+import type { WeightUnit } from '../db/weightUnit';
 import ExerciseImage from '../components/ExerciseImage';
 import AddExerciseForm from '../components/AddExerciseForm';
 import RoutineEditor from '../components/RoutineEditor';
@@ -19,6 +21,7 @@ export default function ManageScreen() {
   const [exFilter, setExFilter] = useState<BodyPart | '전체'>('전체');
   const [visibleCount, setVisibleCount] = useState(30);
   const [rest, setRest] = useState(getRestSeconds());
+  const [unit, setUnit] = useState<WeightUnit>(getWeightUnit());
   const fileRef = useRef<HTMLInputElement>(null);
   const routines = useLiveQuery(() => listRoutines(), []) ?? [];
   const exercises = useLiveQuery(() => listExercises({ includeHidden: true }), []) ?? [];
@@ -192,6 +195,20 @@ export default function ManageScreen() {
               setRestSeconds(n);
             }}
           />
+        </div>
+        <div className="field">
+          <label htmlFor="weight-unit">무게 단위</label>
+          <select
+            id="weight-unit" value={unit}
+            onChange={(e) => {
+              const u = e.target.value as WeightUnit;
+              setUnit(u);
+              setWeightUnit(u);
+            }}
+          >
+            <option value="kg">kg</option>
+            <option value="lb">lb</option>
+          </select>
         </div>
       </div>
 
