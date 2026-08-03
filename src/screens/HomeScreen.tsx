@@ -9,6 +9,7 @@ import {
 import { listExercises } from '../db/exercises';
 import { getTodayRoutineId, setTodayRoutineId, clearTodayRoutine } from '../db/todayRoutine';
 import MonthCalendar from '../components/MonthCalendar';
+import SessionDetails from '../components/SessionDetails';
 
 function sameDay(a: Date, b: Date): boolean {
   return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
@@ -35,6 +36,7 @@ export default function HomeScreen() {
   const [, setTick] = useState(0);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [showBackdatePick, setShowBackdatePick] = useState(false);
+  const [openSessionId, setOpenSessionId] = useState('');
   const bump = () => setTick((n) => n + 1);
   const routines = useLiveQuery(() => listRoutines(), []) ?? [];
   const sessions = useLiveQuery(() => listFinishedSessions(), []) ?? [];
@@ -154,17 +156,29 @@ export default function HomeScreen() {
         <MonthCalendar
           workoutDays={workoutDays}
           selectedDate={selectedDate}
-          onSelectDate={(d) => { setSelectedDate(d); setShowBackdatePick(false); }}
+          onSelectDate={(d) => { setSelectedDate(d); setShowBackdatePick(false); setOpenSessionId(''); }}
         />
         {selectedDate && (
           <div style={{ marginTop: 12 }}>
             {daySessions.map((s) => (
-              <div
-                key={s.id} className="hist-row" style={{ cursor: 'pointer' }}
-                onClick={() => navigate(`/summary/${s.id}`)}
-              >
-                <span>{sessionTitle(s, exMap)} · {s.entries.length}개 운동</span>
-                <span className="d">보기 ›</span>
+              <div key={s.id} className="hist-row" style={{ display: 'block' }}>
+                <div
+                  style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
+                  onClick={() => setOpenSessionId(openSessionId === s.id ? '' : s.id)}
+                >
+                  <span>{sessionTitle(s, exMap)} · {s.entries.length}개 운동 {openSessionId === s.id ? '▴' : '▾'}</span>
+                  <button
+                    className="btn-sm btn btn-ghost"
+                    onClick={(ev) => { ev.stopPropagation(); navigate(`/summary/${s.id}`); }}
+                  >
+                    요약 ›
+                  </button>
+                </div>
+                {openSessionId === s.id && (
+                  <div style={{ marginTop: 8 }}>
+                    <SessionDetails key={s.id} session={s} exMap={exMap} />
+                  </div>
+                )}
               </div>
             ))}
             {daySessions.length === 0 && <div className="empty">이 날은 운동 기록이 없어요</div>}

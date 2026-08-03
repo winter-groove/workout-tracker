@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { vi } from 'vitest';
 import type { Session } from '../types';
@@ -101,13 +101,14 @@ function renderWithSummary() {
   );
 }
 
-test('달력 날짜를 누르면 그날 세션이 표시되고 탭하면 요약으로 이동한다', async () => {
+test('달력 날짜를 누르면 그날 세션이 표시되고 요약 버튼으로 이동한다', async () => {
   const now = new Date();
   const ts = new Date(now.getFullYear(), now.getMonth(), 15, 10, 0).getTime();
   await addFinishedSession(ts, '가슴 날');
   renderWithSummary();
   fireEvent.click(await screen.findByRole('button', { name: `${now.getMonth() + 1}월 15일` }));
-  fireEvent.click(await screen.findByText('가슴 날 · 1개 운동'));
+  expect(await screen.findByText(/가슴 날 · 1개 운동/)).toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', { name: '요약 ›' }));
   expect(await screen.findByText('요약화면')).toBeInTheDocument();
 });
 
@@ -179,5 +180,24 @@ test('이름 없는 세션은 달력 목록에서 부위 이름으로 표시된�
   await db.sessions.add(s);
   renderWithSummary();
   fireEvent.click(await screen.findByRole('button', { name: `${now.getMonth() + 1}월 15일` }));
-  expect(await screen.findByText('가슴 운동 · 1개 운동')).toBeInTheDocument();
+  expect(await screen.findByText(/가슴 운동 · 1개 운동/)).toBeInTheDocument();
+});
+
+test('달력 세션을 탭하면 세트 표가 펼쳐진다', async () => {
+  await seedLibrary();
+  const now = new Date();
+  const ts = new Date(now.getFullYear(), now.getMonth(), 15, 10).getTime();
+  const s: Session = {
+    id: crypto.randomUUID(), startedAt: ts, finishedAt: ts + 3600_000,
+    entries: [{ exerciseId: 'lib-bench-press', sets: [{ weight: 60, reps: 10, completedAt: ts + 1 }] }],
+  };
+  await db.sessions.add(s);
+  renderWithSummary();
+  fireEvent.click(await screen.findByRole('button', { name: `${now.getMonth() + 1}월 15일` }));
+  fireEvent.click(await screen.findByText(/가슴 운동 · 1개 운동/));
+  expect(await screen.findByText('무게(kg)')).toBeInTheDocument();
+  expect(screen.getByText('60')).toBeInTheDocument();
+  // 다시 탭하면 접힘
+  fireEvent.click(screen.getByText(/가슴 운동 · 1개 운동/));
+  await waitFor(() => expect(screen.queryByText('무게(kg)')).not.toBeInTheDocument());
 });
