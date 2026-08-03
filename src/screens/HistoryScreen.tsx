@@ -94,7 +94,7 @@ export default function HistoryScreen() {
           {sessions.map((s) => (
             <div key={s.id} className="card" onClick={() => setOpenId(openId === s.id ? '' : s.id)}>
               <div className="hist-row" style={{ borderBottom: openId === s.id ? undefined : 'none' }}>
-                <span>{sessionTitle(s, exMap)} · {s.entries.length}개 운동</span>
+                <span>{sessionTitle(s, exMap)} · {s.entries.length}개 운동 {openId === s.id ? '▴' : '▾'}</span>
                 <span className="d">{fmtDate(s.startedAt)}</span>
               </div>
               {openId === s.id && (
@@ -108,11 +108,20 @@ export default function HistoryScreen() {
                       : null;
                     return (
                       <div key={i} className="hist-row" style={{ display: 'block' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                          <span>{exMap.get(e.exerciseId)?.name ?? '삭제된 운동'}{p?.isPR ? ' 🏆' : ''}</span>
-                          <span className="d">{fmtSets(e.sets)}</span>
+                        <div style={{ fontWeight: 700 }}>
+                          {exMap.get(e.exerciseId)?.name ?? '삭제된 운동'}{p?.isPR ? ' 🏆' : ''}
                         </div>
-                        {line && <div className="d" style={{ fontSize: 12, marginTop: 2 }}>{line}</div>}
+                        <div className="set-view d" style={{ marginTop: 6 }}>
+                          <span>세트</span><span>무게({unit})</span><span>횟수</span>
+                        </div>
+                        {e.sets.map((set, j) => (
+                          <div key={j} className="set-view" style={{ marginTop: 4 }}>
+                            <span className="d">{j + 1}</span>
+                            <span>{kgToDisplay(set.weight)}</span>
+                            <span>{set.reps}</span>
+                          </div>
+                        ))}
+                        {line && <div className="d" style={{ fontSize: 12, marginTop: 6 }}>{line}</div>}
                       </div>
                     );
                   })}

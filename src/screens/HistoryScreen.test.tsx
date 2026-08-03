@@ -4,6 +4,7 @@ import { db } from '../db/db';
 import { seedLibrary } from '../db/exercises';
 import type { Session } from '../types';
 import * as progress from '../db/progress';
+import { setWeightUnit } from '../db/weightUnit';
 import HistoryScreen from './HistoryScreen';
 
 beforeEach(async () => {
@@ -121,4 +122,29 @@ test('이름 없는 세션은 부위 기반 자동 이름으로 표시된다', a
   await addFinishedSession(1000, 'lib-bench-press', [{ weight: 50, reps: 10 }]);
   renderScreen();
   expect(await screen.findByText(/가슴 운동 · 1개 운동/)).toBeInTheDocument();
+});
+
+test('세션을 펼치면 세트 표(세트·무게·횟수)가 보인다', async () => {
+  await addFinishedSession(1000, 'lib-bench-press', [
+    { weight: 60, reps: 10 },
+    { weight: 62.5, reps: 8 },
+  ]);
+  renderScreen();
+  fireEvent.click(await screen.findByText(/1개 운동/));
+  expect(await screen.findByText('무게(kg)')).toBeInTheDocument();
+  expect(screen.getByText('세트')).toBeInTheDocument();
+  expect(screen.getByText('62.5')).toBeInTheDocument(); // 2세트 무게가 표 셀로
+});
+
+test('lb 모드: 세트 표가 파운드로 표시된다', async () => {
+  setWeightUnit('lb');
+  try {
+    await addFinishedSession(1000, 'lib-bench-press', [{ weight: 60, reps: 10 }]);
+    renderScreen();
+    fireEvent.click(await screen.findByText(/1개 운동/));
+    expect(await screen.findByText('무게(lb)')).toBeInTheDocument();
+    expect(screen.getByText('132.3')).toBeInTheDocument();
+  } finally {
+    localStorage.removeItem('wt-weight-unit');
+  }
 });
