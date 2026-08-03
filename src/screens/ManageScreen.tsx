@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { BODY_PARTS } from '../types';
 import type { BodyPart, Routine } from '../types';
-import { listExercises, setExerciseHidden, deleteCustomExercise } from '../db/exercises';
+import { listExercises, setExerciseHidden, deleteCustomExercise, setExerciseFavorite } from '../db/exercises';
 import { listRoutines, deleteRoutine, newRoutine } from '../db/routines';
 import { exportData, importData } from '../db/backup';
 import { getRestSeconds, setRestSeconds } from '../db/settings';
@@ -132,6 +132,13 @@ export default function ManageScreen() {
                     <div className="sb">{ex.bodyPart} · {ex.equipment}{ex.isCustom ? ' · 직접 등록' : ''}</div>
                   </div>
                   <div className="right">
+                    <button
+                      className="btn-sm btn btn-ghost"
+                      aria-label={`${ex.name} 즐겨찾기`}
+                      onClick={() => void setExerciseFavorite(ex.id, !ex.isFavorite)}
+                    >
+                      {ex.isFavorite ? '★' : '☆'}
+                    </button>{' '}
                     {ex.isCustom ? (
                       <button
                         className="btn-sm btn btn-danger"

@@ -60,3 +60,14 @@ test('검색어를 바꾸면 더보기 카운트가 리셋된다', async () => {
     expect(screen.getAllByRole('button', { name: '숨기기' }).length).toBeLessThanOrEqual(30);
   });
 });
+
+test('관리 탭에서 별을 탭하면 즐겨찾기가 토글된다', async () => {
+  render(<MemoryRouter><ManageScreen /></MemoryRouter>);
+  fireEvent.click(await screen.findByRole('button', { name: /내 운동 목록/ }));
+  await screen.findByPlaceholderText('운동 이름 검색');
+  fireEvent.change(screen.getByPlaceholderText('운동 이름 검색'), { target: { value: '스쿼트' } });
+  fireEvent.click(await screen.findByLabelText('스쿼트 즐겨찾기'));
+  await waitFor(async () => {
+    expect((await db.exercises.get('lib-squat'))?.isFavorite).toBe(true);
+  });
+});

@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { db } from '../db/db';
-import { seedLibrary } from '../db/exercises';
+import { seedLibrary, setExerciseFavorite } from '../db/exercises';
 import ExercisePicker, { dominantBodyPart } from './ExercisePicker';
 import type { Exercise, Session } from '../types';
 
@@ -117,5 +117,27 @@ test('최근 한 운동 행을 탭하면 onSelect가 불린다', async () => {
   render(<ExercisePicker onSelect={onSelect} onClose={() => {}} />);
   await screen.findByText('최근 한 운동');
   fireEvent.click(screen.getByText('스쿼트'));
+  expect(onSelect).toHaveBeenCalledWith(expect.objectContaining({ id: 'lib-squat' }));
+});
+
+test('즐겨찾기 운동은 최상단 구간에 표시되고 최근 구간에서 빠진다', async () => {
+  await addDone(new Date(2026, 5, 1, 12).getTime(), 'lib-squat');
+  await setExerciseFavorite('lib-squat', true);
+  await setExerciseFavorite('lib-bench-press', true);
+  render(<ExercisePicker onSelect={() => {}} onClose={() => {}} />);
+  expect(await screen.findByText('★ 즐겨찾기')).toBeInTheDocument();
+  expect(screen.queryByText('최근 한 운동')).not.toBeInTheDocument(); // 유일한 최근(스쿼트)이 즐겨찾기로 이동
+  expect(screen.getByText('전체 운동')).toBeInTheDocument();
+});
+
+test('별을 탭하면 토글되고 행 선택은 일어나지 않는다', async () => {
+  const onSelect = vi.fn();
+  render(<ExercisePicker onSelect={onSelect} onClose={() => {}} />);
+  fireEvent.click(await screen.findByLabelText('스쿼트 즐겨찾기'));
+  await waitFor(async () => {
+    expect((await db.exercises.get('lib-squat'))?.isFavorite).toBe(true);
+  });
+  expect(onSelect).not.toHaveBeenCalled();
+  fireEvent.click(screen.getByText('스쿼트')); // 행 탭은 여전히 선택
   expect(onSelect).toHaveBeenCalledWith(expect.objectContaining({ id: 'lib-squat' }));
 });

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { BODY_PARTS } from '../types';
 import type { BodyPart, Exercise } from '../types';
-import { listExercises } from '../db/exercises';
+import { listExercises, setExerciseFavorite } from '../db/exercises';
 import { getLastDoneMap } from '../db/sessions';
 import ExerciseImage from './ExerciseImage';
 import AddExerciseForm from './AddExerciseForm';
@@ -51,10 +51,41 @@ export default function ExercisePicker({
       (query.trim() === '' || e.name.includes(query.trim())),
   );
 
+  const favorites = visible.filter((e) => e.isFavorite);
   const recent = visible
-    .filter((e) => lastDone.has(e.id))
+    .filter((e) => !e.isFavorite && lastDone.has(e.id))
     .sort((a, b) => (lastDone.get(b.id) ?? 0) - (lastDone.get(a.id) ?? 0));
-  const rest = visible.filter((e) => !lastDone.has(e.id));
+  const rest = visible.filter((e) => !e.isFavorite && !lastDone.has(e.id));
+
+  function renderRow(ex: Exercise, doneAt?: number) {
+    return (
+      <div
+        key={ex.id} className="ex-row" style={{ cursor: 'pointer' }}
+        onClick={() => onSelect(ex)}
+      >
+        <ExerciseImage exercise={ex} />
+        <div>
+          <div className="nm">{ex.name}</div>
+          <div className="sb">
+            {ex.bodyPart} · {ex.equipment}{doneAt !== undefined ? ` · ${fmtDone(doneAt)}` : ''}
+          </div>
+        </div>
+        <button
+          aria-label={`${ex.name} 즐겨찾기`}
+          style={{
+            marginLeft: 'auto', background: 'none', border: 'none', padding: '0 6px',
+            fontSize: 18, color: ex.isFavorite ? '#f5a623' : 'var(--gray-5)', cursor: 'pointer',
+          }}
+          onClick={(ev) => {
+            ev.stopPropagation();
+            void setExerciseFavorite(ex.id, !ex.isFavorite);
+          }}
+        >
+          {ex.isFavorite ? '★' : '☆'}
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="overlay">
@@ -75,30 +106,22 @@ export default function ExercisePicker({
             </button>
           ))}
         </div>
-        {recent.length > 0 && (
+        {favorites.length > 0 && (
           <>
-            <div className="card-h" style={{ marginTop: 4 }}>최근 한 운동</div>
-            {recent.map((ex) => (
-              <button key={ex.id} className="ex-row" onClick={() => onSelect(ex)}>
-                <ExerciseImage exercise={ex} />
-                <div>
-                  <div className="nm">{ex.name}</div>
-                  <div className="sb">{ex.bodyPart} · {ex.equipment} · {fmtDone(lastDone.get(ex.id) ?? 0)}</div>
-                </div>
-              </button>
-            ))}
-            <div className="card-h" style={{ marginTop: 12 }}>전체 운동</div>
+            <div className="card-h" style={{ marginTop: 4 }}>★ 즐겨찾기</div>
+            {favorites.map((ex) => renderRow(ex, lastDone.get(ex.id)))}
           </>
         )}
-        {rest.map((ex) => (
-          <button key={ex.id} className="ex-row" onClick={() => onSelect(ex)}>
-            <ExerciseImage exercise={ex} />
-            <div>
-              <div className="nm">{ex.name}</div>
-              <div className="sb">{ex.bodyPart} · {ex.equipment}</div>
-            </div>
-          </button>
-        ))}
+        {recent.length > 0 && (
+          <>
+            <div className="card-h" style={{ marginTop: favorites.length > 0 ? 12 : 4 }}>최근 한 운동</div>
+            {recent.map((ex) => renderRow(ex, lastDone.get(ex.id)))}
+          </>
+        )}
+        {(favorites.length > 0 || recent.length > 0) && rest.length > 0 && (
+          <div className="card-h" style={{ marginTop: 12 }}>전체 운동</div>
+        )}
+        {rest.map((ex) => renderRow(ex))}
         {visible.length === 0 && <div className="empty">검색 결과가 없어요</div>}
         {adding ? (
           <AddExerciseForm onSaved={(ex) => { setAdding(false); onSelect(ex); }} />
