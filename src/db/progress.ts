@@ -1,5 +1,6 @@
 import type { SetRecord, Session } from '../types';
 import { db } from './db';
+import { getWeightUnit, kgToDisplay } from './weightUnit';
 
 export interface EntryProgress {
   volume: number;
@@ -32,8 +33,9 @@ export function fmtVolumeDelta(cur: number, prev: number): string {
 
 export function fmtWeightDelta(cur: number, prev: number): string {
   if (cur === prev) return '➖';
-  const d = cur - prev;
-  return `${arrow(cur, prev)} ${d > 0 ? '+' : ''}${d}kg`;
+  const arrowCh = cur > prev ? '🔺' : '🔻';
+  const d = Math.round((kgToDisplay(cur) - kgToDisplay(prev)) * 10) / 10;
+  return `${arrowCh} ${d > 0 ? '+' : ''}${d}${getWeightUnit()}`;
 }
 
 // records는 최신순 (getExerciseHistory의 반환 순서와 동일)

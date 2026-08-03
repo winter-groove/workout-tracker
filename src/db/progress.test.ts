@@ -3,6 +3,7 @@ import {
   volume, maxWeight, fmtVolumeDelta, fmtWeightDelta, annotateHistory,
   getPreviousRecord, getPRWeight, summarizeEntry, summarizeSession,
 } from './progress';
+import { setWeightUnit } from './weightUnit';
 import type { Session } from '../types';
 
 beforeEach(async () => {
@@ -135,4 +136,14 @@ test('같은 정오의 이중 백데이트: 요약이 서로를 비교하되 자
   expect(pb.isPR).toBe(true);        // 60 > 50
   const [pa] = await summarizeSession(a);
   expect(pa.isPR).toBe(false);       // PR 뱃지 중복 없음 (b의 60이 PR)
+});
+
+test('fmtWeightDelta는 lb 모드에서 파운드로 표시한다', () => {
+  setWeightUnit('lb');
+  try {
+    expect(fmtWeightDelta(62.5, 60)).toBe('🔺 +5.5lb'); // 137.8 - 132.3
+    expect(fmtWeightDelta(60, 60)).toBe('➖');
+  } finally {
+    localStorage.removeItem('wt-weight-unit');
+  }
 });
