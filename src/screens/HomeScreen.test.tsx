@@ -201,3 +201,22 @@ test('달력 세션을 탭하면 세트 표가 펼쳐진다', async () => {
   fireEvent.click(screen.getByText(/가슴 운동 · 1개 운동/));
   await waitFor(() => expect(screen.queryByText('무게(kg)')).not.toBeInTheDocument());
 });
+
+test('같은 날 두 세션은 한 번에 하나만 펼쳐지고 전환된다', async () => {
+  await seedLibrary();
+  const now = new Date();
+  const ts = new Date(now.getFullYear(), now.getMonth(), 15, 9).getTime();
+  const mk = (id: string, exerciseId: string, weight: number): Session => ({
+    id, startedAt: ts + (id === 'b' ? 3_600_000 : 0), finishedAt: ts + 7_200_000,
+    entries: [{ exerciseId, sets: [{ weight, reps: 10, completedAt: ts + 1 }] }],
+  });
+  await db.sessions.add(mk('a', 'lib-bench-press', 60));
+  await db.sessions.add(mk('b', 'lib-squat', 80));
+  renderWithSummary();
+  fireEvent.click(await screen.findByRole('button', { name: `${now.getMonth() + 1}월 15일` }));
+  fireEvent.click(await screen.findByText(/가슴 운동 · 1개 운동/));
+  expect(await screen.findByText('60')).toBeInTheDocument();
+  fireEvent.click(screen.getByText(/하체 운동 · 1개 운동/));
+  expect(await screen.findByText('80')).toBeInTheDocument();
+  await waitFor(() => expect(screen.queryByText('60')).not.toBeInTheDocument()); // 이전 세션 접힘
+});
