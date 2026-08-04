@@ -156,7 +156,8 @@ test('운동별 단위 lb: 전역 kg여도 그 운동만 lb + kg 병기로 표�
   fireEvent.click(await screen.findByText(/1개 운동/));
   expect(await screen.findByText('무게(lb)')).toBeInTheDocument();
   expect(screen.getByText('132.3 (60kg)')).toBeInTheDocument();
-  expect(screen.getByText('볼륨 1322.8lb (600kg) · 최고 132.3lb (60kg) · 첫 기록')).toBeInTheDocument();
+  // 요약 줄은 비동기 summarizeSession 이후 렌더 — 동기 getByText는 레이스
+  expect(await screen.findByText('볼륨 1322.8lb (600kg) · 최고 132.3lb (60kg) · 첫 기록')).toBeInTheDocument();
 });
 
 test('접힘 세션 행에 총볼륨이 kg으로 표시되고, 펼쳐도 표기는 행 한 곳뿐이다', async () => {
