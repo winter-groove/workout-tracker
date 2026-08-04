@@ -413,3 +413,22 @@ test('lb 모드: 표시는 파운드, 저장은 kg', async () => {
     localStorage.removeItem('wt-weight-unit');
   }
 });
+
+test('단위 토글: 운동별 lb로 저장되고 표시·입력이 파운드로 바뀐다', async () => {
+  const prev = await startSession(routine);
+  prev.entries[0].sets = [{ weight: 60, reps: 10, completedAt: Date.now() }];
+  const { finishSession } = await import('../db/sessions');
+  await finishSession(prev);
+
+  await startSession(routine);
+  renderScreen();
+  await screen.findByText(/지난번 60kg×10/);
+  fireEvent.click(await screen.findByRole('button', { name: '벤치프레스 단위 전환' }));
+  expect(await screen.findByText(/지난번 132.3lb×10/)).toBeInTheDocument();
+  expect(screen.getByText('무게(lb)')).toBeInTheDocument();
+  expect((screen.getByLabelText('세트 1 무게') as HTMLInputElement).value).toBe('132.3'); // 프리필 60kg → lb
+  expect((await db.exercises.get('lib-bench-press'))?.unit).toBe('lb');
+  // 단위 미지정 운동(스쿼트)은 전역 kg 유지
+  fireEvent.click(screen.getByRole('button', { name: '다음 운동' }));
+  expect(await screen.findByText('무게(kg)')).toBeInTheDocument();
+});

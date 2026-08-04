@@ -5,12 +5,12 @@ import type { Exercise, Session, SetRecord } from '../types';
 import {
   getActiveSession, saveSession, finishSession, discardSession, buildEntry, sessionTitle,
 } from '../db/sessions';
-import { listExercises } from '../db/exercises';
+import { listExercises, setExerciseUnit } from '../db/exercises';
 import { getRestSeconds } from '../db/settings';
 import {
   volume, maxWeight, fmtVolumeDelta, getPRWeight, getPreviousRecord,
 } from '../db/progress';
-import { getWeightUnit, kgToDisplay, displayToKg } from '../db/weightUnit';
+import { kgToDisplay, displayToKg, unitFor, type WeightUnit } from '../db/weightUnit';
 import ExerciseImage from '../components/ExerciseImage';
 import ExercisePicker, { dominantBodyPart } from '../components/ExercisePicker';
 import RestTimer from '../components/RestTimer';
@@ -22,10 +22,9 @@ function fmtElapsed(startedAt: number, now: number): string {
   return `${mm}:${ss}`;
 }
 
-function fmtLast(sets: SetRecord[]): string {
-  const unit = getWeightUnit();
+function fmtLast(sets: SetRecord[], unit: WeightUnit): string {
   return sets
-    .map((s, i) => (i === 0 ? `${kgToDisplay(s.weight)}${unit}×${s.reps}` : `${kgToDisplay(s.weight)}×${s.reps}`))
+    .map((s, i) => (i === 0 ? `${kgToDisplay(s.weight, unit)}${unit}×${s.reps}` : `${kgToDisplay(s.weight, unit)}×${s.reps}`))
     .join(' · ');
 }
 
@@ -215,7 +214,6 @@ export default function SessionScreen() {
     navigate(`/summary/${session.id}`, { replace: true });
   }
 
-  const unit = getWeightUnit();
   const total = groups.length;
   const startDate = new Date(session.startedAt);
   const isBackdated = startDate.toDateString() !== new Date(now).toDateString();
@@ -238,14 +236,15 @@ export default function SessionScreen() {
           group.map((entryIdx) => {
             const e = session.entries[entryIdx];
             const gex = exMap.get(e.exerciseId);
+            const u = unitFor(gex);
             const rec = records.get(e.exerciseId);
             const doneSets = e.sets.filter((s) => s.completedAt !== undefined);
             const curVol = volume(doneSets);
             const lastVol = rec?.last ? volume(rec.last) : 0;
             const isPRNow = rec?.last !== undefined && maxWeight(doneSets) > (rec?.pr ?? 0);
             const overloadText = curVol > lastVol
-              ? `볼륨 ${kgToDisplay(curVol)}${unit} ${fmtVolumeDelta(curVol, lastVol)}`
-              : `볼륨 ${kgToDisplay(curVol)} / 지난 ${kgToDisplay(lastVol)}${unit}`;
+              ? `볼륨 ${kgToDisplay(curVol, u)}${u} ${fmtVolumeDelta(curVol, lastVol)}`
+              : `볼륨 ${kgToDisplay(curVol, u)} / 지난 ${kgToDisplay(lastVol, u)}${u}`;
             return (
               <div key={entryIdx} className="card">
                 {group.length === 1 && gex && <ExerciseImage exercise={gex} className="hero-img" />}
@@ -253,32 +252,42 @@ export default function SessionScreen() {
                 <div className="tags">
                   {gex && <span className="tag">{gex.bodyPart}</span>}
                   {gex && <span className="tag">{gex.equipment}</span>}
+                  {gex && (
+                    <button
+                      className="btn-sm btn btn-ghost" style={{ marginLeft: 'auto' }}
+                      aria-label={`${gex.name} 단위 전환`}
+                      onClick={() => void setExerciseUnit(gex.id, u === 'kg' ? 'lb' : 'kg')}
+                    >
+                      {u} ⇄
+                    </button>
+                  )}
                   <button
-                    className="btn-sm btn btn-ghost" style={{ marginLeft: 'auto' }}
+                    className="btn-sm btn btn-ghost"
+                    style={gex ? undefined : { marginLeft: 'auto' }}
                     onClick={() => removeEntry(entryIdx)}
                   >
                     운동 빼기
                   </button>
                 </div>
-                {rec?.last && <div className="last-pill" style={{ marginTop: 10 }}>🔥 지난번 {fmtLast(rec.last)}</div>}
+                {rec?.last && <div className="last-pill" style={{ marginTop: 10 }}>🔥 지난번 {fmtLast(rec.last, u)}</div>}
                 {rec?.last && (
                   <div className="last-pill" style={{ marginTop: 6, marginLeft: 6 }}>
                     📈 {overloadText}{isPRNow ? ' · 🏆 PR!' : ''}
                   </div>
                 )}
                 <div className="set-head" style={{ marginTop: 10 }}>
-                  <span>세트</span><span>무게({unit})</span><span>횟수</span><span>완료</span>
+                  <span>세트</span><span>무게({u})</span><span>횟수</span><span>완료</span>
                 </div>
                 {e.sets.map((s, j) => (
                   <div key={j} className={`set-row ${s.completedAt ? 'done' : ''}`} style={{ marginTop: 8 }}>
                     <span className="n">{j + 1}</span>
                     <input
-                      type="number" inputMode="decimal" step={unit === 'lb' ? 2.5 : 0.5} min="0"
+                      type="number" inputMode="decimal" step={u === 'lb' ? 2.5 : 0.5} min="0"
                       aria-label={`세트 ${j + 1} 무게`}
-                      value={s.weight === 0 ? '' : kgToDisplay(s.weight)}
+                      value={s.weight === 0 ? '' : kgToDisplay(s.weight, u)}
                       placeholder="0"
                       onFocus={(ev) => ev.currentTarget.select()}
-                      onChange={(ev) => patchSet(entryIdx, j, { weight: displayToKg(Number(ev.target.value) || 0) })}
+                      onChange={(ev) => patchSet(entryIdx, j, { weight: displayToKg(Number(ev.target.value) || 0, u) })}
                     />
                     <input
                       type="number" inputMode="numeric" min="0"
