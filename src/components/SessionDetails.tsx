@@ -3,9 +3,10 @@ import type { Exercise, Session } from '../types';
 import {
   fmtVolumeDelta, fmtWeightDelta, summarizeSession, type EntryProgress,
 } from '../db/progress';
-import { getWeightUnit, kgToDisplay } from '../db/weightUnit';
+import { fmtWeightCell, fmtWeightLabel, kgToDisplay, unitFor } from '../db/weightUnit';
 
-// 완료 세션의 운동별 세트 표 + 증감·PR 요약 (기록 탭·홈 달력 공용).
+// 완료 세션의 운동별 세트 표 + 증감·PR 요약 + 총볼륨 (기록 탭·홈 달력 공용).
+// 무게는 운동별 단위(unitFor)로 표시하되 lb면 kg 병기, 총볼륨은 항상 원본 kg.
 // 요약은 마운트 단위로 로드 — 세션 전환 시 재마운트되므로 잔상/race 없음.
 // 소비처 계약: 세션마다 재마운트되도록 렌더할 것(조건부 렌더 또는 key={session.id}) — 재마운트가 이전 세션 요약의 잔상 표시를 방지한다.
 export default function SessionDetails({
@@ -15,7 +16,6 @@ export default function SessionDetails({
   exMap: Map<string, Exercise>;
 }) {
   const [summaries, setSummaries] = useState<EntryProgress[] | null>(null);
-  const unit = getWeightUnit();
 
   useEffect(() => {
     let cancelled = false;
@@ -31,10 +31,11 @@ export default function SessionDetails({
     <>
       {session.entries.map((e, i) => {
         const p = summaries?.[i];
+        const u = unitFor(exMap.get(e.exerciseId));
         const line = p
           ? (p.prevVolume === undefined
-              ? `볼륨 ${kgToDisplay(p.volume)}${unit} · 최고 ${kgToDisplay(p.maxWeight)}${unit} · 첫 기록`
-              : `볼륨 ${kgToDisplay(p.volume)}${unit} ${fmtVolumeDelta(p.volume, p.prevVolume)} · 최고 ${kgToDisplay(p.maxWeight)}${unit} ${fmtWeightDelta(p.maxWeight, p.prevMaxWeight ?? 0)}`)
+              ? `볼륨 ${fmtWeightLabel(p.volume, u)} · 최고 ${fmtWeightLabel(p.maxWeight, u)} · 첫 기록`
+              : `볼륨 ${fmtWeightLabel(p.volume, u)} ${fmtVolumeDelta(p.volume, p.prevVolume)} · 최고 ${fmtWeightLabel(p.maxWeight, u)} ${fmtWeightDelta(p.maxWeight, p.prevMaxWeight ?? 0, u)}`)
           : null;
         return (
           <div key={i} className="hist-row" style={{ display: 'block' }}>
@@ -42,12 +43,12 @@ export default function SessionDetails({
               {exMap.get(e.exerciseId)?.name ?? '삭제된 운동'}{p?.isPR ? ' 🏆' : ''}
             </div>
             <div className="set-view d" style={{ marginTop: 6 }}>
-              <span>세트</span><span>무게({unit})</span><span>횟수</span>
+              <span>세트</span><span>무게({u})</span><span>횟수</span>
             </div>
             {e.sets.map((set, j) => (
               <div key={j} className="set-view" style={{ marginTop: 4 }}>
                 <span className="d">{j + 1}</span>
-                <span>{kgToDisplay(set.weight)}</span>
+                <span>{fmtWeightCell(set.weight, u)}</span>
                 <span>{set.reps}</span>
               </div>
             ))}
@@ -55,6 +56,11 @@ export default function SessionDetails({
           </div>
         );
       })}
+      {summaries && (
+        <div style={{ fontWeight: 700, marginTop: 8 }}>
+          총볼륨 {kgToDisplay(summaries.reduce((sum, p) => sum + p.volume, 0), 'kg')}kg
+        </div>
+      )}
     </>
   );
 }

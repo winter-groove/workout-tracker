@@ -143,8 +143,34 @@ test('lb 모드: 세트 표가 파운드로 표시된다', async () => {
     renderScreen();
     fireEvent.click(await screen.findByText(/1개 운동/));
     expect(await screen.findByText('무게(lb)')).toBeInTheDocument();
-    expect(screen.getByText('132.3')).toBeInTheDocument();
+    expect(screen.getByText('132.3 (60kg)')).toBeInTheDocument();
   } finally {
     localStorage.removeItem('wt-weight-unit');
   }
+});
+
+test('운동별 단위 lb: 전역 kg여도 그 운동만 lb + kg 병기로 표시된다', async () => {
+  await db.exercises.update('lib-bench-press', { unit: 'lb' });
+  await addFinishedSession(1000, 'lib-bench-press', [{ weight: 60, reps: 10 }]);
+  renderScreen();
+  fireEvent.click(await screen.findByText(/1개 운동/));
+  expect(await screen.findByText('무게(lb)')).toBeInTheDocument();
+  expect(screen.getByText('132.3 (60kg)')).toBeInTheDocument();
+  expect(screen.getByText('볼륨 1322.8lb (600kg) · 최고 132.3lb (60kg) · 첫 기록')).toBeInTheDocument();
+});
+
+test('펼침 상세에 세션 총볼륨이 kg으로 표시된다', async () => {
+  const s: Session = {
+    id: crypto.randomUUID(),
+    startedAt: 1000,
+    finishedAt: 3600_000,
+    entries: [
+      { exerciseId: 'lib-bench-press', sets: [{ weight: 60, reps: 10, completedAt: 1001 }] },
+      { exerciseId: 'lib-squat', sets: [{ weight: 100, reps: 5, completedAt: 1001 }] },
+    ],
+  };
+  await db.sessions.add(s);
+  renderScreen();
+  fireEvent.click(await screen.findByText(/2개 운동/));
+  expect(await screen.findByText('총볼륨 1100kg')).toBeInTheDocument(); // 600 + 500
 });

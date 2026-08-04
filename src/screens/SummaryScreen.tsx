@@ -6,7 +6,7 @@ import { db } from '../db/db';
 import { listExercises } from '../db/exercises';
 import { summarizeSession, fmtVolumeDelta, fmtWeightDelta, type EntryProgress } from '../db/progress';
 import { resumeSession, sessionTitle } from '../db/sessions';
-import { getWeightUnit, kgToDisplay } from '../db/weightUnit';
+import { fmtWeightLabel, kgToDisplay, unitFor } from '../db/weightUnit';
 
 function fmtDate(ts: number): string {
   const d = new Date(ts);
@@ -40,7 +40,6 @@ export default function SummaryScreen() {
 
   if (!session) return null;
 
-  const unit = getWeightUnit();
   const canResume = session.finishedAt !== undefined
     && new Date(session.finishedAt).toDateString() === new Date().toDateString();
 
@@ -59,12 +58,16 @@ export default function SummaryScreen() {
       <h1 className="screen-title">운동 완료 🎉</h1>
       <div className="card">
         <div className="card-h">{sessionTitle(session, exMap)} · {fmtDate(session.startedAt)} · {session.entries.length}개 운동</div>
+        <div style={{ fontWeight: 800, marginBottom: 8 }}>
+          총볼륨 {kgToDisplay(progress.reduce((sum, p) => sum + p.volume, 0), 'kg')}kg
+        </div>
         {session.entries.map((e, i) => {
           const p = progress[i];
           if (!p) return null;
+          const u = unitFor(exMap.get(e.exerciseId));
           const line = p.prevVolume === undefined
-            ? `볼륨 ${kgToDisplay(p.volume)}${unit} · 최고 ${kgToDisplay(p.maxWeight)}${unit} · 첫 기록`
-            : `볼륨 ${kgToDisplay(p.volume)}${unit} ${fmtVolumeDelta(p.volume, p.prevVolume)} · 최고 ${kgToDisplay(p.maxWeight)}${unit} ${fmtWeightDelta(p.maxWeight, p.prevMaxWeight ?? 0)}`;
+            ? `볼륨 ${fmtWeightLabel(p.volume, u)} · 최고 ${fmtWeightLabel(p.maxWeight, u)} · 첫 기록`
+            : `볼륨 ${fmtWeightLabel(p.volume, u)} ${fmtVolumeDelta(p.volume, p.prevVolume)} · 최고 ${fmtWeightLabel(p.maxWeight, u)} ${fmtWeightDelta(p.maxWeight, p.prevMaxWeight ?? 0, u)}`;
           return (
             <div key={i} className="hist-row" style={{ display: 'block' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>

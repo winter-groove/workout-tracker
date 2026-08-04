@@ -122,8 +122,23 @@ test('lb 모드: 요약 볼륨·최고가 파운드로 표시된다', async () =
     const cur = await addFinishedSession(1000, 'lib-bench-press', [{ weight: 60, reps: 10 }]);
     renderAt(`/summary/${cur.id}`);
     // 볼륨 600kg → 1322.8lb, 최고 60kg → 132.3lb
-    expect(await screen.findByText('볼륨 1322.8lb · 최고 132.3lb · 첫 기록')).toBeInTheDocument();
+    expect(await screen.findByText('볼륨 1322.8lb (600kg) · 최고 132.3lb (60kg) · 첫 기록')).toBeInTheDocument();
   } finally {
     localStorage.removeItem('wt-weight-unit');
   }
+});
+
+test('요약 화면에 세션 총볼륨이 kg으로 표시된다', async () => {
+  const s: Session = {
+    id: crypto.randomUUID(),
+    startedAt: 1000,
+    finishedAt: 3600_000,
+    entries: [
+      { exerciseId: 'lib-bench-press', sets: [{ weight: 60, reps: 10, completedAt: 1001 }] },
+      { exerciseId: 'lib-squat', sets: [{ weight: 100, reps: 5, completedAt: 1001 }] },
+    ],
+  };
+  await db.sessions.add(s);
+  renderAt(`/summary/${s.id}`);
+  expect(await screen.findByText('총볼륨 1100kg')).toBeInTheDocument();
 });
