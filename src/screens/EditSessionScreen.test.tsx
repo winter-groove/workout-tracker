@@ -213,6 +213,20 @@ test('편집에서 묶인 그룹의 짝을 삭제하면 오묶임 없이 flag가
   expect(saved?.entries[0].pairedWithNext).toBeUndefined(); // 펙덱과 오묶임 금지
 });
 
+test('운동별 단위 lb: 편집 무게 입력이 파운드로 표시되고 kg으로 저장된다', async () => {
+  await db.exercises.update('lib-bench-press', { unit: 'lb' });
+  const s = await addFinishedSession(1000, ['lib-bench-press'], 60);
+  renderAt(`/edit/${s.id}`);
+  await screen.findByText('벤치프레스');
+  await waitFor(() => {
+    expect((screen.getByLabelText('세트 1 무게') as HTMLInputElement).value).toBe('132.3');
+  });
+  fireEvent.change(screen.getByLabelText('세트 1 무게'), { target: { value: '135' } });
+  fireEvent.click(screen.getByRole('button', { name: '저장' }));
+  await screen.findByText('요약화면');
+  expect((await db.sessions.get(s.id))?.entries[0].sets[0].weight).toBeCloseTo(61.23, 2);
+});
+
 test('세션 이름을 지정해 저장하면 반영되고 placeholder는 자동 이름이다', async () => {
   const s = await addFinishedSession(1000, ['lib-bench-press']);
   renderAt(`/edit/${s.id}`);

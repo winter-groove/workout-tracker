@@ -5,7 +5,7 @@ import type { Exercise, Session, SessionEntry, SetRecord } from '../types';
 import { db } from '../db/db';
 import { saveSession, buildEntry, sessionTitle } from '../db/sessions';
 import { listExercises } from '../db/exercises';
-import { getWeightUnit, kgToDisplay, displayToKg } from '../db/weightUnit';
+import { kgToDisplay, displayToKg, unitFor } from '../db/weightUnit';
 import ExercisePicker, { dominantBodyPart } from '../components/ExercisePicker';
 
 export default function EditSessionScreen() {
@@ -37,8 +37,6 @@ export default function EditSessionScreen() {
   }, [sessionId, navigate]);
 
   if (!session) return null;
-
-  const unit = getWeightUnit();
 
   function patchSet(entryIdx: number, setIdx: number, patch: Partial<SetRecord>) {
     setEntries(entries.map((e, i) =>
@@ -126,45 +124,48 @@ export default function EditSessionScreen() {
           onChange={(e) => setName(e.target.value)}
         />
       </div>
-      {entries.map((e, i) => (
-        <div key={i} className="card">
-          <div className="hist-row" style={{ borderBottom: 'none' }}>
-            <span>{exMap.get(e.exerciseId)?.name ?? '삭제된 운동'}</span>
-            <button
-              className="btn-sm btn btn-danger"
-              onClick={() => removeEntry(i)}
-            >
-              운동 삭제
-            </button>
-          </div>
-          {e.sets.map((s, j) => (
-            <div key={j} className="set-row" style={{ marginTop: 8 }}>
-              <span className="n">{j + 1}</span>
-              <input
-                type="number" inputMode="decimal" step={unit === 'lb' ? 2.5 : 0.5} min="0"
-                aria-label={`세트 ${j + 1} 무게`}
-                value={s.weight === 0 ? '' : kgToDisplay(s.weight)}
-                placeholder="0"
-                onFocus={(ev) => ev.currentTarget.select()}
-                onChange={(ev) => patchSet(i, j, { weight: displayToKg(Number(ev.target.value) || 0) })}
-              />
-              <input
-                type="number" inputMode="numeric" min="0"
-                aria-label={`세트 ${j + 1} 횟수`}
-                value={s.reps}
-                onFocus={(ev) => ev.currentTarget.select()}
-                onChange={(ev) => patchSet(i, j, { reps: Number(ev.target.value) || 0 })}
-              />
-              <button className="chk" aria-label={`세트 ${j + 1} 삭제`} onClick={() => removeSet(i, j)}>
-                ×
+      {entries.map((e, i) => {
+        const u = unitFor(exMap.get(e.exerciseId));
+        return (
+          <div key={i} className="card">
+            <div className="hist-row" style={{ borderBottom: 'none' }}>
+              <span>{exMap.get(e.exerciseId)?.name ?? '삭제된 운동'}</span>
+              <button
+                className="btn-sm btn btn-danger"
+                onClick={() => removeEntry(i)}
+              >
+                운동 삭제
               </button>
             </div>
-          ))}
-          <button className="btn btn-ghost" style={{ marginTop: 10 }} onClick={() => addSet(i)}>
-            ＋ 세트 추가
-          </button>
-        </div>
-      ))}
+            {e.sets.map((s, j) => (
+              <div key={j} className="set-row" style={{ marginTop: 8 }}>
+                <span className="n">{j + 1}</span>
+                <input
+                  type="number" inputMode="decimal" step={u === 'lb' ? 2.5 : 0.5} min="0"
+                  aria-label={`세트 ${j + 1} 무게`}
+                  value={s.weight === 0 ? '' : kgToDisplay(s.weight, u)}
+                  placeholder="0"
+                  onFocus={(ev) => ev.currentTarget.select()}
+                  onChange={(ev) => patchSet(i, j, { weight: displayToKg(Number(ev.target.value) || 0, u) })}
+                />
+                <input
+                  type="number" inputMode="numeric" min="0"
+                  aria-label={`세트 ${j + 1} 횟수`}
+                  value={s.reps}
+                  onFocus={(ev) => ev.currentTarget.select()}
+                  onChange={(ev) => patchSet(i, j, { reps: Number(ev.target.value) || 0 })}
+                />
+                <button className="chk" aria-label={`세트 ${j + 1} 삭제`} onClick={() => removeSet(i, j)}>
+                  ×
+                </button>
+              </div>
+            ))}
+            <button className="btn btn-ghost" style={{ marginTop: 10 }} onClick={() => addSet(i)}>
+              ＋ 세트 추가
+            </button>
+          </div>
+        );
+      })}
       <button className="btn btn-ghost" onClick={() => setShowPicker(true)}>＋ 운동 추가</button>
       <div className="btn-row">
         <button

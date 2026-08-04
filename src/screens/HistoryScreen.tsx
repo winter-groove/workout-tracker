@@ -5,7 +5,7 @@ import type { SetRecord } from '../types';
 import { listFinishedSessions, deleteSession, getExerciseHistory, sessionTitle } from '../db/sessions';
 import { listExercises } from '../db/exercises';
 import { annotateHistory, fmtVolumeDelta, fmtWeightDelta } from '../db/progress';
-import { getWeightUnit, kgToDisplay } from '../db/weightUnit';
+import { kgToDisplay, unitFor, fmtWeightLabel, type WeightUnit } from '../db/weightUnit';
 import SessionDetails from '../components/SessionDetails';
 
 function fmtDate(ts: number): string {
@@ -14,8 +14,8 @@ function fmtDate(ts: number): string {
   return `${d.getMonth() + 1}/${d.getDate()} (${day})`;
 }
 
-function fmtSets(sets: SetRecord[]): string {
-  return sets.map((s) => `${kgToDisplay(s.weight)}×${s.reps}`).join(', ');
+function fmtSets(sets: SetRecord[], unit: WeightUnit): string {
+  return sets.map((s) => `${kgToDisplay(s.weight, unit)}×${s.reps}`).join(', ');
 }
 
 export default function HistoryScreen() {
@@ -30,7 +30,7 @@ export default function HistoryScreen() {
   );
   const exMap = new Map(exercises.map((e) => [e.id, e]));
   const annotations = history ? annotateHistory(history.map((h) => h.sets)) : [];
-  const unit = getWeightUnit();
+  const filterUnit = unitFor(exMap.get(filterId));
 
   async function remove(id: string) {
     if (window.confirm('이 기록을 삭제할까요?')) await deleteSession(id);
@@ -58,12 +58,12 @@ export default function HistoryScreen() {
           {history.map(({ session, sets }, i) => {
             const a = annotations[i];
             const line = a.prevVolume === undefined
-              ? `볼륨 ${kgToDisplay(a.volume)}${unit} · 첫 기록`
-              : `볼륨 ${kgToDisplay(a.volume)}${unit} ${fmtVolumeDelta(a.volume, a.prevVolume)} · 최고 ${kgToDisplay(a.maxWeight)}${unit} ${fmtWeightDelta(a.maxWeight, a.prevMaxWeight ?? 0)}`;
+              ? `볼륨 ${fmtWeightLabel(a.volume, filterUnit)} · 첫 기록`
+              : `볼륨 ${fmtWeightLabel(a.volume, filterUnit)} ${fmtVolumeDelta(a.volume, a.prevVolume)} · 최고 ${fmtWeightLabel(a.maxWeight, filterUnit)} ${fmtWeightDelta(a.maxWeight, a.prevMaxWeight ?? 0, filterUnit)}`;
             return (
               <div key={session.id} className="hist-row" style={{ display: 'block' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span>{fmtSets(sets)}</span>
+                  <span>{fmtSets(sets, filterUnit)}</span>
                   <span className="d">{fmtDate(session.startedAt)}</span>
                 </div>
                 <div className="d" style={{ fontSize: 12, marginTop: 2 }}>
