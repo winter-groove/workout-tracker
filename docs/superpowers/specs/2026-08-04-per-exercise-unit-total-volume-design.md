@@ -37,7 +37,7 @@
 
 ### 3. `SessionScreen.tsx` — 운동별 토글 + 입력 단위
 
-- 각 운동 카드 `.tags` 줄에(운동 빼기 버튼 앞) btn-sm 토글: 현재 유효 단위 표시 `단위 kg`/`단위 lb`, 탭하면 반대 단위를 `db.exercises.update(id, { unit })`로 저장(명시 저장 — 전역 바뀌어도 유지). useLiveQuery라 즉시 반영. `gex` 없으면(삭제된 운동) 토글 숨김
+- 각 운동 카드 `.tags` 줄에(운동 빼기 버튼 앞) btn-sm 토글: 현재 유효 단위 표시 `kg ⇄`/`lb ⇄`(aria-label `{운동명} 단위 전환`), 탭하면 반대 단위를 `db.exercises.update(id, { unit })`로 저장(명시 저장 — 전역 바뀌어도 유지). useLiveQuery라 즉시 반영. `gex` 없으면(삭제된 운동) 토글 숨김
 - 유효 단위 `u = unitFor(gex)`를 카드 단위로 계산: set-head `무게(u)`, 무게 input `kgToDisplay(w, u)`/`displayToKg(v, u)`, step `u==='lb' ? 2.5 : 0.5`
 - 지난번 pill(`fmtLast`)·볼륨 pill(`overloadText`)도 u로 표시 (라이브 화면은 병기 없음 — 컴팩트)
 - 슈퍼세트 그룹 내 카드마다 단위 독립
