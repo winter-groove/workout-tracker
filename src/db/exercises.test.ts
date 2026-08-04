@@ -1,7 +1,7 @@
 import { db } from './db';
 import {
   seedLibrary, listExercises, addCustomExercise,
-  setExerciseHidden, setExerciseFavorite, deleteCustomExercise, LIBRARY_VERSION,
+  setExerciseHidden, setExerciseFavorite, deleteCustomExercise, setExerciseUnit, LIBRARY_VERSION,
 } from './exercises';
 import { exportData, importData } from './backup';
 import library from '../data/exercise-library.json';
@@ -127,4 +127,17 @@ test('백업 왕복에 isFavorite이 보존된다', async () => {
   const dump = JSON.parse(JSON.stringify(await exportData()));
   await importData(dump);
   expect((await db.exercises.get('lib-squat'))?.isFavorite).toBe(true);
+});
+
+test('setExerciseUnit이 단위를 저장하고 seedLibrary 재동기화에도 보존된다', async () => {
+  await seedLibrary();
+  await setExerciseUnit('lib-bench-press', 'lb');
+  expect((await db.exercises.get('lib-bench-press'))?.unit).toBe('lb');
+  // 이름을 어긋나게 만들어 동기화(bulkPut) 경로를 강제로 태운다
+  await db.exercises.update('lib-bench-press', { name: '변조' });
+  await db.meta.put({ key: 'libraryVersion', value: 0 });
+  await seedLibrary();
+  const ex = await db.exercises.get('lib-bench-press');
+  expect(ex?.name).toBe('벤치프레스');
+  expect(ex?.unit).toBe('lb'); // 동기화가 unit을 지우지 않음
 });

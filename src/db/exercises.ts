@@ -1,6 +1,7 @@
 import { db } from './db';
 import library from '../data/exercise-library.json';
 import type { BodyPart, Equipment, Exercise, IconKey } from '../types';
+import type { WeightUnit } from './weightUnit';
 
 export const LIBRARY_VERSION = 3;
 
@@ -66,6 +67,10 @@ export async function addCustomExercise(input: {
 
 export async function setExerciseFavorite(id: string, favorite: boolean): Promise<void> {
   await db.exercises.update(id, { isFavorite: favorite });
+}
+
+export async function setExerciseUnit(id: string, unit: WeightUnit): Promise<void> {
+  await db.exercises.update(id, { unit });
 }
 
 export async function setExerciseHidden(id: string, hidden: boolean): Promise<void> {

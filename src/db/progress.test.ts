@@ -147,3 +147,9 @@ test('fmtWeightDelta는 lb 모드에서 파운드로 표시한다', () => {
     localStorage.removeItem('wt-weight-unit');
   }
 });
+
+test('fmtWeightDelta: 단위 파라미터로 표시 단위를 바꾼다 (판정은 원본 kg)', () => {
+  expect(fmtWeightDelta(62.5, 60, 'lb')).toBe('🔺 +5.5lb'); // 137.8 - 132.3
+  expect(fmtWeightDelta(62.5, 60, 'kg')).toBe('🔺 +2.5kg');
+  expect(fmtWeightDelta(60, 60, 'lb')).toBe('➖');
+});

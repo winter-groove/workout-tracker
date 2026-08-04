@@ -1,6 +1,6 @@
 import { db } from './db';
 import { exportData, importData } from './backup';
-import { seedLibrary } from './exercises';
+import { seedLibrary, setExerciseUnit } from './exercises';
 import { saveRoutine, newRoutine } from './routines';
 import { startSession, finishSession } from './sessions';
 
@@ -69,4 +69,14 @@ test('백업에서 빠진 라이브러리 운동은 가져오기 후 재시딩�
   // no duplicates introduced by the reseed
   const ids = (await db.exercises.toArray()).map((e) => e.id);
   expect(new Set(ids).size).toBe(ids.length);
+});
+
+test('운동별 단위(unit)가 백업 왕복에서 보존된다', async () => {
+  await seedLibrary();
+  await setExerciseUnit('lib-bench-press', 'lb');
+  const dump = await exportData();
+  await db.delete();
+  await db.open();
+  await importData(dump);
+  expect((await db.exercises.get('lib-bench-press'))?.unit).toBe('lb');
 });
