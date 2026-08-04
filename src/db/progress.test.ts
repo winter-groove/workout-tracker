@@ -1,7 +1,7 @@
 import { db } from './db';
 import {
   volume, maxWeight, fmtVolumeDelta, fmtWeightDelta, annotateHistory,
-  getPreviousRecord, getPRWeight, summarizeEntry, summarizeSession,
+  getPreviousRecord, getPRWeight, summarizeEntry, summarizeSession, sessionVolume,
 } from './progress';
 import { setWeightUnit } from './weightUnit';
 import type { Session } from '../types';
@@ -152,4 +152,18 @@ test('fmtWeightDelta: 단위 파라미터로 표시 단위를 바꾼다 (판정�
   expect(fmtWeightDelta(62.5, 60, 'lb')).toBe('🔺 +5.5lb'); // 137.8 - 132.3
   expect(fmtWeightDelta(62.5, 60, 'kg')).toBe('🔺 +2.5kg');
   expect(fmtWeightDelta(60, 60, 'lb')).toBe('➖');
+});
+
+test('sessionVolume은 모든 entry의 볼륨을 원본 kg으로 합산한다', () => {
+  const s: Session = {
+    id: 's1',
+    startedAt: 1000,
+    finishedAt: 2000,
+    entries: [
+      { exerciseId: 'a', sets: [{ weight: 60, reps: 10, completedAt: 1001 }] },        // 600
+      { exerciseId: 'b', sets: [{ weight: 100, reps: 5, completedAt: 1001 }] },        // 500
+    ],
+  };
+  expect(sessionVolume(s)).toBe(1100);
+  expect(sessionVolume({ ...s, entries: [] })).toBe(0);
 });

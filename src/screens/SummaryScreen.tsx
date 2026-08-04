@@ -4,7 +4,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import type { Session } from '../types';
 import { db } from '../db/db';
 import { listExercises } from '../db/exercises';
-import { summarizeSession, fmtVolumeDelta, fmtWeightDelta, type EntryProgress } from '../db/progress';
+import { summarizeSession, fmtVolumeDelta, fmtWeightDelta, sessionVolume, type EntryProgress } from '../db/progress';
 import { resumeSession, sessionTitle } from '../db/sessions';
 import { fmtWeightLabel, kgToDisplay, unitFor } from '../db/weightUnit';
 
@@ -59,7 +59,7 @@ export default function SummaryScreen() {
       <div className="card">
         <div className="card-h">{sessionTitle(session, exMap)} · {fmtDate(session.startedAt)} · {session.entries.length}개 운동</div>
         <div style={{ fontWeight: 800, marginBottom: 8 }}>
-          총볼륨 {kgToDisplay(progress.reduce((sum, p) => sum + p.volume, 0), 'kg')}kg
+          총볼륨 {kgToDisplay(sessionVolume(session), 'kg')}kg
         </div>
         {session.entries.map((e, i) => {
           const p = progress[i];

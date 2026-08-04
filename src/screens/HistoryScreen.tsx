@@ -4,7 +4,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import type { SetRecord } from '../types';
 import { listFinishedSessions, deleteSession, getExerciseHistory, sessionTitle } from '../db/sessions';
 import { listExercises } from '../db/exercises';
-import { annotateHistory, fmtVolumeDelta, fmtWeightDelta } from '../db/progress';
+import { annotateHistory, fmtVolumeDelta, fmtWeightDelta, sessionVolume } from '../db/progress';
 import { kgToDisplay, unitFor, fmtWeightLabel, type WeightUnit } from '../db/weightUnit';
 import SessionDetails from '../components/SessionDetails';
 
@@ -79,7 +79,7 @@ export default function HistoryScreen() {
           {sessions.map((s) => (
             <div key={s.id} className="card" onClick={() => setOpenId(openId === s.id ? '' : s.id)}>
               <div className="hist-row" style={{ borderBottom: openId === s.id ? undefined : 'none' }}>
-                <span>{sessionTitle(s, exMap)} · {s.entries.length}개 운동 {openId === s.id ? '▴' : '▾'}</span>
+                <span>{sessionTitle(s, exMap)} · {s.entries.length}개 운동 · 총볼륨 {kgToDisplay(sessionVolume(s), 'kg')}kg {openId === s.id ? '▴' : '▾'}</span>
                 <span className="d">{fmtDate(s.startedAt)}</span>
               </div>
               {openId === s.id && (

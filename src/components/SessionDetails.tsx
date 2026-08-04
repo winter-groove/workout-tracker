@@ -3,10 +3,10 @@ import type { Exercise, Session } from '../types';
 import {
   fmtVolumeDelta, fmtWeightDelta, summarizeSession, type EntryProgress,
 } from '../db/progress';
-import { fmtWeightCell, fmtWeightLabel, kgToDisplay, unitFor } from '../db/weightUnit';
+import { fmtWeightCell, fmtWeightLabel, unitFor } from '../db/weightUnit';
 
-// 완료 세션의 운동별 세트 표 + 증감·PR 요약 + 총볼륨 (기록 탭·홈 달력 공용).
-// 무게는 운동별 단위(unitFor)로 표시하되 lb면 kg 병기, 총볼륨은 항상 원본 kg.
+// 완료 세션의 운동별 세트 표 + 증감·PR 요약 (기록 탭·홈 달력 공용).
+// 무게는 운동별 단위(unitFor)로 표시하되 lb면 kg 병기. 총볼륨은 소비처의 세션 행이 표시한다(sessionVolume).
 // 요약은 마운트 단위로 로드 — 세션 전환 시 재마운트되므로 잔상/race 없음.
 // 소비처 계약: 세션마다 재마운트되도록 렌더할 것(조건부 렌더 또는 key={session.id}) — 재마운트가 이전 세션 요약의 잔상 표시를 방지한다.
 export default function SessionDetails({
@@ -56,11 +56,6 @@ export default function SessionDetails({
           </div>
         );
       })}
-      {summaries && (
-        <div style={{ fontWeight: 700, marginTop: 8 }}>
-          총볼륨 {kgToDisplay(summaries.reduce((sum, p) => sum + p.volume, 0), 'kg')}kg
-        </div>
-      )}
     </>
   );
 }

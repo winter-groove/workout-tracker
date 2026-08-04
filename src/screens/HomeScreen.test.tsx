@@ -220,3 +220,20 @@ test('같은 날 두 세션은 한 번에 하나만 펼쳐지고 전환된다', 
   expect(await screen.findByText('80')).toBeInTheDocument();
   await waitFor(() => expect(screen.queryByText('60')).not.toBeInTheDocument()); // 이전 세션 접힘
 });
+
+test('달력 세션 행에 총볼륨이 kg으로 표시된다', async () => {
+  await seedLibrary();
+  const now = new Date();
+  const ts = new Date(now.getFullYear(), now.getMonth(), 15, 10).getTime();
+  const s: Session = {
+    id: crypto.randomUUID(), startedAt: ts, finishedAt: ts + 3600_000,
+    entries: [
+      { exerciseId: 'lib-bench-press', sets: [{ weight: 60, reps: 10, completedAt: ts + 1 }] },
+      { exerciseId: 'lib-squat', sets: [{ weight: 100, reps: 5, completedAt: ts + 1 }] },
+    ],
+  };
+  await db.sessions.add(s);
+  renderWithSummary();
+  fireEvent.click(await screen.findByRole('button', { name: `${now.getMonth() + 1}월 15일` }));
+  expect(await screen.findByText(/2개 운동 · 총볼륨 1100kg/)).toBeInTheDocument(); // 600 + 500
+});

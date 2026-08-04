@@ -18,6 +18,11 @@ export function maxWeight(sets: SetRecord[]): number {
   return sets.reduce((max, s) => Math.max(max, s.weight), 0);
 }
 
+// 세션 전체 총볼륨 (원본 kg 합) — DB 조회 없는 순수 계산
+export function sessionVolume(session: Session): number {
+  return session.entries.reduce((sum, e) => sum + volume(e.sets), 0);
+}
+
 function arrow(cur: number, prev: number): string {
   if (cur > prev) return '🔺';
   if (cur < prev) return '🔻';
