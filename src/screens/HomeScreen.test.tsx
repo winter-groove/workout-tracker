@@ -133,7 +133,8 @@ test('과거 날짜에 기록 추가 버튼으로 백데이트 세션을 시작�
   const now = new Date();
   fireEvent.click(await screen.findByRole('button', { name: `${now.getMonth() + 1}월 1일` }));
   fireEvent.click(await screen.findByRole('button', { name: '＋ 이 날짜에 기록 추가' }));
-  fireEvent.click(screen.getByRole('button', { name: '가슴운동' }));
+  // 루틴 목록은 useLiveQuery로 비동기 로드 — 동기 getByRole은 레이스
+  fireEvent.click(await screen.findByRole('button', { name: '가슴운동' }));
   expect(await screen.findByText('세션화면')).toBeInTheDocument();
   const s = await getActiveSession();
   const d = new Date(s!.startedAt);
