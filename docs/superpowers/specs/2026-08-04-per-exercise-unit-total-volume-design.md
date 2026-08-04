@@ -56,7 +56,7 @@
 
 ### 6. `HistoryScreen.tsx` — 운동별로 보기
 
-- 선택한 운동의 `u = unitFor(ex)`로 세트 문자열(`fmtSets`)·볼륨·최고·증감 표시, lb면 병기 규칙 동일 적용
+- 선택한 운동의 `u = unitFor(ex)`로 표시: 세트 문자열(`fmtSets`)은 단위 환산만(컴팩트 목록이라 병기 생략), 아래 요약 줄(볼륨·최고·증감)은 `fmtWeightLabel`/`fmtWeightDelta(…, u)`로 병기 적용
 
 ### 7. 전역 설정 (관리 탭)
 
