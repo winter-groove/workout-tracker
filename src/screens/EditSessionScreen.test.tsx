@@ -309,3 +309,29 @@ test('＋ 세트 추가는 마지막 non-drop 세트를 시드로 한다', async
   const newSet = await screen.findByLabelText('세트 2 무게') as HTMLInputElement;
   expect(newSet.value).toBe('70'); // 마지막 non-drop이 70이므로
 });
+
+test('무게 0인 본세트 뒤에 드랍이 있어도 세트 추가는 본세트를 시드로 한다', async () => {
+  const s: Session = {
+    id: crypto.randomUUID(),
+    startedAt: 1000,
+    finishedAt: 1000 + 3600_000,
+    entries: [{
+      exerciseId: 'lib-bench-press',
+      sets: [
+        { weight: 0, reps: 12, completedAt: 1001 },
+        { weight: 40, reps: 8, completedAt: 1002, isDrop: true },
+      ],
+    }],
+  };
+  await db.sessions.add(s);
+  renderAt(`/edit/${s.id}`);
+  await screen.findByText('벤치프레스');
+  fireEvent.click(screen.getByRole('button', { name: '＋ 세트 추가' }));
+  const reps = await screen.findByLabelText('세트 2 횟수') as HTMLInputElement;
+  expect(reps.value).toBe('12'); // 드랍(8)이 아니라 본세트(12) 기준
+  fireEvent.click(screen.getByRole('button', { name: '저장' }));
+  await screen.findByText('요약화면');
+  const saved = await db.sessions.get(s.id);
+  expect(saved?.entries[0].sets[2]).toMatchObject({ weight: 0, reps: 12 });
+  expect(saved?.entries[0].sets[2].isDrop).toBeUndefined();
+});

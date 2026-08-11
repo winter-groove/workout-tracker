@@ -65,17 +65,10 @@ export default function EditSessionScreen() {
   function addSet(entryIdx: number) {
     setEntries(entries.map((e, i) => {
       if (i !== entryIdx) return e;
-      // 마지막 non-drop 세트를 시드로, 없으면 마지막 세트, 둘 다 없으면 기본값
-      let seed = { weight: 0, reps: 10 };
-      for (let j = e.sets.length - 1; j >= 0; j--) {
-        if (!e.sets[j].isDrop) {
-          seed = e.sets[j];
-          break;
-        }
-      }
-      if (seed.weight === 0 && e.sets.length > 0) {
-        seed = e.sets[e.sets.length - 1];
-      }
+      // 새 세트는 본세트 — 드랍의 낮춘 무게가 아니라 마지막 본세트를 기준으로 채운다
+      const seed = [...e.sets].reverse().find((s) => !s.isDrop)
+        ?? e.sets[e.sets.length - 1]
+        ?? { weight: 0, reps: 10 };
       return { ...e, sets: [...e.sets, { weight: seed.weight, reps: seed.reps }] };
     }));
   }
