@@ -1,6 +1,6 @@
 import { db } from './db';
 import { exportData, importData } from './backup';
-import { seedLibrary, setExerciseUnit } from './exercises';
+import { seedLibrary, setExerciseUnit, LIBRARY_VERSION } from './exercises';
 import { saveRoutine, newRoutine } from './routines';
 import { startSession, finishSession } from './sessions';
 
@@ -46,7 +46,7 @@ test('가져오기는 libraryVersion 메타를 재설정하고 seedLibrary를 �
   await db.open();
   await importData(backup);
 
-  expect(await db.meta.get('libraryVersion')).toEqual({ key: 'libraryVersion', value: 3 });
+  expect(await db.meta.get('libraryVersion')).toEqual({ key: 'libraryVersion', value: LIBRARY_VERSION });
   expect(await db.exercises.count()).toBe(backup.exercises.length);
   const ids = (await db.exercises.toArray()).map((e) => e.id).sort();
   expect(ids).toEqual(backup.exercises.map((e) => e.id).sort());

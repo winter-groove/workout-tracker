@@ -3,7 +3,7 @@ import library from '../data/exercise-library.json';
 import type { BodyPart, Equipment, Exercise, IconKey } from '../types';
 import type { WeightUnit } from './weightUnit';
 
-export const LIBRARY_VERSION = 3;
+export const LIBRARY_VERSION = 4;
 
 export async function seedLibrary(): Promise<void> {
   const meta = await db.meta.get('libraryVersion');

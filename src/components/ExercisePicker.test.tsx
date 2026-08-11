@@ -36,7 +36,7 @@ test('부위 칩으로 필터링된다', async () => {
   fireEvent.click(screen.getByRole('button', { name: '하체' }));
   await waitFor(() => {
     expect(screen.queryByText('벤치프레스')).not.toBeInTheDocument();
-    expect(screen.getByText('레그 프레스')).toBeInTheDocument();
+    expect(screen.getByText('레그프레스')).toBeInTheDocument();
   });
 });
 
@@ -76,7 +76,7 @@ test('dominantBodyPart: 최빈 부위, 동률·빈 배열은 undefined', () => {
 
 test('initialFilter가 주어지면 해당 부위 칩이 켜진 채 열리고 전환도 가능하다', async () => {
   render(<ExercisePicker onSelect={() => {}} onClose={() => {}} initialFilter="하체" />);
-  expect(await screen.findByText('레그 프레스')).toBeInTheDocument();
+  expect(await screen.findByText('레그프레스')).toBeInTheDocument();
   expect(screen.queryByText('벤치프레스')).not.toBeInTheDocument();
   expect(screen.getByRole('button', { name: '하체' })).toHaveClass('on');
   fireEvent.click(screen.getByRole('button', { name: '전체' }));

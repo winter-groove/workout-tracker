@@ -94,7 +94,7 @@ test('이름 동기화: 옛 이름 내장 행이 갱신되고 숨김·커스텀�
   expect(r?.name).toBe('리버스 펙덱 플라이');
   expect(r?.isHidden).toBe(true);
   expect((await db.exercises.get('custom-1'))?.name).toBe('내 커스텀 운동');
-  expect((await db.meta.get('libraryVersion'))?.value).toBe(3);
+  expect((await db.meta.get('libraryVersion'))?.value).toBe(LIBRARY_VERSION);
 });
 
 test('setExerciseFavorite 토글과 숨김 시 자동 해제', async () => {
