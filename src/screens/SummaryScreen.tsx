@@ -59,7 +59,7 @@ export default function SummaryScreen() {
       <div className="card">
         <div className="card-h">{sessionTitle(session, exMap)} · {fmtDate(session.startedAt)} · {session.entries.length}개 운동</div>
         <div style={{ fontWeight: 800, marginBottom: 8 }}>
-          총볼륨 {kgToDisplay(sessionVolume(session), 'kg')}kg
+          총 볼륨 {kgToDisplay(sessionVolume(session), 'kg')}kg
         </div>
         {session.entries.map((e, i) => {
           const p = progress[i];

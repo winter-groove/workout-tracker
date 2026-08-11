@@ -168,7 +168,7 @@ export default function HomeScreen() {
                   style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
                   onClick={() => setOpenSessionId(openSessionId === s.id ? '' : s.id)}
                 >
-                  <span>{sessionTitle(s, exMap)} · {s.entries.length}개 운동 · 총볼륨 {kgToDisplay(sessionVolume(s), 'kg')}kg {openSessionId === s.id ? '▴' : '▾'}</span>
+                  <span>{sessionTitle(s, exMap)} · {s.entries.length}개 운동 · 총 볼륨 {kgToDisplay(sessionVolume(s), 'kg')}kg {openSessionId === s.id ? '▴' : '▾'}</span>
                   <button
                     className="btn-sm btn btn-ghost"
                     onClick={(ev) => { ev.stopPropagation(); navigate(`/summary/${s.id}`); }}

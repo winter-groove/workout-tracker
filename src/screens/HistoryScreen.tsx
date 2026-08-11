@@ -81,7 +81,7 @@ export default function HistoryScreen() {
           {sessions.map((s) => (
             <div key={s.id} className="card" onClick={() => setOpenId(openId === s.id ? '' : s.id)}>
               <div className="hist-row" style={{ borderBottom: openId === s.id ? undefined : 'none' }}>
-                <span>{sessionTitle(s, exMap)} · {s.entries.length}개 운동 · 총볼륨 {kgToDisplay(sessionVolume(s), 'kg')}kg {openId === s.id ? '▴' : '▾'}</span>
+                <span>{sessionTitle(s, exMap)} · {s.entries.length}개 운동 · 총 볼륨 {kgToDisplay(sessionVolume(s), 'kg')}kg {openId === s.id ? '▴' : '▾'}</span>
                 <span className="d">{fmtDate(s.startedAt)}</span>
               </div>
               {openId === s.id && (

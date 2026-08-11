@@ -192,7 +192,7 @@ test('운동별로 보기에서 드랍은 ↓로 표시된다', async () => {
   expect(await screen.findByText('70×8, ↓56×8')).toBeInTheDocument();
 });
 
-test('접힘 세션 행에 총볼륨이 kg으로 표시되고, 펼쳐도 표기는 행 한 곳뿐이다', async () => {
+test('접힘 세션 행에 총 볼륨이 kg으로 표시되고, 펼쳐도 표기는 행 한 곳뿐이다', async () => {
   const s: Session = {
     id: crypto.randomUUID(),
     startedAt: 1000,
@@ -204,11 +204,11 @@ test('접힘 세션 행에 총볼륨이 kg으로 표시되고, 펼쳐도 표기�
   };
   await db.sessions.add(s);
   renderScreen();
-  // 펼치기 전에도 행에 총볼륨이 보인다 (600 + 500)
-  const row = await screen.findByText(/2개 운동 · 총볼륨 1100kg/);
+  // 펼치기 전에도 행에 총 볼륨이 보인다 (600 + 500)
+  const row = await screen.findByText(/2개 운동 · 총 볼륨 1100kg/);
   fireEvent.click(row);
   expect(await screen.findAllByText('무게(kg)')).toHaveLength(2); // 운동별 세트 표 2개
-  expect(screen.getAllByText(/총볼륨 1100kg/)).toHaveLength(1); // 펼침 상세에 중복 표기 없음
+  expect(screen.getAllByText(/총 볼륨 1100kg/)).toHaveLength(1); // 펼침 상세에 중복 표기 없음
 });
 
 test('운동별로 보기: lb 운동은 파운드 세트 목록 + 병기 요약으로 표시된다', async () => {

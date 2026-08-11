@@ -128,7 +128,7 @@ test('lb 모드: 요약 볼륨·최고가 파운드로 표시된다', async () =
   }
 });
 
-test('요약 화면에 세션 총볼륨이 kg으로 표시된다', async () => {
+test('요약 화면에 세션 총 볼륨이 kg으로 표시된다', async () => {
   const s: Session = {
     id: crypto.randomUUID(),
     startedAt: 1000,
@@ -140,5 +140,5 @@ test('요약 화면에 세션 총볼륨이 kg으로 표시된다', async () => {
   };
   await db.sessions.add(s);
   renderAt(`/summary/${s.id}`);
-  expect(await screen.findByText('총볼륨 1100kg')).toBeInTheDocument();
+  expect(await screen.findByText('총 볼륨 1100kg')).toBeInTheDocument();
 });

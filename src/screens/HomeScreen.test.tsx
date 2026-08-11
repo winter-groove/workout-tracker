@@ -226,7 +226,7 @@ test('같은 날 두 세션은 한 번에 하나만 펼쳐지고 전환된다', 
   await waitFor(() => expect(screen.queryByText('60')).not.toBeInTheDocument()); // 이전 세션 접힘
 });
 
-test('달력 세션 행에 총볼륨이 kg으로 표시된다', async () => {
+test('달력 세션 행에 총 볼륨이 kg으로 표시된다', async () => {
   await seedLibrary();
   const now = new Date();
   const ts = new Date(now.getFullYear(), now.getMonth(), 15, 10).getTime();
@@ -240,5 +240,5 @@ test('달력 세션 행에 총볼륨이 kg으로 표시된다', async () => {
   await db.sessions.add(s);
   renderWithSummary();
   fireEvent.click(await screen.findByRole('button', { name: `${now.getMonth() + 1}월 15일` }));
-  expect(await screen.findByText(/2개 운동 · 총볼륨 1100kg/)).toBeInTheDocument(); // 600 + 500
+  expect(await screen.findByText(/2개 운동 · 총 볼륨 1100kg/)).toBeInTheDocument(); // 600 + 500
 });
