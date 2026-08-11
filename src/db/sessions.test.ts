@@ -2,7 +2,7 @@ import { db } from './db';
 import {
   getLastRecord, buildEntry, startSession, getActiveSession,
   saveSession, finishSession, discardSession,
-  listFinishedSessions, deleteSession, getExerciseHistory, resumeSession, getLastDoneMap, sessionTitle,
+  listFinishedSessions, deleteSession, getExerciseHistory, resumeSession, getLastDoneMap, sessionTitle, setLabels,
 } from './sessions';
 import { exportData, importData } from './backup';
 import type { Routine, Session, Exercise } from '../types';
@@ -246,4 +246,49 @@ test('sessionTitle: 루틴명 우선, 부위 구성 자동, fallback', () => {
   expect(sessionTitle({ ...base, entries: [E('e1'), E('e3'), E('e2'), E('e4')] }, exMap)).toBe('가슴·등 운동');
   expect(sessionTitle({ ...base, entries: [E('없는운동')] }, exMap)).toBe('오늘 운동');
   expect(sessionTitle({ ...base, entries: [] }, exMap)).toBe('오늘 운동');
+});
+
+test('setLabels: 본세트는 번호, 드랍은 3-1·3-2, 선두 드랍은 본세트로 취급', () => {
+  expect(setLabels([{}, {}, {}])).toEqual(['1', '2', '3']);
+  expect(setLabels([{}, {}, {}, { isDrop: true }, { isDrop: true }]))
+    .toEqual(['1', '2', '3', '3-1', '3-2']);
+  expect(setLabels([{ isDrop: true }, { isDrop: true }])).toEqual(['1', '1-1']);
+  expect(setLabels([{}, { isDrop: true }, {}, { isDrop: true }]))
+    .toEqual(['1', '1-1', '2', '2-1']);
+  expect(setLabels([])).toEqual([]);
+});
+
+test('buildEntry는 지난 기록의 드랍 구조까지 프리필한다', async () => {
+  const s: Session = {
+    id: crypto.randomUUID(), startedAt: 1000, finishedAt: 2000,
+    entries: [{
+      exerciseId: 'ex1',
+      sets: [
+        { weight: 70, reps: 8, completedAt: 1001 },
+        { weight: 56, reps: 8, completedAt: 1002, isDrop: true },
+      ],
+    }],
+  };
+  await db.sessions.add(s);
+  const entry = await buildEntry('ex1', 3);
+  expect(entry.sets).toEqual([
+    { weight: 70, reps: 8 },
+    { weight: 56, reps: 8, isDrop: true },
+  ]);
+});
+
+test('finishSession은 본세트가 빠져 선두에 남은 드랍을 본세트로 정리한다', async () => {
+  const s = await startSession();
+  s.entries = [{
+    exerciseId: 'ex1',
+    sets: [
+      { weight: 70, reps: 8 },                                        // 미완료 → 제거
+      { weight: 56, reps: 8, completedAt: Date.now(), isDrop: true },  // 남아서 선두가 됨
+    ],
+  }];
+  await saveSession(s);
+  await finishSession(s);
+  const saved = await db.sessions.get(s.id);
+  expect(saved?.entries[0].sets).toHaveLength(1);
+  expect(saved?.entries[0].sets[0].isDrop).toBeUndefined();
 });

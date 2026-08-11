@@ -1,4 +1,4 @@
-import { getWeightUnit, setWeightUnit, kgToDisplay, displayToKg, unitFor, fmtWeightCell, fmtWeightLabel } from './weightUnit';
+import { getWeightUnit, setWeightUnit, kgToDisplay, displayToKg, unitFor, fmtWeightCell, fmtWeightLabel, stepFor, dropWeight } from './weightUnit';
 
 afterEach(() => {
   localStorage.removeItem('wt-weight-unit');
@@ -58,4 +58,15 @@ test('fmtWeightCell/fmtWeightLabel: lb면 kg 병기', () => {
   expect(fmtWeightLabel(60, 'kg')).toBe('60kg');
   expect(fmtWeightLabel(60, 'lb')).toBe('132.3lb (60kg)');
   expect(fmtWeightLabel(600, 'lb')).toBe('1322.8lb (600kg)');
+});
+
+test('stepFor·dropWeight: 표시 단위 스텝에 맞춰 20% 낮춘다', () => {
+  expect(stepFor('kg')).toBe(0.5);
+  expect(stepFor('lb')).toBe(2.5);
+  expect(dropWeight(70, 'kg')).toBe(56);
+  expect(dropWeight(62.5, 'kg')).toBe(50);
+  expect(dropWeight(0, 'kg')).toBe(0);
+  // 60kg = 132.3lb → ×0.8 = 105.84 → 2.5 스텝 반올림 105lb → 47.63kg
+  expect(dropWeight(60, 'lb')).toBe(47.63);
+  expect(kgToDisplay(dropWeight(60, 'lb'), 'lb')).toBe(105);
 });

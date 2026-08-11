@@ -40,3 +40,17 @@ export function fmtWeightLabel(kg: number, unit: WeightUnit): string {
   const v = kgToDisplay(kg, unit);
   return unit === 'lb' ? `${v}lb (${kgToDisplay(kg, 'kg')}kg)` : `${v}kg`;
 }
+
+// 무게 입력 스텝 (lb 2.5 / kg 0.5)
+export function stepFor(unit: WeightUnit): number {
+  return unit === 'lb' ? 2.5 : 0.5;
+}
+
+export const DROP_RATIO = 0.8;
+
+// 드랍 세트 기본 무게: 표시 단위에서 20% 낮춘 뒤 입력 스텝에 맞춰 반올림 → kg 저장값
+export function dropWeight(kg: number, unit: WeightUnit): number {
+  const step = stepFor(unit);
+  const dropped = kgToDisplay(kg, unit) * DROP_RATIO;
+  return displayToKg(Math.round(dropped / step) * step, unit);
+}

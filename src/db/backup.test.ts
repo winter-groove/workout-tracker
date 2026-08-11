@@ -80,3 +80,22 @@ test('운동별 단위(unit)가 백업 왕복에서 보존된다', async () => {
   await importData(dump);
   expect((await db.exercises.get('lib-bench-press'))?.unit).toBe('lb');
 });
+
+test('드랍 세트 플래그가 백업 왕복에서 보존된다', async () => {
+  const s = await startSession();
+  s.entries = [{
+    exerciseId: 'ex1',
+    sets: [
+      { weight: 70, reps: 8, completedAt: Date.now() },
+      { weight: 56, reps: 8, completedAt: Date.now(), isDrop: true },
+    ],
+  }];
+  await finishSession(s);
+  const dump = await exportData();
+  await db.delete();
+  await db.open();
+  await importData(dump);
+  const restored = await db.sessions.get(s.id);
+  expect(restored?.entries[0].sets).toHaveLength(2);
+  expect(restored?.entries[0].sets[1].isDrop).toBe(true);
+});

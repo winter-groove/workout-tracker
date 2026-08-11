@@ -35,6 +35,7 @@ export interface SetRecord {
   weight: number;
   reps: number;
   completedAt?: number; // epoch ms, 없으면 미완료
+  isDrop?: boolean;     // true면 직전 세트에 이어지는 드랍 (휴식 없이 무게만 낮춤)
 }
 
 export interface SessionEntry {

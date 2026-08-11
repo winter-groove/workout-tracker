@@ -19,8 +19,11 @@ export async function buildEntry(
   const last = before === undefined
     ? await getLastRecord(exerciseId)
     : await getPreviousRecord(exerciseId, before);
+  // 지난 기록의 드랍 구조까지 프리필 (선두 드랍 플래그는 버림)
   const sets: SetRecord[] = last
-    ? last.map((s) => ({ weight: s.weight, reps: s.reps }))
+    ? last.map((s, i) => (i > 0 && s.isDrop
+        ? { weight: s.weight, reps: s.reps, isDrop: true }
+        : { weight: s.weight, reps: s.reps }))
     : Array.from({ length: defaultSets }, () => ({ weight: 0, reps: 10 }));
   return { exerciseId, sets };
 }
@@ -55,10 +58,17 @@ export async function saveSession(session: Session): Promise<void> {
   await db.sessions.put(session);
 }
 
+// 선두 세트의 isDrop 해제 — 짝(본세트)이 사라진 드랍은 본세트로 승격
+export function dropHeadCleaned(sets: SetRecord[]): SetRecord[] {
+  return sets.length > 0 && sets[0].isDrop
+    ? [{ ...sets[0], isDrop: undefined }, ...sets.slice(1)]
+    : sets;
+}
+
 export async function finishSession(session: Session): Promise<void> {
   const withDone = session.entries.map((e) => ({
     ...e,
-    sets: e.sets.filter((s) => s.completedAt !== undefined),
+    sets: dropHeadCleaned(e.sets.filter((s) => s.completedAt !== undefined)),
   }));
   const keep = withDone.map((e) => e.sets.length > 0);
   const entries = withDone
@@ -132,4 +142,20 @@ export function sessionTitle(session: Session, exMap: Map<string, Exercise>): st
     .slice(0, 2)
     .map(([p]) => p);
   return parts.length > 0 ? `${parts.join('·')} 운동` : '오늘 운동';
+}
+
+// 세트 표시 라벨: 본세트는 1,2,3…, 드랍은 직전 본세트 번호에 -1,-2…
+// 배열 첫 세트의 isDrop은 무시하고 본세트로 취급 (짝 잃은 플래그 자가 치유 — groupsOf와 동일 원칙)
+export function setLabels(sets: { isDrop?: boolean }[]): string[] {
+  let main = 0;
+  let drop = 0;
+  return sets.map((s, i) => {
+    if (s.isDrop && i > 0) {
+      drop += 1;
+      return `${main}-${drop}`;
+    }
+    main += 1;
+    drop = 0;
+    return `${main}`;
+  });
 }
