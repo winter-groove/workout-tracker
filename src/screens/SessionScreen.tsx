@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
 import type { Exercise, Session, SetRecord } from '../types';
 import {
-  getActiveSession, saveSession, finishSession, discardSession, buildEntry, sessionTitle, setLabels,
+  getActiveSession, saveSession, finishSession, discardSession, buildEntry, sessionTitle, setLabels, seedForNewSet,
 } from '../db/sessions';
 import { listExercises, setExerciseUnit } from '../db/exercises';
 import { getRestSeconds } from '../db/settings';
@@ -136,13 +136,9 @@ export default function SessionScreen() {
 
   function addSet(entryIdx: number) {
     if (!session) return;
-    const target = session.entries[entryIdx];
-    // 새 세트는 본세트 — 드랍의 낮춘 무게가 아니라 마지막 본세트를 기준으로 채운다
-    const base = [...target.sets].reverse().find((s) => !s.isDrop)
-      ?? target.sets[target.sets.length - 1]
-      ?? { weight: 0, reps: 10 };
+    const seed = seedForNewSet(session.entries[entryIdx].sets);
     const entries = session.entries.map((e, i) =>
-      i !== entryIdx ? e : { ...e, sets: [...e.sets, { weight: base.weight, reps: base.reps }] },
+      i !== entryIdx ? e : { ...e, sets: [...e.sets, { weight: seed.weight, reps: seed.reps }] },
     );
     void update({ ...session, entries });
   }

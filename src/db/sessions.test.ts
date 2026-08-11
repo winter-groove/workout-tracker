@@ -2,7 +2,7 @@ import { db } from './db';
 import {
   getLastRecord, buildEntry, startSession, getActiveSession,
   saveSession, finishSession, discardSession,
-  listFinishedSessions, deleteSession, getExerciseHistory, resumeSession, getLastDoneMap, sessionTitle, setLabels,
+  listFinishedSessions, deleteSession, getExerciseHistory, resumeSession, getLastDoneMap, sessionTitle, setLabels, seedForNewSet,
 } from './sessions';
 import { exportData, importData } from './backup';
 import type { Routine, Session, Exercise } from '../types';
@@ -291,4 +291,15 @@ test('finishSession은 본세트가 빠져 선두에 남은 드랍을 본세트�
   const saved = await db.sessions.get(s.id);
   expect(saved?.entries[0].sets).toHaveLength(1);
   expect(saved?.entries[0].sets[0].isDrop).toBeUndefined();
+});
+
+test('seedForNewSet: 마지막 본세트 기준, 드랍만 있으면 마지막 세트, 비면 기본값', () => {
+  expect(seedForNewSet([{ weight: 70, reps: 8 }, { weight: 56, reps: 8, isDrop: true }]))
+    .toEqual({ weight: 70, reps: 8 });
+  // 무게 0인 본세트도 정상 시드 (맨몸 운동)
+  expect(seedForNewSet([{ weight: 0, reps: 12 }, { weight: 40, reps: 8, isDrop: true }]))
+    .toEqual({ weight: 0, reps: 12 });
+  expect(seedForNewSet([{ weight: 30, reps: 10, isDrop: true }]))
+    .toEqual({ weight: 30, reps: 10 });
+  expect(seedForNewSet([])).toEqual({ weight: 0, reps: 10 });
 });

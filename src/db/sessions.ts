@@ -159,3 +159,10 @@ export function setLabels(sets: { isDrop?: boolean }[]): string[] {
     return `${main}`;
   });
 }
+
+// 새 세트(본세트)의 프리필 기준: 마지막 본세트 → 없으면 마지막 세트 → 없으면 기본값
+// 드랍의 낮춘 무게가 새 본세트로 번지지 않게 한다
+export function seedForNewSet(sets: SetRecord[]): { weight: number; reps: number } {
+  const base = [...sets].reverse().find((s) => !s.isDrop) ?? sets[sets.length - 1];
+  return base ? { weight: base.weight, reps: base.reps } : { weight: 0, reps: 10 };
+}

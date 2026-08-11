@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
 import type { Exercise, Session, SessionEntry, SetRecord } from '../types';
 import { db } from '../db/db';
-import { saveSession, buildEntry, sessionTitle, setLabels, dropHeadCleaned } from '../db/sessions';
+import { saveSession, buildEntry, sessionTitle, setLabels, dropHeadCleaned, seedForNewSet } from '../db/sessions';
 import { listExercises } from '../db/exercises';
 import { kgToDisplay, displayToKg, unitFor, dropWeight, stepFor, type WeightUnit } from '../db/weightUnit';
 import ExercisePicker, { dominantBodyPart } from '../components/ExercisePicker';
@@ -65,10 +65,7 @@ export default function EditSessionScreen() {
   function addSet(entryIdx: number) {
     setEntries(entries.map((e, i) => {
       if (i !== entryIdx) return e;
-      // 새 세트는 본세트 — 드랍의 낮춘 무게가 아니라 마지막 본세트를 기준으로 채운다
-      const seed = [...e.sets].reverse().find((s) => !s.isDrop)
-        ?? e.sets[e.sets.length - 1]
-        ?? { weight: 0, reps: 10 };
+      const seed = seedForNewSet(e.sets);
       return { ...e, sets: [...e.sets, { weight: seed.weight, reps: seed.reps }] };
     }));
   }
