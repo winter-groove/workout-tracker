@@ -674,7 +674,7 @@
   {
     "id": "barbell-seated-calf-raise",
     "libId": "Barbell_Seated_Calf_Raise",
-    "name": "바벨 시티드카프레이즈",
+    "name": "바벨 시티드 카프레이즈",
     "bodyPart": "하체",
     "equipment": "바벨"
   },
@@ -1073,7 +1073,7 @@
   {
     "id": "cable-rope-overhead-triceps-extension",
     "libId": "Cable_Rope_Overhead_Triceps_Extension",
-    "name": "케이블 로프 오버헤드트라이셉스 익스텐션",
+    "name": "케이블 로프 오버헤드 트라이셉스 익스텐션",
     "bodyPart": "팔",
     "equipment": "케이블"
   },
@@ -1605,7 +1605,7 @@
   {
     "id": "dumbbell-alternate-bicep-curl",
     "libId": "Dumbbell_Alternate_Bicep_Curl",
-    "name": "덤벨 얼터네이트 바이셉스컬",
+    "name": "덤벨 얼터네이트 바이셉스 컬",
     "bodyPart": "팔",
     "equipment": "덤벨"
   },
