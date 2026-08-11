@@ -156,11 +156,15 @@ test('진행 중 세션이 있으면 기록 추가가 차단된다', async () =>
   vi.spyOn(window, 'alert').mockImplementation(() => {});
   await startSession();
   renderWithSummary();
+  // 활성 세션이 useLiveQuery로 반영된 뒤에 눌러야 함 — 반영 전이면 차단 대신 그 세션을 이어받는다
+  await screen.findByText('진행 중인 운동이 있어요');
   const now = new Date();
   fireEvent.click(await screen.findByRole('button', { name: `${now.getMonth() + 1}월 1일` }));
   fireEvent.click(await screen.findByRole('button', { name: '＋ 이 날짜에 기록 추가' }));
   fireEvent.click(screen.getByRole('button', { name: '빈 세션' }));
-  expect(window.alert).toHaveBeenCalledWith('진행 중인 운동을 먼저 완료하세요');
+  await waitFor(() => {
+    expect(window.alert).toHaveBeenCalledWith('진행 중인 운동을 먼저 완료하세요');
+  });
 });
 
 test('홈에 최근 운동 카드가 없다', async () => {
