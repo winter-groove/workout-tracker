@@ -3,6 +3,7 @@ import type { Exercise, Session } from '../types';
 import {
   fmtVolumeDelta, fmtWeightDelta, summarizeSession, type EntryProgress,
 } from '../db/progress';
+import { setLabels } from '../db/sessions';
 import { fmtWeightCell, fmtWeightLabel, unitFor } from '../db/weightUnit';
 
 // 완료 세션의 운동별 세트 표 + 증감·PR 요약 (기록 탭·홈 달력 공용).
@@ -32,6 +33,7 @@ export default function SessionDetails({
       {session.entries.map((e, i) => {
         const p = summaries?.[i];
         const u = unitFor(exMap.get(e.exerciseId));
+        const labels = setLabels(e.sets);
         const line = p
           ? (p.prevVolume === undefined
               ? `볼륨 ${fmtWeightLabel(p.volume, u)} · 최고 ${fmtWeightLabel(p.maxWeight, u)} · 첫 기록`
@@ -47,7 +49,7 @@ export default function SessionDetails({
             </div>
             {e.sets.map((set, j) => (
               <div key={j} className="set-view" style={{ marginTop: 4 }}>
-                <span className="d">{j + 1}</span>
+                <span className="d">{labels[j]}</span>
                 <span>{fmtWeightCell(set.weight, u)}</span>
                 <span>{set.reps}</span>
               </div>

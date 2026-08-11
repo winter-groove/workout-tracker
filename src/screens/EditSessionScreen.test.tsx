@@ -273,3 +273,39 @@ test('세트를 전부 지워 제거되는 운동 뒤의 flag도 저장 시 정�
   expect(saved?.entries).toHaveLength(1);
   expect(saved?.entries[0].pairedWithNext).toBeUndefined();
 });
+
+test('편집 화면에서 드랍을 추가하면 라벨·무게가 맞고 저장에 isDrop이 유지된다', async () => {
+  const s = await addFinishedSession(1000, ['lib-bench-press'], 70);
+  renderAt(`/edit/${s.id}`);
+  await screen.findByText('벤치프레스');
+  fireEvent.click(screen.getByRole('button', { name: '↓ 드랍 추가' }));
+  const drop = await screen.findByLabelText('세트 1-1 무게') as HTMLInputElement;
+  expect(drop.value).toBe('56'); // 70 × 0.8
+  fireEvent.click(screen.getByRole('button', { name: '저장' }));
+  await screen.findByText('요약화면');
+  const saved = await db.sessions.get(s.id);
+  expect(saved?.entries[0].sets).toHaveLength(2);
+  expect(saved?.entries[0].sets[1]).toMatchObject({ weight: 56, isDrop: true });
+  expect(saved?.entries[0].sets[1].completedAt).toBe(1001); // 저장 시 완료 처리
+});
+
+test('＋ 세트 추가는 마지막 non-drop 세트를 시드로 한다', async () => {
+  const s: Session = {
+    id: crypto.randomUUID(), startedAt: 1000, finishedAt: 2000,
+    entries: [
+      {
+        exerciseId: 'lib-bench-press',
+        sets: [
+          { weight: 70, reps: 8, completedAt: 1001 },
+          { weight: 56, reps: 8, completedAt: 1002, isDrop: true },
+        ],
+      },
+    ],
+  };
+  await db.sessions.add(s);
+  renderAt(`/edit/${s.id}`);
+  await screen.findByText('벤치프레스');
+  fireEvent.click(screen.getByRole('button', { name: '＋ 세트 추가' }));
+  const newSet = await screen.findByLabelText('세트 2 무게') as HTMLInputElement;
+  expect(newSet.value).toBe('70'); // 마지막 non-drop이 70이므로
+});

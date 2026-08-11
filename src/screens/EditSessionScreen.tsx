@@ -3,9 +3,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
 import type { Exercise, Session, SessionEntry, SetRecord } from '../types';
 import { db } from '../db/db';
-import { saveSession, buildEntry, sessionTitle } from '../db/sessions';
+import { saveSession, buildEntry, sessionTitle, setLabels, dropHeadCleaned } from '../db/sessions';
 import { listExercises } from '../db/exercises';
-import { kgToDisplay, displayToKg, unitFor } from '../db/weightUnit';
+import { kgToDisplay, displayToKg, unitFor, dropWeight, stepFor, type WeightUnit } from '../db/weightUnit';
 import ExercisePicker, { dominantBodyPart } from '../components/ExercisePicker';
 
 export default function EditSessionScreen() {
@@ -50,11 +50,33 @@ export default function EditSessionScreen() {
     ));
   }
 
+  function addDrop(entryIdx: number, unit: WeightUnit) {
+    setEntries(entries.map((e, i) => {
+      if (i !== entryIdx) return e;
+      const last = e.sets[e.sets.length - 1];
+      if (!last) return e;
+      return {
+        ...e,
+        sets: [...e.sets, { weight: dropWeight(last.weight, unit), reps: last.reps, isDrop: true }],
+      };
+    }));
+  }
+
   function addSet(entryIdx: number) {
     setEntries(entries.map((e, i) => {
       if (i !== entryIdx) return e;
-      const last = e.sets[e.sets.length - 1] ?? { weight: 0, reps: 10 };
-      return { ...e, sets: [...e.sets, { weight: last.weight, reps: last.reps }] };
+      // 마지막 non-drop 세트를 시드로, 없으면 마지막 세트, 둘 다 없으면 기본값
+      let seed = { weight: 0, reps: 10 };
+      for (let j = e.sets.length - 1; j >= 0; j--) {
+        if (!e.sets[j].isDrop) {
+          seed = e.sets[j];
+          break;
+        }
+      }
+      if (seed.weight === 0 && e.sets.length > 0) {
+        seed = e.sets[e.sets.length - 1];
+      }
+      return { ...e, sets: [...e.sets, { weight: seed.weight, reps: seed.reps }] };
     }));
   }
 
@@ -88,7 +110,9 @@ export default function EditSessionScreen() {
       }
       const withCompleted = entries.map((e) => ({
         ...e,
-        sets: e.sets.map((s) => ({ ...s, completedAt: s.completedAt ?? session.startedAt + 1 })),
+        sets: dropHeadCleaned(
+          e.sets.map((s) => ({ ...s, completedAt: s.completedAt ?? session.startedAt + 1 })),
+        ),
       }));
       const keep = withCompleted.map((e) => e.sets.length > 0);
       const cleaned = withCompleted
@@ -126,6 +150,7 @@ export default function EditSessionScreen() {
       </div>
       {entries.map((e, i) => {
         const u = unitFor(exMap.get(e.exerciseId));
+        const labels = setLabels(e.sets);
         return (
           <div key={i} className="card">
             <div className="hist-row" style={{ borderBottom: 'none' }}>
@@ -139,10 +164,10 @@ export default function EditSessionScreen() {
             </div>
             {e.sets.map((s, j) => (
               <div key={j} className="set-row" style={{ marginTop: 8 }}>
-                <span className="n">{j + 1}</span>
+                <span className="n">{labels[j]}</span>
                 <input
-                  type="number" inputMode="decimal" step={u === 'lb' ? 2.5 : 0.5} min="0"
-                  aria-label={`세트 ${j + 1} 무게`}
+                  type="number" inputMode="decimal" step={stepFor(u)} min="0"
+                  aria-label={`세트 ${labels[j]} 무게`}
                   value={s.weight === 0 ? '' : kgToDisplay(s.weight, u)}
                   placeholder="0"
                   onFocus={(ev) => ev.currentTarget.select()}
@@ -150,19 +175,25 @@ export default function EditSessionScreen() {
                 />
                 <input
                   type="number" inputMode="numeric" min="0"
-                  aria-label={`세트 ${j + 1} 횟수`}
+                  aria-label={`세트 ${labels[j]} 횟수`}
                   value={s.reps}
                   onFocus={(ev) => ev.currentTarget.select()}
                   onChange={(ev) => patchSet(i, j, { reps: Number(ev.target.value) || 0 })}
                 />
-                <button className="chk" aria-label={`세트 ${j + 1} 삭제`} onClick={() => removeSet(i, j)}>
+                <button className="chk" aria-label={`세트 ${labels[j]} 삭제`} onClick={() => removeSet(i, j)}>
                   ×
                 </button>
               </div>
             ))}
-            <button className="btn btn-ghost" style={{ marginTop: 10 }} onClick={() => addSet(i)}>
-              ＋ 세트 추가
-            </button>
+            <div className="btn-row tight" style={{ marginTop: 10 }}>
+              <button className="btn btn-ghost" onClick={() => addSet(i)}>＋ 세트 추가</button>
+              <button
+                className="btn btn-ghost" disabled={e.sets.length === 0}
+                onClick={() => addDrop(i, u)}
+              >
+                ↓ 드랍 추가
+              </button>
+            </div>
           </div>
         );
       })}

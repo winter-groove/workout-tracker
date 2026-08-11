@@ -160,6 +160,38 @@ test('운동별 단위 lb: 전역 kg여도 그 운동만 lb + kg 병기로 표�
   expect(await screen.findByText('볼륨 1322.8lb (600kg) · 최고 132.3lb (60kg) · 첫 기록')).toBeInTheDocument();
 });
 
+async function addDropSession(): Promise<Session> {
+  const s: Session = {
+    id: crypto.randomUUID(), startedAt: 1000, finishedAt: 3600_000,
+    entries: [{
+      exerciseId: 'lib-bench-press',
+      sets: [
+        { weight: 70, reps: 8, completedAt: 1001 },
+        { weight: 56, reps: 8, completedAt: 1002, isDrop: true },
+      ],
+    }],
+  };
+  await db.sessions.add(s);
+  return s;
+}
+
+test('펼침 세트 표에서 드랍은 1-1로 표시된다', async () => {
+  await addDropSession();
+  renderScreen();
+  fireEvent.click(await screen.findByText(/1개 운동/));
+  expect(await screen.findByText('1-1')).toBeInTheDocument();
+  expect(screen.getByText('56')).toBeInTheDocument();
+});
+
+test('운동별로 보기에서 드랍은 ↓로 표시된다', async () => {
+  await addDropSession();
+  renderScreen();
+  const select = await screen.findByLabelText('운동별로 보기');
+  await screen.findByRole('option', { name: '벤치프레스' });
+  fireEvent.change(select, { target: { value: 'lib-bench-press' } });
+  expect(await screen.findByText('70×8, ↓56×8')).toBeInTheDocument();
+});
+
 test('접힘 세션 행에 총볼륨이 kg으로 표시되고, 펼쳐도 표기는 행 한 곳뿐이다', async () => {
   const s: Session = {
     id: crypto.randomUUID(),

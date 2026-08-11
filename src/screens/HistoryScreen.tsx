@@ -15,7 +15,9 @@ function fmtDate(ts: number): string {
 }
 
 function fmtSets(sets: SetRecord[], unit: WeightUnit): string {
-  return sets.map((s) => `${kgToDisplay(s.weight, unit)}×${s.reps}`).join(', ');
+  return sets
+    .map((s) => `${s.isDrop ? '↓' : ''}${kgToDisplay(s.weight, unit)}×${s.reps}`)
+    .join(', ');
 }
 
 export default function HistoryScreen() {
