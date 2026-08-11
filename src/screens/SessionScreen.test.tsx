@@ -432,3 +432,36 @@ test('단위 토글: 운동별 lb로 저장되고 표시·입력이 파운드로
   fireEvent.click(screen.getByRole('button', { name: '다음 운동' }));
   expect(await screen.findByText('무게(kg)')).toBeInTheDocument();
 });
+
+test('드랍 추가: 3-1 라벨과 80% 무게로 이어 붙고 저장된다', async () => {
+  await startSession(routine); // 벤치프레스 2세트
+  renderScreen();
+  await screen.findByText('벤치프레스');
+  fireEvent.change(screen.getByLabelText('세트 2 무게'), { target: { value: '70' } });
+  fireEvent.click(screen.getByRole('button', { name: '↓ 드랍 추가' }));
+  const drop = await screen.findByLabelText('세트 2-1 무게') as HTMLInputElement;
+  expect(drop.value).toBe('56'); // 70 × 0.8
+  await waitFor(async () => {
+    const s = await getActiveSession();
+    expect(s?.entries[0].sets).toHaveLength(3);
+    expect(s?.entries[0].sets[2]).toMatchObject({ weight: 56, reps: 10, isDrop: true });
+  });
+});
+
+test('드랍이 뒤따르는 세트를 완료하면 휴식 타이머가 뜨지 않고, 드랍을 완료하면 뜬다', async () => {
+  const s = await startSession(routine);
+  s.entries[0].sets = [
+    { weight: 70, reps: 8 },
+    { weight: 56, reps: 8, isDrop: true },
+  ];
+  await saveSession(s);
+  renderScreen();
+  await screen.findByText('벤치프레스');
+  fireEvent.click(screen.getByLabelText('세트 1 완료'));
+  await waitFor(async () => {
+    expect((await getActiveSession())?.entries[0].sets[0].completedAt).toBeDefined();
+  });
+  expect(screen.queryByText('건너뛰기')).not.toBeInTheDocument(); // 드랍 앞에서는 휴식 없음
+  fireEvent.click(screen.getByLabelText('세트 1-1 완료'));
+  expect(await screen.findByText('건너뛰기')).toBeInTheDocument(); // 체인 끝 → 휴식
+});

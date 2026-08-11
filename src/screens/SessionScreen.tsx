@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
 import type { Exercise, Session, SetRecord } from '../types';
 import {
-  getActiveSession, saveSession, finishSession, discardSession, buildEntry, sessionTitle,
+  getActiveSession, saveSession, finishSession, discardSession, buildEntry, sessionTitle, setLabels,
 } from '../db/sessions';
 import { listExercises, setExerciseUnit } from '../db/exercises';
 import { getRestSeconds } from '../db/settings';
 import {
   volume, maxWeight, fmtVolumeDelta, getPRWeight, getPreviousRecord,
 } from '../db/progress';
-import { kgToDisplay, displayToKg, unitFor, type WeightUnit } from '../db/weightUnit';
+import { kgToDisplay, displayToKg, unitFor, dropWeight, stepFor, type WeightUnit } from '../db/weightUnit';
 import ExerciseImage from '../components/ExerciseImage';
 import ExercisePicker, { dominantBodyPart } from '../components/ExercisePicker';
 import RestTimer from '../components/RestTimer';
@@ -24,7 +24,10 @@ function fmtElapsed(startedAt: number, now: number): string {
 
 function fmtLast(sets: SetRecord[], unit: WeightUnit): string {
   return sets
-    .map((s, i) => (i === 0 ? `${kgToDisplay(s.weight, unit)}${unit}×${s.reps}` : `${kgToDisplay(s.weight, unit)}×${s.reps}`))
+    .map((s, i) => {
+      const w = kgToDisplay(s.weight, unit);
+      return `${s.isDrop ? '↓' : ''}${i === 0 ? `${w}${unit}` : `${w}`}×${s.reps}`;
+    })
     .join(' · ');
 }
 
@@ -123,6 +126,8 @@ export default function SessionScreen() {
       patchSet(entryIdx, setIdx, { completedAt: undefined });
     } else {
       patchSet(entryIdx, setIdx, { completedAt: Date.now() });
+      // 뒤에 드랍이 이어지면 쉬지 않고 바로 진행 — 휴식은 드랍 체인이 끝난 뒤
+      if (session.entries[entryIdx].sets[setIdx + 1]?.isDrop) return;
       const restSec = getRestSeconds();
       setRestTotal(restSec);
       setRestUntil(Date.now() + restSec * 1000);
@@ -135,6 +140,22 @@ export default function SessionScreen() {
     const last = target.sets[target.sets.length - 1] ?? { weight: 0, reps: 10 };
     const entries = session.entries.map((e, i) =>
       i !== entryIdx ? e : { ...e, sets: [...e.sets, { weight: last.weight, reps: last.reps }] },
+    );
+    void update({ ...session, entries });
+  }
+
+  function addDrop(entryIdx: number, unit: WeightUnit) {
+    if (!session) return;
+    const target = session.entries[entryIdx];
+    const last = target.sets[target.sets.length - 1];
+    if (!last) return;
+    const entries = session.entries.map((e, i) =>
+      i !== entryIdx
+        ? e
+        : {
+            ...e,
+            sets: [...e.sets, { weight: dropWeight(last.weight, unit), reps: last.reps, isDrop: true }],
+          },
     );
     void update({ ...session, entries });
   }
@@ -237,6 +258,7 @@ export default function SessionScreen() {
             const e = session.entries[entryIdx];
             const gex = exMap.get(e.exerciseId);
             const u = unitFor(gex);
+            const labels = setLabels(e.sets);
             const rec = records.get(e.exerciseId);
             const doneSets = e.sets.filter((s) => s.completedAt !== undefined);
             const curVol = volume(doneSets);
@@ -280,10 +302,10 @@ export default function SessionScreen() {
                 </div>
                 {e.sets.map((s, j) => (
                   <div key={j} className={`set-row ${s.completedAt ? 'done' : ''}`} style={{ marginTop: 8 }}>
-                    <span className="n">{j + 1}</span>
+                    <span className="n">{labels[j]}</span>
                     <input
-                      type="number" inputMode="decimal" step={u === 'lb' ? 2.5 : 0.5} min="0"
-                      aria-label={`세트 ${j + 1} 무게`}
+                      type="number" inputMode="decimal" step={stepFor(u)} min="0"
+                      aria-label={`세트 ${labels[j]} 무게`}
                       value={s.weight === 0 ? '' : kgToDisplay(s.weight, u)}
                       placeholder="0"
                       onFocus={(ev) => ev.currentTarget.select()}
@@ -291,13 +313,13 @@ export default function SessionScreen() {
                     />
                     <input
                       type="number" inputMode="numeric" min="0"
-                      aria-label={`세트 ${j + 1} 횟수`}
+                      aria-label={`세트 ${labels[j]} 횟수`}
                       value={s.reps}
                       onFocus={(ev) => ev.currentTarget.select()}
                       onChange={(ev) => patchSet(entryIdx, j, { reps: Number(ev.target.value) || 0 })}
                     />
                     <button
-                      className="chk" aria-label={`세트 ${j + 1} 완료`}
+                      className="chk" aria-label={`세트 ${labels[j]} 완료`}
                       onClick={() => toggleSet(entryIdx, j)}
                     >
                       ✓
@@ -306,6 +328,12 @@ export default function SessionScreen() {
                 ))}
                 <div className="btn-row" style={{ marginTop: 10 }}>
                   <button className="btn btn-ghost" onClick={() => addSet(entryIdx)}>＋ 세트 추가</button>
+                  <button
+                    className="btn btn-ghost" disabled={e.sets.length === 0}
+                    onClick={() => addDrop(entryIdx, u)}
+                  >
+                    ↓ 드랍 추가
+                  </button>
                   <button
                     className="btn btn-ghost" disabled={e.sets.length <= 1} onClick={() => removeSet(entryIdx)}
                   >
