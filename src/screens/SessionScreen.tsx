@@ -137,9 +137,12 @@ export default function SessionScreen() {
   function addSet(entryIdx: number) {
     if (!session) return;
     const target = session.entries[entryIdx];
-    const last = target.sets[target.sets.length - 1] ?? { weight: 0, reps: 10 };
+    // 새 세트는 본세트 — 드랍의 낮춘 무게가 아니라 마지막 본세트를 기준으로 채운다
+    const base = [...target.sets].reverse().find((s) => !s.isDrop)
+      ?? target.sets[target.sets.length - 1]
+      ?? { weight: 0, reps: 10 };
     const entries = session.entries.map((e, i) =>
-      i !== entryIdx ? e : { ...e, sets: [...e.sets, { weight: last.weight, reps: last.reps }] },
+      i !== entryIdx ? e : { ...e, sets: [...e.sets, { weight: base.weight, reps: base.reps }] },
     );
     void update({ ...session, entries });
   }
@@ -326,7 +329,7 @@ export default function SessionScreen() {
                     </button>
                   </div>
                 ))}
-                <div className="btn-row" style={{ marginTop: 10 }}>
+                <div className="btn-row tight" style={{ marginTop: 10 }}>
                   <button className="btn btn-ghost" onClick={() => addSet(entryIdx)}>＋ 세트 추가</button>
                   <button
                     className="btn btn-ghost" disabled={e.sets.length === 0}

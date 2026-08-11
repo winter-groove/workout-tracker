@@ -39,6 +39,8 @@ input, select { font: inherit; }
 .btn-row { display: flex; gap: 8px; }
 .btn-row .btn { flex: 1; }
 .btn-sm { display: inline-block; width: auto; padding: 8px 14px; font-size: 13px; border-radius: 10px; }
+/* 버튼 3개가 한 줄에 들어가는 좁은 화면(360px~)용 — 세로 터치 영역은 유지하고 가로만 줄인다 */
+.btn-row.tight .btn { padding: 14px 6px; font-size: 13.5px; white-space: nowrap; }
 
 .tag { font-size: 11px; font-weight: 600; color: var(--blue); background: var(--blue-bg); border-radius: 6px; padding: 3px 8px; }
 .last-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--green); background: var(--green-bg); border-radius: 8px; padding: 6px 10px; }

@@ -465,3 +465,21 @@ test('드랍이 뒤따르는 세트를 완료하면 휴식 타이머가 뜨지 �
   fireEvent.click(screen.getByLabelText('세트 1-1 완료'));
   expect(await screen.findByText('건너뛰기')).toBeInTheDocument(); // 체인 끝 → 휴식
 });
+
+test('드랍 뒤에 세트를 추가하면 드랍 무게가 아니라 마지막 본세트 무게로 채워진다', async () => {
+  const s = await startSession(routine);
+  s.entries[0].sets = [
+    { weight: 70, reps: 8 },
+    { weight: 56, reps: 8, isDrop: true },
+  ];
+  await saveSession(s);
+  renderScreen();
+  await screen.findByText('벤치프레스');
+  fireEvent.click(screen.getByRole('button', { name: '＋ 세트 추가' }));
+  await waitFor(async () => {
+    const cur = await getActiveSession();
+    expect(cur?.entries[0].sets).toHaveLength(3);
+    expect(cur?.entries[0].sets[2]).toMatchObject({ weight: 70, reps: 8 });
+    expect(cur?.entries[0].sets[2].isDrop).toBeUndefined();
+  });
+});
