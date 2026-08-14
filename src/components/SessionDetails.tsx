@@ -3,6 +3,7 @@ import type { Exercise, Session } from '../types';
 import {
   fmtVolumeDelta, fmtWeightDelta, summarizeSession, type EntryProgress,
 } from '../db/progress';
+import { sessionDuration } from '../db/sessions';
 import { setLabels } from '../db/sessions';
 import { fmtWeightCell, fmtWeightLabel, unitFor } from '../db/weightUnit';
 
@@ -58,6 +59,11 @@ export default function SessionDetails({
           </div>
         );
       })}
+      {sessionDuration(session) && (
+        <div className="d" style={{ fontSize: 12, marginTop: 8 }}>
+          ⏱ 운동 시간 {sessionDuration(session)}
+        </div>
+      )}
     </>
   );
 }

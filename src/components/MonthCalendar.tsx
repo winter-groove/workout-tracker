@@ -58,11 +58,12 @@ export default function MonthCalendar({
             if (!d) return <div key={di} className="day"><div className="dot" style={{ visibility: 'hidden' }} /></div>;
             const done = workoutDays.has(dayKey(d));
             const isToday = sameDay(d, today);
+            const isFuture = !isToday && d.getTime() > today.getTime();
             const isSelected = selectedDate !== null && sameDay(d, selectedDate);
             return (
               <div key={di} className="day">
                 <button
-                  className={`dot ${done ? 'on' : isToday ? 'today' : ''}${isSelected ? ' sel' : ''}`}
+                  className={`dot ${done ? 'on' : isToday ? 'today' : isFuture ? 'future' : ''}${isSelected ? ' sel' : ''}`}
                   aria-label={`${viewMonth + 1}월 ${d.getDate()}일`}
                   onClick={() => onSelectDate(d)}
                 >

@@ -5,7 +5,7 @@ import type { Session } from '../types';
 import { db } from '../db/db';
 import { listExercises } from '../db/exercises';
 import { summarizeSession, fmtVolumeDelta, fmtWeightDelta, sessionVolume, type EntryProgress } from '../db/progress';
-import { resumeSession, sessionTitle } from '../db/sessions';
+import { resumeSession, sessionTitle, sessionDuration } from '../db/sessions';
 import { fmtWeightLabel, kgToDisplay, unitFor } from '../db/weightUnit';
 
 function fmtDate(ts: number): string {
@@ -57,7 +57,10 @@ export default function SummaryScreen() {
     <div className="screen">
       <h1 className="screen-title">운동 완료 🎉</h1>
       <div className="card">
-        <div className="card-h">{sessionTitle(session, exMap)} · {fmtDate(session.startedAt)} · {session.entries.length}개 운동</div>
+        <div className="card-h">
+          {sessionTitle(session, exMap)} · {fmtDate(session.startedAt)} · {session.entries.length}개 운동
+          {sessionDuration(session) ? ` · ${sessionDuration(session)}` : ''}
+        </div>
         <div style={{ fontWeight: 800, marginBottom: 8 }}>
           총 볼륨 {kgToDisplay(sessionVolume(session), 'kg')}kg
         </div>

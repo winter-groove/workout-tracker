@@ -40,3 +40,17 @@ test('운동한 날은 ✓로 표시된다', () => {
   render(<MonthCalendar workoutDays={new Set([key])} selectedDate={null} onSelectDate={() => {}} />);
   expect(screen.getByRole('button', { name: `${now.getMonth() + 1}월 15일` })).toHaveTextContent('✓');
 });
+
+test('미래 날짜는 future로 흐리게, 지난 날짜는 기존 그대로 표시된다', () => {
+  render(<MonthCalendar workoutDays={new Set()} selectedDate={null} onSelectDate={() => {}} />);
+  const now = new Date();
+  fireEvent.click(screen.getByLabelText('다음 달'));
+  const next = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+  expect(screen.getByRole('button', { name: `${next.getMonth() + 1}월 15일` })).toHaveClass('future');
+  fireEvent.click(screen.getByLabelText('이전 달'));
+  fireEvent.click(screen.getByLabelText('이전 달'));
+  const prev = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  const prevBtn = screen.getByRole('button', { name: `${prev.getMonth() + 1}월 15일` });
+  expect(prevBtn).not.toHaveClass('future');
+  expect(prevBtn).not.toHaveClass('today');
+});

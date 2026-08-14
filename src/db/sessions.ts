@@ -144,6 +144,18 @@ export function sessionTitle(session: Session, exMap: Map<string, Exercise>): st
   return parts.length > 0 ? `${parts.join('·')} 운동` : '오늘 운동';
 }
 
+// 완료 세션의 소요 시간 문자열 (52분 / 1시간 / 1시간 12분, 최소 1분).
+// null이면 표시 생략: 미완료·0 이하·12시간 이상 — 백데이트 세션은 startedAt이 과거 정오,
+// finishedAt이 실제 입력 시각이라 차이가 무의미하게 커지는 것을 걸러낸다.
+export function sessionDuration(session: Session): string | null {
+  if (session.finishedAt === undefined) return null;
+  const ms = session.finishedAt - session.startedAt;
+  if (ms <= 0 || ms >= 12 * 3600_000) return null;
+  const min = Math.max(1, Math.round(ms / 60_000));
+  if (min < 60) return `${min}분`;
+  return min % 60 === 0 ? `${min / 60}시간` : `${Math.floor(min / 60)}시간 ${min % 60}분`;
+}
+
 // 세트 표시 라벨: 본세트는 1,2,3…, 드랍은 직전 본세트 번호에 -1,-2…
 // 배열 첫 세트의 isDrop은 무시하고 본세트로 취급 (짝 잃은 플래그 자가 치유 — groupsOf와 동일 원칙)
 export function setLabels(sets: { isDrop?: boolean }[]): string[] {

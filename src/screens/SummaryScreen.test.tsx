@@ -142,3 +142,9 @@ test('요약 화면에 세션 총 볼륨이 kg으로 표시된다', async () => 
   renderAt(`/summary/${s.id}`);
   expect(await screen.findByText('총 볼륨 1100kg')).toBeInTheDocument();
 });
+
+test('요약 헤더에 운동 시간이 표시된다', async () => {
+  const cur = await addFinishedSession(1000, 'lib-bench-press', [{ weight: 60, reps: 10 }]); // +1시간짜리 세션
+  renderAt(`/summary/${cur.id}`);
+  expect(await screen.findByText(/1개 운동 · 1시간/)).toBeInTheDocument();
+});

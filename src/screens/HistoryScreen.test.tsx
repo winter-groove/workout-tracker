@@ -221,3 +221,10 @@ test('운동별로 보기: lb 운동은 파운드 세트 목록 + 병기 요약�
   expect(await screen.findByText('132.3×10')).toBeInTheDocument(); // fmtSets는 환산만
   expect(screen.getByText('볼륨 1322.8lb (600kg) · 첫 기록')).toBeInTheDocument();
 });
+
+test('펼침 상세에 운동 시간이 표시된다', async () => {
+  await addFinishedSession(1000, 'lib-bench-press', [{ weight: 60, reps: 10 }]); // +1시간짜리 세션
+  renderScreen();
+  fireEvent.click(await screen.findByText(/1개 운동/));
+  expect(await screen.findByText('⏱ 운동 시간 1시간')).toBeInTheDocument();
+});

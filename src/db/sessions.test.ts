@@ -303,3 +303,15 @@ test('seedForNewSet: 마지막 본세트 기준, 드랍만 있으면 마지막 �
     .toEqual({ weight: 30, reps: 10 });
   expect(seedForNewSet([])).toEqual({ weight: 0, reps: 10 });
 });
+
+test('sessionDuration: 분·시간 표기, 백데이트(12시간 이상)·미완료는 null', async () => {
+  const { sessionDuration } = await import('./sessions');
+  const base: Session = { id: 'd1', startedAt: 1_000_000, entries: [] };
+  expect(sessionDuration(base)).toBeNull(); // 미완료
+  expect(sessionDuration({ ...base, finishedAt: base.startedAt + 52 * 60_000 })).toBe('52분');
+  expect(sessionDuration({ ...base, finishedAt: base.startedAt + 60 * 60_000 })).toBe('1시간');
+  expect(sessionDuration({ ...base, finishedAt: base.startedAt + 72 * 60_000 })).toBe('1시간 12분');
+  expect(sessionDuration({ ...base, finishedAt: base.startedAt + 30_000 })).toBe('1분'); // 1분 미만 → 최소 1분
+  expect(sessionDuration({ ...base, finishedAt: base.startedAt + 22 * 3600_000 })).toBeNull(); // 백데이트
+  expect(sessionDuration({ ...base, finishedAt: base.startedAt - 1 })).toBeNull(); // 음수
+});
