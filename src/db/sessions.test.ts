@@ -313,5 +313,7 @@ test('sessionDuration: 분·시간 표기, 백데이트(12시간 이상)·미완
   expect(sessionDuration({ ...base, finishedAt: base.startedAt + 72 * 60_000 })).toBe('1시간 12분');
   expect(sessionDuration({ ...base, finishedAt: base.startedAt + 30_000 })).toBe('1분'); // 1분 미만 → 최소 1분
   expect(sessionDuration({ ...base, finishedAt: base.startedAt + 22 * 3600_000 })).toBeNull(); // 백데이트
+  expect(sessionDuration({ ...base, finishedAt: base.startedAt + 12 * 3600_000 - 1 })).toBeNull(); // 반올림 경계도 12시간 컷
+  expect(sessionDuration({ ...base, finishedAt: base.startedAt + 11 * 3600_000 + 59 * 60_000 })).toBe('11시간 59분');
   expect(sessionDuration({ ...base, finishedAt: base.startedAt - 1 })).toBeNull(); // 음수
 });

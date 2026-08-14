@@ -150,8 +150,9 @@ export function sessionTitle(session: Session, exMap: Map<string, Exercise>): st
 export function sessionDuration(session: Session): string | null {
   if (session.finishedAt === undefined) return null;
   const ms = session.finishedAt - session.startedAt;
-  if (ms <= 0 || ms >= 12 * 3600_000) return null;
-  const min = Math.max(1, Math.round(ms / 60_000));
+  const rounded = Math.round(ms / 60_000);
+  if (ms <= 0 || rounded >= 12 * 60) return null; // 반올림 후 판정 — 11:59:30~가 '12시간'으로 새는 것 방지
+  const min = Math.max(1, rounded);
   if (min < 60) return `${min}분`;
   return min % 60 === 0 ? `${min / 60}시간` : `${Math.floor(min / 60)}시간 ${min % 60}분`;
 }
