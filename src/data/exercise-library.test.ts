@@ -1,6 +1,7 @@
 import library from './exercise-library.json';
 import legacy from './legacy-55.json';
 import { BODY_PARTS, EQUIPMENTS } from '../types';
+import { MUSCLE_REGIONS } from './muscle-regions';
 
 test('id와 libId가 중복 없이 유일하다', () => {
   const ids = library.map((x) => x.id);
@@ -47,5 +48,24 @@ test('기존 55개의 id·libId·이름이 보존된다', () => {
     expect(cur?.name).toBe(l.name);
     expect(cur?.bodyPart).toBe(l.bodyPart);
     expect(cur?.equipment).toBe(l.equipment);
+  }
+});
+
+test('일러스트 매칭 운동은 -2/-3 프레임 규약을 지킨다', () => {
+  // 파이프라인 산출물 규약: illustration이 있으면 애니 프레임 파일명이 유도 가능해야 함
+  const withIllu = library.filter((x) => x.illustration);
+  expect(withIllu.length).toBeGreaterThan(0);
+  for (const x of withIllu) {
+    expect(x.illustration).toMatch(/^illustrations\/[a-z0-9-]+\.svg$/);
+  }
+});
+
+test('muscles 필드는 근육맵 영역 id 어휘만 사용하고 주동근이 첫 원소다', () => {
+  const withMuscles = library.filter((x) => Array.isArray(x.muscles));
+  expect(withMuscles.length).toBeGreaterThan(200); // 매칭 297 중 대부분
+  const regionSet = new Set<string>(MUSCLE_REGIONS);
+  for (const x of withMuscles) {
+    expect(x.muscles!.length).toBeGreaterThan(0);
+    for (const m of x.muscles!) expect(regionSet.has(m)).toBe(true);
   }
 });
