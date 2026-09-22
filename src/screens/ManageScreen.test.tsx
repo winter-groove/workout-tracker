@@ -97,3 +97,13 @@ test('주간 목표를 바꾸면 저장된다', async () => {
   fireEvent.change(input, { target: { value: '5' } });
   expect(localStorage.getItem('wt-weekly-goal')).toBe('5');
 });
+
+test('마이 탭 프로필 헤더에 완료 운동 횟수가 보인다', async () => {
+  await db.sessions.add({
+    id: crypto.randomUUID(), startedAt: 1000, finishedAt: 3600_000,
+    entries: [{ exerciseId: 'e1', sets: [{ weight: 50, reps: 10, completedAt: 1001 }] }],
+  });
+  render(<MemoryRouter><ManageScreen /></MemoryRouter>);
+  expect(await screen.findByText('명품보쌈 멤버')).toBeInTheDocument();
+  expect(await screen.findByText('운동 1회 완료')).toBeInTheDocument();
+});

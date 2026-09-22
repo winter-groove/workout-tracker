@@ -4,6 +4,7 @@ import { BODY_PARTS } from '../types';
 import type { BodyPart, Routine } from '../types';
 import { listExercises, setExerciseHidden, deleteCustomExercise, setExerciseFavorite } from '../db/exercises';
 import { listRoutines, deleteRoutine, newRoutine } from '../db/routines';
+import { listFinishedSessions } from '../db/sessions';
 import { exportData, importData } from '../db/backup';
 import { getRestSeconds, setRestSeconds, getWeeklyGoal, setWeeklyGoal } from '../db/settings';
 import { getWeightUnit, setWeightUnit } from '../db/weightUnit';
@@ -26,6 +27,7 @@ export default function ManageScreen() {
   const fileRef = useRef<HTMLInputElement>(null);
   const routines = useLiveQuery(() => listRoutines(), []) ?? [];
   const exercises = useLiveQuery(() => listExercises({ includeHidden: true }), []) ?? [];
+  const doneSessions = useLiveQuery(() => listFinishedSessions(), []) ?? [];
 
   function changeQuery(q: string) {
     setExQuery(q);
@@ -72,6 +74,22 @@ export default function ManageScreen() {
   return (
     <div className="screen">
       <h1 className="screen-title">마이</h1>
+
+      <div className="card" style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+        <span
+          style={{
+            width: 52, height: 52, borderRadius: '50%', background: 'var(--surface-2)',
+            color: 'var(--accent)', fontSize: 20, fontWeight: 800,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}
+        >
+          명
+        </span>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <span style={{ fontSize: 16, fontWeight: 800 }}>명품보쌈 멤버</span>
+          <span className="d" style={{ fontSize: 12.5 }}>운동 {doneSessions.length}회 완료</span>
+        </div>
+      </div>
 
       <div className="card">
         <div className="card-h">루틴 템플릿</div>
