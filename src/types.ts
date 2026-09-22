@@ -19,6 +19,7 @@ export interface Exercise {
   isFavorite?: boolean;
   unit?: 'kg' | 'lb';    // 이 운동의 기록/표시 단위 — 없으면 전역 설정
   illustration?: string; // 내장 운동 일러스트: 'illustrations/<id>.svg' (없으면 픽토그램)
+  muscles?: string[]; // 근육맵 영역 id — 첫 원소가 주동근
 }
 
 export interface RoutineItem {

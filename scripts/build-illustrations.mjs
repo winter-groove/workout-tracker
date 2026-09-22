@@ -27,6 +27,41 @@ const EQUIP_COMPAT = new Map([
   ['Kettlebell', ['기타']], ['Resistance Band', ['기타']], ['Plate', ['기타']], ['Other', ['기타']],
 ]);
 
+// 그쪽 근육 → 우리 근육맵 영역 id (T1: MuscleMap 어휘, 근육 메타 계산용 — 부위 호환성 판정과는 별개)
+const MUSCLE_TO_REGION = new Map([
+  ['Chest', ['chest']],
+  ['Shoulders', ['front-deltoids']],
+  ['Rear Delts', ['back-deltoids']],
+  ['Upper Back', ['upper-back', 'trapezius']],
+  ['Back', ['upper-back', 'lower-back']],
+  ['Lats', ['upper-back']],
+  ['Lower Back', ['lower-back']],
+  ['Posterior Chain', ['hamstring', 'gluteal', 'lower-back']],
+  ['Hamstrings', ['hamstring']],
+  ['Quads', ['quadriceps']],
+  ['Glutes', ['gluteal']],
+  ['Calves', ['calves']],
+  ['Adductors', ['adductor']],
+  ['Hips', ['gluteal', 'abductors']],
+  ['Legs', ['quadriceps', 'hamstring', 'gluteal']],
+  ['Biceps', ['biceps']],
+  ['Triceps', ['triceps']],
+  ['Forearms', ['forearm']],
+  ['Core', ['abs', 'obliques']],
+  ['Mobility', []],
+]);
+
+function regionsFor(m) {
+  const primary = MUSCLE_TO_REGION.get(m.primaryMuscle) ?? [];
+  const secondary = (m.secondaryMuscles ?? []).flatMap((s) => MUSCLE_TO_REGION.get(s) ?? []);
+  const seen = new Set();
+  const out = [];
+  for (const r of [...primary, ...secondary]) {
+    if (!seen.has(r)) { seen.add(r); out.push(r); }
+  }
+  return out;
+}
+
 const norm = (s) => s.toLowerCase().replace(/[_\-]/g, ' ').replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, ' ').trim();
 const tokens = (s) => new Set(norm(s).split(' '));
 const subset = (a, b) => [...a].every((t) => b.has(t));
@@ -53,7 +88,7 @@ function compatible(entry, m) {
   return part === entry.bodyPart && Array.isArray(equips) && equips.includes(entry.equipment);
 }
 
-const stats = { alias: 0, exact: 0, relaxed: 0, excluded: 0, none: 0 };
+const stats = { alias: 0, exact: 0, relaxed: 0, excluded: 0, none: 0, framesMissing: 0 };
 const picks = new Map(); // our id → their slug
 
 for (const x of lib) {
@@ -74,16 +109,38 @@ for (const x of lib) {
   if (hit) { picks.set(x.id, hit.slug); stats.relaxed++; } else { stats.none++; }
 }
 
+// 프레임 1/2/3 모두 존재하는 항목만 유지 (하나라도 없으면 picks에서 제거)
+for (const [id, slug] of [...picks]) {
+  let complete = true;
+  for (const frame of [1, 2, 3]) {
+    try { await access(`${TMP}/packages/workout-guide/assets/${slug}/frame-${frame}.svg`); }
+    catch { complete = false; break; }
+  }
+  if (!complete) { picks.delete(id); stats.framesMissing++; }
+}
+
 await rm(OUT, { recursive: true, force: true });
 await mkdir(OUT, { recursive: true });
 for (const [id, slug] of picks) {
   await cp(`${TMP}/packages/workout-guide/assets/${slug}/frame-1.svg`, `${OUT}/${id}.svg`);
+  await cp(`${TMP}/packages/workout-guide/assets/${slug}/frame-2.svg`, `${OUT}/${id}-2.svg`);
+  await cp(`${TMP}/packages/workout-guide/assets/${slug}/frame-3.svg`, `${OUT}/${id}-3.svg`);
 }
 
 const next = lib.map((x) => {
-  const { illustration: _drop, ...rest } = x;
-  return picks.has(x.id) ? { ...rest, illustration: `illustrations/${x.id}.svg` } : rest;
+  const { illustration: _dropIllu, muscles: _dropMuscles, ...rest } = x;
+  if (!picks.has(x.id)) return rest;
+  const slug = picks.get(x.id);
+  const m = bySlug.get(slug);
+  const muscles = regionsFor(m);
+  return {
+    ...rest,
+    illustration: `illustrations/${x.id}.svg`,
+    ...(muscles.length > 0 ? { muscles } : {}),
+  };
 });
 await writeFile('src/data/exercise-library.json', `${JSON.stringify(next, null, 2)}\n`);
 
-console.log(`✓ 매칭 ${picks.size}/${lib.length} (별칭 ${stats.alias}, 정확 ${stats.exact}, 완화 ${stats.relaxed}, 제외 ${stats.excluded}, 미매칭 ${stats.none})`);
+const muscleCount = next.filter((x) => Array.isArray(x.muscles)).length;
+console.log(`✓ 매칭 ${picks.size}/${lib.length} (별칭 ${stats.alias}, 정확 ${stats.exact}, 완화 ${stats.relaxed}, 제외 ${stats.excluded}, 미매칭 ${stats.none}, frames 미비 ${stats.framesMissing})`);
+console.log(`  muscles 기록 ${muscleCount}개`);

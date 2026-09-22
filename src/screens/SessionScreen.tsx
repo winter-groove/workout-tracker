@@ -11,7 +11,7 @@ import {
   volume, maxWeight, fmtVolumeDelta, getPRWeight, getPreviousRecord,
 } from '../db/progress';
 import { kgToDisplay, displayToKg, unitFor, dropWeight, stepFor, type WeightUnit } from '../db/weightUnit';
-import ExerciseImage from '../components/ExerciseImage';
+import ExerciseHero from '../components/ExerciseHero';
 import ExercisePicker, { dominantBodyPart } from '../components/ExercisePicker';
 import RestTimer from '../components/RestTimer';
 
@@ -307,7 +307,7 @@ export default function SessionScreen() {
               : `볼륨 ${kgToDisplay(curVol, u)} / 지난 ${kgToDisplay(lastVol, u)}${u}`;
             return (
               <div key={entryIdx} className="card">
-                {group.length === 1 && gex && <ExerciseImage exercise={gex} className="hero-img" />}
+                {group.length === 1 && gex && <ExerciseHero exercise={gex} />}
                 <div className="ex-name">{gex?.name ?? '삭제된 운동'}</div>
                 <div className="tags">
                   {gex && <span className="tag">{gex.bodyPart}</span>}

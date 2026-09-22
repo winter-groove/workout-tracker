@@ -112,4 +112,5 @@ test('마이 탭 하단에 일러스트 출처가 표기된다', async () => {
   render(<MemoryRouter><ManageScreen /></MemoryRouter>);
   expect(await screen.findByText(/Workout Guide/)).toBeInTheDocument();
   expect(screen.getByText(/CC BY-SA 4\.0/)).toBeInTheDocument();
+  expect(screen.getByText(/react-body-highlighter/)).toBeInTheDocument();
 });

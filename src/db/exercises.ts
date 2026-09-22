@@ -3,7 +3,7 @@ import library from '../data/exercise-library.json';
 import type { BodyPart, Equipment, Exercise, IconKey } from '../types';
 import type { WeightUnit } from './weightUnit';
 
-export const LIBRARY_VERSION = 5;
+export const LIBRARY_VERSION = 6;
 
 export async function seedLibrary(): Promise<void> {
   const meta = await db.meta.get('libraryVersion');
@@ -20,6 +20,7 @@ export async function seedLibrary(): Promise<void> {
       isCustom: false,
       isHidden: false,
       ...(x.illustration ? { illustration: x.illustration } : {}),
+      ...(x.muscles ? { muscles: x.muscles } : {}),
     }))
     .filter((r) => !byId.has(r.id));
   await db.exercises.bulkAdd(rows);
@@ -31,6 +32,7 @@ export async function seedLibrary(): Promise<void> {
     if (
       cur.name !== x.name || cur.bodyPart !== x.bodyPart || cur.equipment !== x.equipment
       || cur.illustration !== x.illustration
+      || JSON.stringify(cur.muscles) !== JSON.stringify(x.muscles)
     ) {
       updates.push({
         ...cur,
@@ -38,6 +40,7 @@ export async function seedLibrary(): Promise<void> {
         bodyPart: x.bodyPart as BodyPart,
         equipment: x.equipment as Equipment,
         illustration: x.illustration,
+        muscles: x.muscles,
       });
     }
   }
