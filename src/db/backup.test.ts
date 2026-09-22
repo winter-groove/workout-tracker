@@ -1,6 +1,6 @@
 import { db } from './db';
 import { exportData, importData } from './backup';
-import { seedLibrary, setExerciseUnit, LIBRARY_VERSION } from './exercises';
+import { seedLibrary, setExerciseUnit, addCustomExercise, LIBRARY_VERSION } from './exercises';
 import { saveRoutine, newRoutine } from './routines';
 import { startSession, finishSession } from './sessions';
 
@@ -98,4 +98,20 @@ test('드랍 세트 플래그가 백업 왕복에서 보존된다', async () => 
   const restored = await db.sessions.get(s.id);
   expect(restored?.entries[0].sets).toHaveLength(2);
   expect(restored?.entries[0].sets[1].isDrop).toBe(true);
+});
+
+test('운동 illustration 필드가 백업 왕복에서 보존된다', async () => {
+  await seedLibrary();
+  // 내장 운동(lib-*)은 seedLibrary 재동기화가 library.json 기준으로 illustration을 덮어쓰므로
+  // (매칭이 없는 내장 운동은 잔존 값도 지워짐 — 의도된 동작), 동기화 대상이 아닌 커스텀 운동으로
+  // "백업 직렬화 자체가 필드를 보존하는지"를 검증한다.
+  const custom = await addCustomExercise({
+    name: '커스텀 운동', bodyPart: '가슴', equipment: '맨몸', iconKey: 'bodyweight',
+  });
+  await db.exercises.update(custom.id, { illustration: 'illustrations/x.svg' });
+  const dump = await exportData();
+  await db.delete();
+  await db.open();
+  await importData(dump);
+  expect((await db.exercises.get(custom.id))?.illustration).toBe('illustrations/x.svg');
 });
