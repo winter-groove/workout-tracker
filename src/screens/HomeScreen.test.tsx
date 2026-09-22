@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { vi } from 'vitest';
 import type { Session } from '../types';
@@ -22,223 +22,106 @@ afterEach(() => {
 function renderScreen() {
   return render(
     <MemoryRouter>
-      <HomeScreen />
+      <Routes>
+        <Route path="/" element={<HomeScreen />} />
+        <Route path="/session" element={<div>세션화면</div>} />
+      </Routes>
     </MemoryRouter>,
   );
 }
 
-test('미선택이면 루틴 목록과 추천 뱃지가 보인다', async () => {
-  await saveRoutine({ id: 'r1', name: '가슴운동', items: [] });
-  await saveRoutine({ id: 'r2', name: '등운동', items: [] });
-  renderScreen();
-  expect(await screen.findByText('오늘 뭐 할까요?')).toBeInTheDocument();
-  expect(screen.getByRole('button', { name: /가슴운동.*추천/ })).toBeInTheDocument();
-  expect(screen.getByRole('button', { name: '등운동' })).toBeInTheDocument();
-  expect(screen.getByRole('button', { name: '빈 세션으로 시작' })).toBeInTheDocument();
-});
-
-test('루틴을 탭하면 오늘의 루틴으로 고정된다', async () => {
-  await saveRoutine({ id: 'r1', name: '가슴운동', items: [{ exerciseId: 'e1', defaultSets: 3 }] });
-  renderScreen();
-  fireEvent.click(await screen.findByRole('button', { name: /가슴운동/ }));
-  expect(await screen.findByText('오늘은 가슴운동')).toBeInTheDocument();
-  expect(screen.getByText('1개 운동')).toBeInTheDocument();
-  expect(screen.getByRole('button', { name: '운동 시작하기' })).toBeInTheDocument();
-});
-
-test('다시 선택을 누르면 목록으로 돌아온다', async () => {
-  await saveRoutine({ id: 'r1', name: '가슴운동', items: [] });
-  setTodayRoutineId('r1');
-  renderScreen();
-  expect(await screen.findByText('오늘은 가슴운동')).toBeInTheDocument();
-  fireEvent.click(screen.getByRole('button', { name: '다시 선택' }));
-  expect(await screen.findByText('오늘 뭐 할까요?')).toBeInTheDocument();
-});
-
-test('저장된 오늘의 루틴이 삭제됐으면 선택 화면이 보인다', async () => {
-  await saveRoutine({ id: 'r1', name: '가슴운동', items: [] });
-  setTodayRoutineId('삭제된루틴');
-  renderScreen();
-  expect(await screen.findByText('오늘 뭐 할까요?')).toBeInTheDocument();
-});
-
-test('루틴이 하나도 없으면 기존 첫 운동 안내가 보인다', async () => {
-  renderScreen();
-  expect(await screen.findByText('첫 운동을 시작해보세요')).toBeInTheDocument();
-});
-
-test('앱이 켜진 채 날짜가 바뀌면 다시 선택 화면으로 돌아온다', async () => {
-  await saveRoutine({ id: 'r1', name: '가슴운동', items: [] });
-  setTodayRoutineId('r1');
-  renderScreen();
-  expect(await screen.findByText('오늘은 가슴운동')).toBeInTheDocument();
-  // 자정이 지나 저장된 날짜가 어제가 된 상황을 시뮬레이션
-  localStorage.setItem('wt-today-routine', JSON.stringify({ id: 'r1', date: '2020-01-01' }));
-  fireEvent(document, new Event('visibilitychange'));
-  expect(await screen.findByText('오늘 뭐 할까요?')).toBeInTheDocument();
-});
-
-async function addFinishedSession(startedAt: number, name?: string): Promise<Session> {
+async function addFinishedSession(startedAt: number, name?: string, weight = 50): Promise<Session> {
   const s: Session = {
     id: crypto.randomUUID(),
     startedAt,
     finishedAt: startedAt + 3600_000,
     routineName: name,
-    entries: [{ exerciseId: 'e1', sets: [{ weight: 50, reps: 10, completedAt: startedAt + 1 }] }],
+    entries: [{ exerciseId: 'lib-bench-press', sets: [{ weight, reps: 10, completedAt: startedAt + 1 }] }],
   };
   await db.sessions.add(s);
   return s;
 }
 
-function renderWithSummary() {
-  return render(
-    <MemoryRouter>
-      <Routes>
-        <Route path="/" element={<HomeScreen />} />
-        <Route path="/summary/:sessionId" element={<div>요약화면</div>} />
-      </Routes>
-    </MemoryRouter>,
-  );
-}
-
-test('달력 날짜를 누르면 그날 세션이 표시되고 요약 버튼으로 이동한다', async () => {
-  const now = new Date();
-  const ts = new Date(now.getFullYear(), now.getMonth(), 15, 10, 0).getTime();
-  await addFinishedSession(ts, '가슴 날');
-  renderWithSummary();
-  fireEvent.click(await screen.findByRole('button', { name: `${now.getMonth() + 1}월 15일` }));
-  expect(await screen.findByText(/가슴 날 · 1개 운동/)).toBeInTheDocument();
-  fireEvent.click(screen.getByRole('button', { name: '요약 ›' }));
-  expect(await screen.findByText('요약화면')).toBeInTheDocument();
+test('루틴이 있으면 추천 루틴이 코치 카드로 자동 제안된다', async () => {
+  await seedLibrary();
+  await saveRoutine({ id: 'r1', name: '가슴 날', items: [{ exerciseId: 'lib-bench-press', defaultSets: 4 }] });
+  await addFinishedSession(Date.now() - 3 * 86_400_000, '가슴 날', 70);
+  renderScreen();
+  expect(await screen.findByText('오늘은 가슴 날!')).toBeInTheDocument();
+  expect(screen.getByText('코치 추천')).toBeInTheDocument();
+  expect(await screen.findByText('벤치프레스')).toBeInTheDocument();
+  expect(screen.getByText(/4세트 × 70kg/)).toBeInTheDocument(); // 지난 최고 무게 프리뷰
+  expect(screen.getByText(/1시간/)).toBeInTheDocument(); // 예상 시간(지난 세션 기반)
 });
 
-test('기록 없는 날짜를 누르면 빈 문구가 보인다', async () => {
-  renderWithSummary();
-  const now = new Date();
-  fireEvent.click(await screen.findByRole('button', { name: `${now.getMonth() + 1}월 15일` }));
-  expect(await screen.findByText('이 날은 운동 기록이 없어요')).toBeInTheDocument();
+test('오늘의 루틴을 고르면 추천보다 우선된다', async () => {
+  await saveRoutine({ id: 'r1', name: '가슴 날', items: [] });
+  await saveRoutine({ id: 'r2', name: '등 날', items: [] });
+  setTodayRoutineId('r2');
+  renderScreen();
+  expect(await screen.findByText('오늘은 등 날!')).toBeInTheDocument();
 });
 
-test('과거 날짜에 기록 추가 버튼으로 백데이트 세션을 시작한다', async () => {
-  await saveRoutine({ id: 'r1', name: '가슴운동', items: [] });
-  render(
-    <MemoryRouter>
-      <Routes>
-        <Route path="/" element={<HomeScreen />} />
-        <Route path="/session" element={<div>세션화면</div>} />
-        <Route path="/summary/:sessionId" element={<div>요약화면</div>} />
-      </Routes>
-    </MemoryRouter>,
-  );
-  const now = new Date();
-  fireEvent.click(await screen.findByRole('button', { name: `${now.getMonth() + 1}월 1일` }));
-  fireEvent.click(await screen.findByRole('button', { name: '＋ 이 날짜에 기록 추가' }));
-  // 루틴 목록은 useLiveQuery로 비동기 로드 — 동기 getByRole은 레이스
-  fireEvent.click(await screen.findByRole('button', { name: '가슴운동' }));
+test('루틴 바꾸기에서 다른 루틴을 고르면 고정된다', async () => {
+  await saveRoutine({ id: 'r1', name: '가슴 날', items: [] });
+  await saveRoutine({ id: 'r2', name: '등 날', items: [] });
+  await addFinishedSession(Date.now() - 86_400_000, '등 날'); // 등을 어제 씀 → 추천은 가슴
+  renderScreen();
+  expect(await screen.findByText('오늘은 가슴 날!')).toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', { name: '루틴 바꾸기' }));
+  fireEvent.click(await screen.findByRole('button', { name: /등 날/ }));
+  expect(await screen.findByText('오늘은 등 날!')).toBeInTheDocument();
+});
+
+test('운동 시작하기는 제안된 루틴으로 세션을 시작한다', async () => {
+  await seedLibrary();
+  await saveRoutine({ id: 'r1', name: '가슴 날', items: [{ exerciseId: 'lib-bench-press', defaultSets: 3 }] });
+  renderScreen();
+  fireEvent.click(await screen.findByRole('button', { name: '운동 시작하기' }));
   expect(await screen.findByText('세션화면')).toBeInTheDocument();
-  const s = await getActiveSession();
-  const d = new Date(s!.startedAt);
-  expect(d.getDate()).toBe(1);
-  expect(d.getHours()).toBe(12);
+  expect((await getActiveSession())?.routineName).toBe('가슴 날');
 });
 
-test('미래 날짜에는 기록 추가 버튼이 없다', async () => {
-  renderWithSummary();
-  const now = new Date();
-  fireEvent.click(await screen.findByLabelText('다음 달'));
-  const next = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-  fireEvent.click(await screen.findByRole('button', { name: `${next.getMonth() + 1}월 15일` }));
-  expect(await screen.findByText('이 날은 운동 기록이 없어요')).toBeInTheDocument();
-  expect(screen.queryByRole('button', { name: '＋ 이 날짜에 기록 추가' })).not.toBeInTheDocument();
+test('루틴이 없으면 첫 운동 안내가 보인다', async () => {
+  renderScreen();
+  expect(await screen.findByText('첫 운동을 시작해보세요')).toBeInTheDocument();
+  expect(screen.getByText('마이 탭에서 루틴을 만들면 여기에 떠요')).toBeInTheDocument();
 });
 
-test('진행 중 세션이 있으면 기록 추가가 차단된다', async () => {
-  vi.spyOn(window, 'alert').mockImplementation(() => {});
+test('날짜가 바뀌면 고정이 풀리고 추천으로 돌아온다', async () => {
+  await saveRoutine({ id: 'r1', name: '가슴 날', items: [] });
+  await saveRoutine({ id: 'r2', name: '등 날', items: [] });
+  setTodayRoutineId('r2');
+  renderScreen();
+  expect(await screen.findByText('오늘은 등 날!')).toBeInTheDocument();
+  localStorage.setItem('wt-today-routine', JSON.stringify({ id: 'r2', date: '2020-01-01' }));
+  fireEvent(document, new Event('visibilitychange'));
+  // 만료 → 추천(둘 다 미사용이면 첫 번째) 표시
+  expect(await screen.findByText('오늘은 가슴 날!')).toBeInTheDocument();
+});
+
+test('주간 목표 링이 이번 주 완료 수를 보여준다', async () => {
+  await addFinishedSession(Date.now() - 3600_000); // 오늘(이번 주) 1개
+  renderScreen();
+  expect(await screen.findByRole('img', { name: '주간 목표 3회 중 1회 완료' })).toBeInTheDocument();
+});
+
+test('코치 팁: 기록이 없으면 환영 문구', async () => {
+  renderScreen();
+  expect(await screen.findByText('첫 운동을 기록하면 여기서 다음 목표를 제안해 드려요.')).toBeInTheDocument();
+});
+
+test('진행 중 세션이 있으면 이어서 하기 카드가 우선한다', async () => {
   await startSession();
-  renderWithSummary();
-  // 활성 세션이 useLiveQuery로 반영된 뒤에 눌러야 함 — 반영 전이면 차단 대신 그 세션을 이어받는다
-  await screen.findByText('진행 중인 운동이 있어요');
-  const now = new Date();
-  fireEvent.click(await screen.findByRole('button', { name: `${now.getMonth() + 1}월 1일` }));
-  fireEvent.click(await screen.findByRole('button', { name: '＋ 이 날짜에 기록 추가' }));
-  fireEvent.click(screen.getByRole('button', { name: '빈 세션' }));
-  await waitFor(() => {
-    expect(window.alert).toHaveBeenCalledWith('진행 중인 운동을 먼저 완료하세요');
-  });
+  renderScreen();
+  expect(await screen.findByText('운동 진행 중이에요')).toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', { name: '이어서 하기' }));
+  expect(await screen.findByText('세션화면')).toBeInTheDocument();
 });
 
-test('홈에 최근 운동 카드가 없다', async () => {
-  await addFinishedSession(Date.now() - 3_600_000, '등 날');
-  renderWithSummary();
-  await screen.findByText('달력');
-  expect(screen.queryByText('최근 운동')).not.toBeInTheDocument();
-});
-
-test('이름 없는 세션은 달력 목록에서 부위 이름으로 표시된다', async () => {
-  await seedLibrary();
-  const now = new Date();
-  const ts = new Date(now.getFullYear(), now.getMonth(), 15, 10).getTime();
-  const s: Session = {
-    id: crypto.randomUUID(), startedAt: ts, finishedAt: ts + 3600_000,
-    entries: [{ exerciseId: 'lib-bench-press', sets: [{ weight: 50, reps: 10, completedAt: ts + 1 }] }],
-  };
-  await db.sessions.add(s);
-  renderWithSummary();
-  fireEvent.click(await screen.findByRole('button', { name: `${now.getMonth() + 1}월 15일` }));
-  expect(await screen.findByText(/가슴 운동 · 1개 운동/)).toBeInTheDocument();
-});
-
-test('달력 세션을 탭하면 세트 표가 펼쳐진다', async () => {
-  await seedLibrary();
-  const now = new Date();
-  const ts = new Date(now.getFullYear(), now.getMonth(), 15, 10).getTime();
-  const s: Session = {
-    id: crypto.randomUUID(), startedAt: ts, finishedAt: ts + 3600_000,
-    entries: [{ exerciseId: 'lib-bench-press', sets: [{ weight: 60, reps: 10, completedAt: ts + 1 }] }],
-  };
-  await db.sessions.add(s);
-  renderWithSummary();
-  fireEvent.click(await screen.findByRole('button', { name: `${now.getMonth() + 1}월 15일` }));
-  fireEvent.click(await screen.findByText(/가슴 운동 · 1개 운동/));
-  expect(await screen.findByText('무게(kg)')).toBeInTheDocument();
-  expect(screen.getByText('60')).toBeInTheDocument();
-  // 다시 탭하면 접힘
-  fireEvent.click(screen.getByText(/가슴 운동 · 1개 운동/));
-  await waitFor(() => expect(screen.queryByText('무게(kg)')).not.toBeInTheDocument());
-});
-
-test('같은 날 두 세션은 한 번에 하나만 펼쳐지고 전환된다', async () => {
-  await seedLibrary();
-  const now = new Date();
-  const ts = new Date(now.getFullYear(), now.getMonth(), 15, 9).getTime();
-  const mk = (id: string, exerciseId: string, weight: number): Session => ({
-    id, startedAt: ts + (id === 'b' ? 3_600_000 : 0), finishedAt: ts + 7_200_000,
-    entries: [{ exerciseId, sets: [{ weight, reps: 10, completedAt: ts + 1 }] }],
-  });
-  await db.sessions.add(mk('a', 'lib-bench-press', 60));
-  await db.sessions.add(mk('b', 'lib-squat', 80));
-  renderWithSummary();
-  fireEvent.click(await screen.findByRole('button', { name: `${now.getMonth() + 1}월 15일` }));
-  fireEvent.click(await screen.findByText(/가슴 운동 · 1개 운동/));
-  expect(await screen.findByText('60')).toBeInTheDocument();
-  fireEvent.click(screen.getByText(/하체 운동 · 1개 운동/));
-  expect(await screen.findByText('80')).toBeInTheDocument();
-  await waitFor(() => expect(screen.queryByText('60')).not.toBeInTheDocument()); // 이전 세션 접힘
-});
-
-test('달력 세션 행에 총 볼륨이 kg으로 표시된다', async () => {
-  await seedLibrary();
-  const now = new Date();
-  const ts = new Date(now.getFullYear(), now.getMonth(), 15, 10).getTime();
-  const s: Session = {
-    id: crypto.randomUUID(), startedAt: ts, finishedAt: ts + 3600_000,
-    entries: [
-      { exerciseId: 'lib-bench-press', sets: [{ weight: 60, reps: 10, completedAt: ts + 1 }] },
-      { exerciseId: 'lib-squat', sets: [{ weight: 100, reps: 5, completedAt: ts + 1 }] },
-    ],
-  };
-  await db.sessions.add(s);
-  renderWithSummary();
-  fireEvent.click(await screen.findByRole('button', { name: `${now.getMonth() + 1}월 15일` }));
-  expect(await screen.findByText(/2개 운동 · 총 볼륨 1100kg/)).toBeInTheDocument(); // 600 + 500
+test('홈에 달력 카드가 없다 (기록 탭으로 이동)', async () => {
+  renderScreen();
+  await screen.findByText(/첫 운동을 시작해보세요|코치 추천/);
+  expect(screen.queryByText('달력')).not.toBeInTheDocument();
+  expect(screen.queryByLabelText('다음 달')).not.toBeInTheDocument();
 });

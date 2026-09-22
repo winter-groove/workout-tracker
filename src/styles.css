@@ -70,6 +70,11 @@ input, select { font: inherit; }
 .startcard .t { font-size: 17px; font-weight: 800; }
 .startcard .s { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
 .startcard .go { margin-top: 14px; background: var(--accent); color: var(--on-accent); border-radius: 12px; text-align: center; padding: 11px; font-size: 14px; font-weight: 800; width: 100%; }
+.startcard .go.ghost { background: var(--surface-2); color: var(--text-2); }
+.coach-pill { display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: 0.06em; color: var(--on-accent); background: var(--accent); border-radius: 999px; padding: 5px 10px; }
+.coach-num { width: 34px; height: 34px; border-radius: 10px; background: var(--surface-2); color: var(--accent); font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.tipcard { display: flex; gap: 12px; align-items: flex-start; }
 
 .weekrow { display: flex; justify-content: space-between; }
 .day { text-align: center; font-size: 11px; color: var(--muted); font-weight: 600; }

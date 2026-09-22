@@ -1,44 +1,45 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
-import type { Routine, Session } from '../types';
+import type { Routine } from '../types';
 import { listRoutines } from '../db/routines';
 import {
   startSession, getActiveSession, discardSession, listFinishedSessions, sessionTitle,
 } from '../db/sessions';
 import { listExercises } from '../db/exercises';
-import { sessionVolume } from '../db/progress';
-import { kgToDisplay } from '../db/weightUnit';
-import { getTodayRoutineId, setTodayRoutineId, clearTodayRoutine } from '../db/todayRoutine';
-import MonthCalendar from '../components/MonthCalendar';
-import SessionDetails from '../components/SessionDetails';
+import {
+  suggestRoutine, routineEstimate, lastTopWeight, weeklyGoalProgress, weekStreak, coachTip,
+} from '../db/coach';
+import { getWeeklyGoal } from '../db/settings';
+import { kgToDisplay, unitFor } from '../db/weightUnit';
+import { getTodayRoutineId, setTodayRoutineId } from '../db/todayRoutine';
 
-function sameDay(a: Date, b: Date): boolean {
-  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
-}
-
-export function pickNextRoutine(routines: Routine[], sessions: Session[]): Routine | undefined {
-  if (routines.length === 0) return undefined;
-  const lastUsed = new Map<string, number>();
-  for (const s of sessions) {
-    if (s.routineName && !lastUsed.has(s.routineName)) lastUsed.set(s.routineName, s.startedAt);
-  }
-  return [...routines].sort(
-    (a, b) => (lastUsed.get(a.name) ?? 0) - (lastUsed.get(b.name) ?? 0),
-  )[0];
-}
+const DAYS = ['일', '월', '화', '수', '목', '금', '토'];
 
 function fmtDate(ts: number): string {
   const d = new Date(ts);
   return `${d.getMonth() + 1}/${d.getDate()}`;
 }
 
+function GoalRing({ done, goal }: { done: number; goal: number }) {
+  const pct = goal > 0 ? Math.min(1, done / goal) : 0;
+  const C = 2 * Math.PI * 24;
+  return (
+    <svg width="58" height="58" viewBox="0 0 58 58" role="img" aria-label={`주간 목표 ${goal}회 중 ${done}회 완료`}>
+      <circle cx="29" cy="29" r="24" fill="none" stroke="var(--border)" strokeWidth="7" />
+      <circle
+        cx="29" cy="29" r="24" fill="none" stroke="var(--accent)" strokeWidth="7" strokeLinecap="round"
+        strokeDasharray={`${C * pct} ${C}`} transform="rotate(-90 29 29)"
+      />
+      <text x="29" y="34" textAnchor="middle" fontSize="15" fontWeight="800" fill="var(--text)">{done}/{goal}</text>
+    </svg>
+  );
+}
+
 export default function HomeScreen() {
   const navigate = useNavigate();
   const [, setTick] = useState(0);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [showBackdatePick, setShowBackdatePick] = useState(false);
-  const [openSessionId, setOpenSessionId] = useState('');
+  const [showRoutinePick, setShowRoutinePick] = useState(false);
   const bump = () => setTick((n) => n + 1);
   const routines = useLiveQuery(() => listRoutines(), []) ?? [];
   const sessions = useLiveQuery(() => listFinishedSessions(), []) ?? [];
@@ -46,50 +47,24 @@ export default function HomeScreen() {
   const allExercises = useLiveQuery(() => listExercises({ includeHidden: true }), []) ?? [];
   const exMap = new Map(allExercises.map((e) => [e.id, e]));
 
-  const today = new Date();
-  const workoutDays = new Set(
-    sessions.map((s) => new Date(s.startedAt)).map((d) => `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`),
-  );
-  const daySessions = selectedDate
-    ? sessions.filter((s) => sameDay(new Date(s.startedAt), selectedDate))
-    : [];
-  const next = pickNextRoutine(routines, sessions);
-  const todayId = getTodayRoutineId();
-  const todayRoutine = routines.find((r) => r.id === todayId);
-
-  function chooseToday(r: Routine) {
-    setTodayRoutineId(r.id);
-    bump();
-  }
-
-  function resetToday() {
-    clearTodayRoutine();
-    bump();
-  }
-
   useEffect(() => {
     const onVisible = () => bump();
     document.addEventListener('visibilitychange', onVisible);
     return () => document.removeEventListener('visibilitychange', onVisible);
   }, []);
 
-  async function begin(routine?: Routine) {
-    await startSession(routine);
-    navigate('/session');
-  }
+  const today = new Date();
+  const goal = getWeeklyGoal();
+  const suggested = suggestRoutine(routines, sessions);
+  const todayId = getTodayRoutineId();
+  const routine = routines.find((r) => r.id === todayId) ?? suggested;
+  const est = routine ? routineEstimate(routine, sessions) : {};
+  const weekly = weeklyGoalProgress(sessions, goal);
+  const streak = weekStreak(sessions, goal);
+  const tip = coachTip(sessions, exMap);
 
-  const canBackdate = selectedDate !== null && selectedDate.getTime() <= today.getTime();
-
-  async function beginBackdate(routine?: Routine) {
-    if (!selectedDate) return;
-    if (active) {
-      window.alert('진행 중인 운동을 먼저 완료하세요');
-      return;
-    }
-    const noon = new Date(
-      selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), 12,
-    ).getTime();
-    await startSession(routine, noon);
+  async function begin(r?: Routine) {
+    await startSession(r);
     navigate('/session');
   }
 
@@ -97,115 +72,104 @@ export default function HomeScreen() {
     if (active && window.confirm('진행 중이던 세션을 버릴까요? 기록한 세트는 완전히 삭제돼요.')) await discardSession(active.id);
   }
 
+  const heading = active ? '운동 진행 중이에요' : routine ? `오늘은 ${routine.name}!` : '오늘 뭐 할까요?';
+
   return (
     <div className="screen">
-      <h1 className="screen-title">
-        {today.getMonth() + 1}월 {today.getDate()}일, 오늘도 해볼까요? 💪
-      </h1>
+      <div>
+        <div className="hist-row d" style={{ border: 'none', padding: 0, fontSize: 13 }}>
+          {today.getMonth() + 1}월 {today.getDate()}일 {DAYS[today.getDay()]}요일
+        </div>
+        <h1 className="screen-title" style={{ paddingTop: 2 }}>{heading}</h1>
+      </div>
 
       {active ? (
         <div className="startcard">
           <div className="t">진행 중인 운동이 있어요</div>
           <div className="s">{sessionTitle(active, exMap)} · {fmtDate(active.startedAt)} 시작</div>
           <button className="go" onClick={() => navigate('/session')}>이어서 하기</button>
-          <button className="go" style={{ marginTop: 8, background: 'rgba(255,255,255,0.2)', color: '#fff' }} onClick={discardActive}>
-            버리기
-          </button>
+          <button className="go ghost" style={{ marginTop: 8 }} onClick={discardActive}>버리기</button>
         </div>
       ) : (
         <div className="startcard">
-          {routines.length === 0 ? (
+          {routine && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+              <span className="coach-pill">코치 추천</span>
+              <span className="s" style={{ marginTop: 0 }}>
+                {est.minutes || est.volumeKg !== undefined
+                  ? `지난 기록 기반${est.minutes ? ` · 약 ${est.minutes}` : ''}${est.volumeKg !== undefined ? ` · ${kgToDisplay(est.volumeKg, 'kg')}kg` : ''}`
+                  : '오늘의 루틴'}
+              </span>
+            </div>
+          )}
+          {routine ? (
             <>
-              <div className="t">첫 운동을 시작해보세요</div>
-              <div className="s">마이 탭에서 루틴을 만들면 여기에 떠요</div>
-              <button className="go" onClick={() => begin()}>빈 세션으로 시작</button>
-            </>
-          ) : todayRoutine ? (
-            <>
-              <div className="t">오늘은 {todayRoutine.name}</div>
-              <div className="s">{todayRoutine.items.length}개 운동</div>
-              <button className="go" onClick={() => begin(todayRoutine)}>운동 시작하기</button>
-              <button
-                className="go" style={{ marginTop: 8, background: 'rgba(255,255,255,0.2)', color: '#fff' }}
-                onClick={resetToday}
-              >
-                다시 선택
-              </button>
+              <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {routine.items.length === 0 && <div className="s" style={{ marginTop: 0 }}>루틴에 운동이 없어요 — 시작 후 자유롭게 추가하세요</div>}
+                {routine.items.map((it, i) => {
+                  const ex = exMap.get(it.exerciseId);
+                  const w = lastTopWeight(sessions, it.exerciseId);
+                  const u = unitFor(ex);
+                  return (
+                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                      <span className="coach-num">{i + 1}</span>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                        <span style={{ fontSize: 14.5, fontWeight: 800 }}>{ex?.name ?? '삭제된 운동'}</span>
+                        <span className="d" style={{ fontSize: 12 }}>
+                          {it.defaultSets}세트{w !== undefined ? ` × ${kgToDisplay(w, u)}${u}` : ''}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <button className="go" onClick={() => void begin(routine)}>운동 시작하기</button>
+              <button className="go ghost" style={{ marginTop: 8 }} onClick={() => setShowRoutinePick(!showRoutinePick)}>루틴 바꾸기</button>
+              {showRoutinePick && (
+                <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {routines.map((r) => (
+                    <button
+                      key={r.id} className="go ghost" style={{ marginTop: 0 }}
+                      onClick={() => { setTodayRoutineId(r.id); setShowRoutinePick(false); bump(); }}
+                    >
+                      {r.name}{suggested?.id === r.id ? ' ⭐ 추천' : ''}
+                    </button>
+                  ))}
+                  <button className="go ghost" style={{ marginTop: 0 }} onClick={() => void begin()}>빈 세션으로 시작</button>
+                </div>
+              )}
             </>
           ) : (
             <>
-              <div className="t">오늘 뭐 할까요?</div>
-              <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 6 }}>
-                {routines.map((r) => (
-                  <button key={r.id} className="go" onClick={() => chooseToday(r)}>
-                    {r.name}{next?.id === r.id ? ' ⭐ 추천' : ''}
-                  </button>
-                ))}
-                <button
-                  className="go" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff' }}
-                  onClick={() => begin()}
-                >
-                  빈 세션으로 시작
-                </button>
-              </div>
+              <div className="t" style={{ marginTop: 12 }}>첫 운동을 시작해보세요</div>
+              <div className="s">마이 탭에서 루틴을 만들면 여기에 떠요</div>
+              <button className="go" onClick={() => void begin()}>빈 세션으로 시작</button>
             </>
           )}
         </div>
       )}
 
-      <div className="card">
-        <div className="card-h">달력</div>
-        <MonthCalendar
-          workoutDays={workoutDays}
-          selectedDate={selectedDate}
-          onSelectDate={(d) => { setSelectedDate(d); setShowBackdatePick(false); setOpenSessionId(''); }}
-        />
-        {selectedDate && (
-          <div style={{ marginTop: 12 }}>
-            {daySessions.map((s) => (
-              <div key={s.id} className="hist-row" style={{ display: 'block' }}>
-                <div
-                  style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
-                  onClick={() => setOpenSessionId(openSessionId === s.id ? '' : s.id)}
-                >
-                  <span>{sessionTitle(s, exMap)} · {s.entries.length}개 운동 · 총 볼륨 {kgToDisplay(sessionVolume(s), 'kg')}kg {openSessionId === s.id ? '▴' : '▾'}</span>
-                  <button
-                    className="btn-sm btn btn-ghost"
-                    onClick={(ev) => { ev.stopPropagation(); navigate(`/summary/${s.id}`); }}
-                  >
-                    요약 ›
-                  </button>
-                </div>
-                {openSessionId === s.id && (
-                  <div style={{ marginTop: 8 }}>
-                    <SessionDetails key={s.id} session={s} exMap={exMap} />
-                  </div>
-                )}
-              </div>
-            ))}
-            {daySessions.length === 0 && <div className="empty">이 날은 운동 기록이 없어요</div>}
-            {canBackdate && (
-              <>
-                <button
-                  className="btn btn-ghost" style={{ marginTop: 10 }}
-                  onClick={() => setShowBackdatePick(!showBackdatePick)}
-                >
-                  ＋ 이 날짜에 기록 추가
-                </button>
-                {showBackdatePick && (
-                  <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 6 }}>
-                    {routines.map((r) => (
-                      <button key={r.id} className="btn btn-ghost" onClick={() => void beginBackdate(r)}>
-                        {r.name}
-                      </button>
-                    ))}
-                    <button className="btn btn-ghost" onClick={() => void beginBackdate()}>빈 세션</button>
-                  </div>
-                )}
-              </>
-            )}
+      <div className="grid-2">
+        <div className="card" style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <GoalRing done={weekly.done} goal={weekly.goal} />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <span style={{ fontSize: 13, fontWeight: 800 }}>주간 목표</span>
+            <span className="d" style={{ fontSize: 11.5 }}>
+              {weekly.done >= weekly.goal ? '이번 주 달성!' : `${weekly.goal - weekly.done}회 남음`}
+            </span>
           </div>
-        )}
+        </div>
+        <div className="card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 3 }}>
+          <span style={{ fontSize: 13, fontWeight: 800 }}>{streak}주 연속</span>
+          <span className="d" style={{ fontSize: 11.5, lineHeight: 1.5 }}>
+            {streak > 0 ? '목표를 채운 주가 이어지고 있어요' : '이번 주 목표부터 채워볼까요?'}
+          </span>
+        </div>
+      </div>
+
+      <div className="card tipcard">
+        <span className="coach-num" aria-hidden="true">💡</span>
+        <p style={{ margin: 0, fontSize: 13, lineHeight: 1.6, color: 'var(--text-2)' }}>{tip.text}</p>
       </div>
     </div>
   );
