@@ -63,7 +63,7 @@ export default function HomeScreen() {
   return (
     <div className="screen">
       <div>
-        <div className="hist-row d" style={{ border: 'none', padding: 0, fontSize: 13 }}>
+        <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-2)' }}>
           {today.getMonth() + 1}월 {today.getDate()}일 {DAYS[today.getDay()]}요일
         </div>
         <h1 className="screen-title" style={{ paddingTop: 2 }}>{heading}</h1>
