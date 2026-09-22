@@ -42,7 +42,8 @@ button { font: inherit; border: none; background: none; cursor: pointer; color: 
 input, select { font: inherit; }
 
 .app { max-width: 480px; margin: 0 auto; min-height: 100dvh; display: flex; flex-direction: column; }
-.screen { flex: 1; padding: 16px 16px 90px; display: flex; flex-direction: column; gap: 14px; }
+/* 설치형 PWA에서 상태바 밑으로 콘텐츠가 깔리지 않게 세이프에어리어만큼 내림 (브라우저에선 env()=0) */
+.screen { flex: 1; padding: max(16px, calc(env(safe-area-inset-top) + 8px)) 16px 90px; display: flex; flex-direction: column; gap: 14px; }
 .screen-title { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; padding-top: 8px; }
 
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
@@ -95,7 +96,7 @@ input, select { font: inherit; }
 
 .set-view { display: grid; grid-template-columns: 40px 1fr 1fr; gap: 6px; text-align: center; font-size: 13.5px; font-weight: 600; }
 
-.topnav { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; background: var(--surface); position: sticky; top: 0; z-index: 5; }
+.topnav { display: flex; justify-content: space-between; align-items: center; padding: max(10px, calc(env(safe-area-inset-top) + 6px)) 16px 10px; background: var(--surface); position: sticky; top: 0; z-index: 5; }
 .topnav .title { font-weight: 700; font-size: 14px; }
 .topnav .clock { color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; }
 .topnav button { font-size: 18px; color: var(--muted); padding: 4px; }
@@ -140,7 +141,7 @@ input, select { font: inherit; }
 .rest .bar > div { height: 100%; background: var(--accent); border-radius: 3px; transition: width 1s linear; }
 .rest .skip { font-size: 12px; font-weight: 700; color: var(--muted); }
 
-.overlay { position: fixed; inset: 0; background: var(--bg); z-index: 20; max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; overflow-y: auto; }
+.overlay { position: fixed; inset: 0; background: var(--bg); z-index: 20; max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; overflow-y: auto; padding-top: env(safe-area-inset-top); }
 .search { background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 11px 14px; font-size: 14px; width: 100%; color: var(--text); }
 .chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; }
 .chip { font-size: 12.5px; font-weight: 700; color: var(--text-2); background: var(--surface-2); border: 1px solid var(--border); border-radius: 999px; padding: 7px 14px; white-space: nowrap; }
