@@ -70,7 +70,7 @@ export default function ManageScreen() {
 
   return (
     <div className="screen">
-      <h1 className="screen-title">관리</h1>
+      <h1 className="screen-title">마이</h1>
 
       <div className="card">
         <div className="card-h">루틴 템플릿</div>

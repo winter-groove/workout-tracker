@@ -117,7 +117,7 @@ export default function HomeScreen() {
           {routines.length === 0 ? (
             <>
               <div className="t">첫 운동을 시작해보세요</div>
-              <div className="s">관리 탭에서 루틴을 만들면 여기에 떠요</div>
+              <div className="s">마이 탭에서 루틴을 만들면 여기에 떠요</div>
               <button className="go" onClick={() => begin()}>빈 세션으로 시작</button>
             </>
           ) : todayRoutine ? (
