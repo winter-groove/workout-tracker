@@ -42,9 +42,14 @@ button { font: inherit; border: none; background: none; cursor: pointer; color: 
 input, select { font: inherit; }
 
 .app { max-width: 480px; margin: 0 auto; min-height: 100dvh; display: flex; flex-direction: column; }
-/* 설치형 PWA: 상태바가 투명이면 iOS 블러 그라데이션이 세이프에어리어보다 아래까지 내려오므로 +24px 여유.
-   상태바가 불투명이면 env()=0이라 원래 여백(16px) 유지 — 메타 해석 차이와 무관하게 안전 */
 .screen { flex: 1; padding: max(16px, calc(env(safe-area-inset-top) + 24px)) 16px 90px; display: flex; flex-direction: column; gap: 14px; }
+/* 설치형(홈 화면 추가) 모드에서만 상단을 크게 내림 — iOS 26 상태바 블러 그라데이션이
+   세이프에어리어보다 훨씬 아래까지 내려오므로 넉넉히 확보. 브라우저에선 media가 안 걸려 그대로 */
+@media (display-mode: standalone) {
+  .screen { padding-top: calc(env(safe-area-inset-top, 47px) + 44px); }
+  .topnav { padding-top: calc(env(safe-area-inset-top, 47px) + 20px); }
+  .overlay { padding-top: calc(env(safe-area-inset-top, 47px) + 12px); }
+}
 .screen-title { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; padding-top: 8px; }
 
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
