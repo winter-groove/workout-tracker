@@ -19,6 +19,12 @@ export default function ExerciseHero({ exercise }: { exercise: Exercise }) {
   const reduced = typeof window.matchMedia === 'function'
     && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // 운동이 바뀌면 애니 상태 초기화 — 인스턴스 재사용 시 이전 운동의 죽은 프레임/위상 잔존 방지
+  useEffect(() => {
+    setStep(0);
+    setDead(new Set());
+  }, [exercise.id]);
+
   useEffect(() => {
     if (urls.length === 0 || reduced) return;
     const t = setInterval(() => {
