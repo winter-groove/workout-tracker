@@ -22,6 +22,14 @@ export default defineConfig({
               expiration: { maxEntries: 1000 },
             },
           },
+          {
+            urlPattern: /\/illustrations\/.+\.svg$/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'exercise-illustrations',
+              expiration: { maxEntries: 1000 },
+            },
+          },
         ],
       },
       manifest: {

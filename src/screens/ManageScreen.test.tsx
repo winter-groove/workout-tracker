@@ -107,3 +107,9 @@ test('마이 탭 프로필 헤더에 완료 운동 횟수가 보인다', async (
   expect(await screen.findByText('명품보쌈 멤버')).toBeInTheDocument();
   expect(await screen.findByText('운동 1회 완료')).toBeInTheDocument();
 });
+
+test('마이 탭 하단에 일러스트 출처가 표기된다', async () => {
+  render(<MemoryRouter><ManageScreen /></MemoryRouter>);
+  expect(await screen.findByText(/Workout Guide/)).toBeInTheDocument();
+  expect(screen.getByText(/CC BY-SA 4\.0/)).toBeInTheDocument();
+});
