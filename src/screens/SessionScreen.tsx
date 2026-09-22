@@ -162,7 +162,10 @@ export default function SessionScreen() {
   function completeFocused(entryIdx: number) {
     if (!session) return;
     const j = focusedSetIdx(entryIdx);
-    if (session.entries[entryIdx].sets[j].completedAt !== undefined) return;
+    if (session.entries[entryIdx].sets[j].completedAt !== undefined) {
+      setFocusSel(null); // 완료된 세트에 갇히지 않게 파생 포커스로 복귀
+      return;
+    }
     setFocusSel(null); // 완료 후엔 파생 포커스(다음 미완료)로
     toggleSet(entryIdx, j);
   }
@@ -339,11 +342,12 @@ export default function SessionScreen() {
                   return (
                     <div className="focus-zone" role="group" aria-label="현재 세트">
                       <div className="fz-label">세트 {labels[fj]}{fs.isDrop ? ' · 드랍' : ''}</div>
-                      <div className="fz-nums">
-                        <button className="fz-step" aria-label={`무게 ${FOCUS_STEP[u]} 내리기`} onClick={() => bumpFocused(entryIdx, 'weight', -FOCUS_STEP[u], u)}>−</button>
+                      <div className="fz-row">
+                        <button className="fz-step" aria-label={`무게 ${FOCUS_STEP[u]}${u} 내리기`} onClick={() => bumpFocused(entryIdx, 'weight', -FOCUS_STEP[u], u)}>−</button>
                         <span className="fz-num">{kgToDisplay(fs.weight, u)}<span className="fz-unit">{u}</span></span>
-                        <button className="fz-step" aria-label={`무게 ${FOCUS_STEP[u]} 올리기`} onClick={() => bumpFocused(entryIdx, 'weight', FOCUS_STEP[u], u)}>＋</button>
-                        <span className="fz-x">×</span>
+                        <button className="fz-step" aria-label={`무게 ${FOCUS_STEP[u]}${u} 올리기`} onClick={() => bumpFocused(entryIdx, 'weight', FOCUS_STEP[u], u)}>＋</button>
+                      </div>
+                      <div className="fz-row">
                         <button className="fz-step" aria-label="횟수 1 내리기" onClick={() => bumpFocused(entryIdx, 'reps', -1, u)}>−</button>
                         <span className="fz-num">{fs.reps}<span className="fz-unit">회</span></span>
                         <button className="fz-step" aria-label="횟수 1 올리기" onClick={() => bumpFocused(entryIdx, 'reps', 1, u)}>＋</button>

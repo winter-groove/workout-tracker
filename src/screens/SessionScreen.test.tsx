@@ -503,9 +503,9 @@ test('집중 존 스텝: 무게 +2.5/−2.5, 횟수 +1/−1이 저장된다', as
   await startSession(routine); // 기록 없음 → 0kg×10
   renderScreen();
   await screen.findByText('벤치프레스');
-  fireEvent.click(screen.getByRole('button', { name: '무게 2.5 올리기' }));
-  fireEvent.click(screen.getByRole('button', { name: '무게 2.5 올리기' }));
-  fireEvent.click(screen.getByRole('button', { name: '무게 2.5 내리기' }));
+  fireEvent.click(screen.getByRole('button', { name: '무게 2.5kg 올리기' }));
+  fireEvent.click(screen.getByRole('button', { name: '무게 2.5kg 올리기' }));
+  fireEvent.click(screen.getByRole('button', { name: '무게 2.5kg 내리기' }));
   fireEvent.click(screen.getByRole('button', { name: '횟수 1 올리기' }));
   await waitFor(async () => {
     const s = await getActiveSession();
@@ -513,8 +513,8 @@ test('집중 존 스텝: 무게 +2.5/−2.5, 횟수 +1/−1이 저장된다', as
     expect(s?.entries[0].sets[0].reps).toBe(11);
   });
   // 0 미만 금지
-  fireEvent.click(screen.getByRole('button', { name: '무게 2.5 내리기' }));
-  fireEvent.click(screen.getByRole('button', { name: '무게 2.5 내리기' }));
+  fireEvent.click(screen.getByRole('button', { name: '무게 2.5kg 내리기' }));
+  fireEvent.click(screen.getByRole('button', { name: '무게 2.5kg 내리기' }));
   await waitFor(async () => {
     expect((await getActiveSession())?.entries[0].sets[0].weight).toBe(0);
   });
@@ -567,4 +567,20 @@ test('모든 세트를 완료하면 집중 존 버튼이 완료 상태가 된다
   await screen.findByText('벤치프레스');
   fireEvent.click(screen.getByRole('button', { name: '세트 완료' }));
   expect(await screen.findByRole('button', { name: '모든 세트 완료' })).toBeDisabled();
+});
+
+test('완료된 세트를 선택한 채 세트 완료를 누르면 파생 포커스로 복귀한다', async () => {
+  await startSession(routine); // 2세트
+  renderScreen();
+  await screen.findByText('벤치프레스');
+  fireEvent.click(screen.getByRole('button', { name: '세트 완료' })); // 1 완료 → 포커스 2
+  await screen.findByText('건너뛰기');
+  fireEvent.click(screen.getByRole('button', { name: '세트 1 선택' })); // 완료된 1로 오버라이드
+  expect(screen.getByRole('group', { name: '현재 세트' })).toHaveTextContent('세트 1');
+  fireEvent.click(screen.getByRole('button', { name: '세트 완료' })); // 1탭: 복귀
+  expect(screen.getByRole('group', { name: '현재 세트' })).toHaveTextContent('세트 2');
+  fireEvent.click(screen.getByRole('button', { name: '세트 완료' })); // 2탭: 세트 2 완료
+  await waitFor(async () => {
+    expect((await getActiveSession())?.entries[0].sets[1].completedAt).toBeDefined();
+  });
 });
