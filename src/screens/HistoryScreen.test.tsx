@@ -1,10 +1,12 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { db } from '../db/db';
 import { seedLibrary } from '../db/exercises';
 import type { Session } from '../types';
 import * as progress from '../db/progress';
 import { setWeightUnit } from '../db/weightUnit';
+import { saveRoutine } from '../db/routines';
+import { startSession, getActiveSession } from '../db/sessions';
 import HistoryScreen from './HistoryScreen';
 
 beforeEach(async () => {
@@ -35,6 +37,7 @@ function renderScreen() {
     <MemoryRouter initialEntries={['/history']}>
       <Routes>
         <Route path="/history" element={<HistoryScreen />} />
+        <Route path="/session" element={<div>세션화면</div>} />
         <Route path="/summary/:sessionId" element={<div>요약화면</div>} />
         <Route path="/edit/:sessionId" element={<div>편집화면</div>} />
       </Routes>
@@ -227,4 +230,77 @@ test('펼침 상세에 운동 시간이 표시된다', async () => {
   renderScreen();
   fireEvent.click(await screen.findByText(/1개 운동/));
   expect(await screen.findByText('⏱ 운동 시간 1시간')).toBeInTheDocument();
+});
+
+test('기록 탭 달력에서 날짜를 누르면 그날 세션이 표시되고 요약 버튼으로 이동한다', async () => {
+  const now = new Date();
+  const ts = new Date(now.getFullYear(), now.getMonth(), 15, 10).getTime();
+  await db.sessions.add({
+    id: crypto.randomUUID(), startedAt: ts, finishedAt: ts + 3600_000, routineName: '가슴 날',
+    entries: [{ exerciseId: 'lib-bench-press', sets: [{ weight: 50, reps: 10, completedAt: ts + 1 }] }],
+  });
+  renderScreen();
+  fireEvent.click(await screen.findByRole('button', { name: `${now.getMonth() + 1}월 15일` }));
+  // 같은 세션이 달력 행(위)과 세션 목록 행(아래)에 모두 있으므로 findAll[0] = 달력 행
+  expect((await screen.findAllByText(/가슴 날 · 1개 운동/))[0]).toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', { name: '요약 ›' })); // 요약 › 버튼은 달력 행에만 있음
+  expect(await screen.findByText('요약화면')).toBeInTheDocument();
+});
+
+test('기록 탭 달력: 세션 행을 탭하면 세트 표가 펼쳐진다', async () => {
+  const now = new Date();
+  const ts = new Date(now.getFullYear(), now.getMonth(), 15, 10).getTime();
+  await db.sessions.add({
+    id: crypto.randomUUID(), startedAt: ts, finishedAt: ts + 3600_000,
+    entries: [{ exerciseId: 'lib-bench-press', sets: [{ weight: 60, reps: 10, completedAt: ts + 1 }] }],
+  });
+  renderScreen();
+  fireEvent.click(await screen.findByRole('button', { name: `${now.getMonth() + 1}월 15일` }));
+  fireEvent.click((await screen.findAllByText(/가슴 운동 · 1개 운동 · 총 볼륨/))[0]); // [0] = 달력 행
+  expect((await screen.findAllByText('무게(kg)')).length).toBeGreaterThan(0);
+});
+
+test('기록 탭: 진행 중 세션이 있으면 백데이트가 차단된다', async () => {
+  vi.spyOn(window, 'alert').mockImplementation(() => {});
+  await saveRoutine({ id: 'r1', name: '가슴운동', items: [] });
+  await startSession();
+  renderScreen();
+  const now = new Date();
+  fireEvent.click(await screen.findByRole('button', { name: `${now.getMonth() + 1}월 1일` }));
+  fireEvent.click(await screen.findByRole('button', { name: '＋ 이 날짜에 기록 추가' }));
+  fireEvent.click(await screen.findByRole('button', { name: '빈 세션' }));
+  await waitFor(() => {
+    expect(window.alert).toHaveBeenCalledWith('진행 중인 운동을 먼저 완료하세요');
+  });
+});
+
+test('기록 탭 달력: 기록 없는 날짜는 빈 문구가 보인다', async () => {
+  renderScreen();
+  const now = new Date();
+  fireEvent.click(await screen.findByRole('button', { name: `${now.getMonth() + 1}월 15일` }));
+  expect(await screen.findByText('이 날은 운동 기록이 없어요')).toBeInTheDocument();
+});
+
+test('기록 탭에서 과거 날짜 백데이트 세션을 시작한다', async () => {
+  await saveRoutine({ id: 'r1', name: '가슴운동', items: [] });
+  renderScreen();
+  const now = new Date();
+  fireEvent.click(await screen.findByRole('button', { name: `${now.getMonth() + 1}월 1일` }));
+  fireEvent.click(await screen.findByRole('button', { name: '＋ 이 날짜에 기록 추가' }));
+  // 루틴 목록은 useLiveQuery로 비동기 로드 — 동기 getByRole은 레이스
+  fireEvent.click(await screen.findByRole('button', { name: '가슴운동' }));
+  expect(await screen.findByText('세션화면')).toBeInTheDocument();
+  const s = await getActiveSession();
+  expect(new Date(s!.startedAt).getDate()).toBe(1);
+  expect(new Date(s!.startedAt).getHours()).toBe(12);
+});
+
+test('기록 탭: 미래 날짜에는 기록 추가 버튼이 없다', async () => {
+  renderScreen();
+  fireEvent.click(await screen.findByLabelText('다음 달'));
+  const now = new Date();
+  const next = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+  fireEvent.click(await screen.findByRole('button', { name: `${next.getMonth() + 1}월 15일` }));
+  expect(await screen.findByText('이 날은 운동 기록이 없어요')).toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: '＋ 이 날짜에 기록 추가' })).not.toBeInTheDocument();
 });
