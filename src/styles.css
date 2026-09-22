@@ -104,7 +104,7 @@ input, select { font: inherit; }
 .progressbar { height: 3px; background: var(--border); }
 .progressbar > div { height: 100%; background: var(--accent); transition: width 0.3s; }
 
-.hero-img { width: 100%; height: 170px; object-fit: cover; display: block; border-radius: 14px; background: var(--surface-2); }
+.hero-img { width: 100%; height: 170px; object-fit: contain; display: block; border-radius: 14px; background: var(--surface-2); padding: 10px; }
 .hero-icon { width: 100%; height: 120px; border-radius: 14px; background: linear-gradient(135deg, #1E2430, #232031); display: flex; align-items: center; justify-content: center; }
 .ex-name { font-size: 19px; font-weight: 800; letter-spacing: -0.3px; margin-top: 10px; }
 .tags { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
