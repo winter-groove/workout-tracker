@@ -20,24 +20,12 @@ test('주동근이 뒤쪽 근육이면 뒷모습 뷰를 렌더한다', () => {
   expect(container.querySelector('[data-view="back"]')).toBeInTheDocument();
 });
 
-test('모든 MUSCLE_REGIONS이 다각형 데이터에 포함된다', () => {
-  // MuscleMap component renders all 17 muscle regions from the polygon groups
-  // Verify this by checking that every region in MUSCLE_REGIONS can be highlighted
-  const regionSet = new Set(MUSCLE_REGIONS);
-
-  // Render with all muscles to verify coverage
-  const { container } = render(
-    <MuscleMap muscles={Array.from(MUSCLE_REGIONS)} bodyPart="가슴" />
-  );
-
-  // Count polygons with highlight classes (mm-primary or mm-secondary)
-  const highlightedPolygons = container.querySelectorAll('.mm-primary, .mm-secondary');
-
-  // Should have coverage for all regions: with 17 regions and multiple polygons per region,
-  // we expect significantly more than 17 highlighted polygons
-  // Minimum 17 (one polygon minimum per region) but typically more
-  expect(highlightedPolygons.length).toBeGreaterThanOrEqual(17);
-
-  // Verify all regions are in the set (this confirms the type coverage)
-  expect(regionSet.size).toBe(17);
+test('17개 영역 전부가 자기 뷰에서 주동근 하이라이트를 받는다', () => {
+  // 각 영역을 단독 주동근으로 렌더 — 그 영역이 앞/뒤 어느 폴리곤 그룹에도 없으면
+  // 뷰 필터에 걸러져 .mm-primary가 0개가 되므로, 폴리곤 누락 회귀를 잡는다.
+  for (const id of MUSCLE_REGIONS) {
+    const { container, unmount } = render(<MuscleMap muscles={[id]} bodyPart="가슴" />);
+    expect(container.querySelectorAll('.mm-primary').length, `${id}: 하이라이트 폴리곤 없음`).toBeGreaterThan(0);
+    unmount();
+  }
 });
