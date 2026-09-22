@@ -45,7 +45,7 @@ export default function ExerciseIcon({ iconKey, size = 30 }: { iconKey: IconKey;
   return (
     <svg
       viewBox="0 0 24 24" width={size} height={size}
-      stroke="#2563eb" fill="none" strokeWidth={2}
+      stroke="var(--accent)" fill="none" strokeWidth={2}
       strokeLinecap="round" strokeLinejoin="round"
     >
       {PATHS[iconKey]}

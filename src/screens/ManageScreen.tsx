@@ -128,7 +128,7 @@ export default function ManageScreen() {
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 8 }}>
               {shownExercises.map((ex) => (
-                <div key={ex.id} className="ex-row" style={{ boxShadow: 'none', border: '1px solid var(--gray-1)' }}>
+                <div key={ex.id} className="ex-row">
                   <ExerciseImage exercise={ex} />
                   <div>
                     <div className="nm">{ex.name}{ex.isHidden ? ' (숨김)' : ''}</div>
