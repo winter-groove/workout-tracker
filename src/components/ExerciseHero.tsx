@@ -62,7 +62,7 @@ export default function ExerciseHero({ exercise }: { exercise: Exercise }) {
           <ExerciseIcon iconKey={exercise.iconKey ?? 'barbell'} />
         </div>
       )}
-      <div style={{ width: 108, background: 'var(--surface-2)', borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 8 }}>
+      <div style={{ width: 108, background: 'var(--bg)', borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 8 }}>
         <MuscleMap muscles={exercise.muscles} bodyPart={exercise.bodyPart} />
       </div>
     </div>

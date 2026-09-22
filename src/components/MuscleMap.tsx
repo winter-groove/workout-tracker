@@ -212,10 +212,10 @@ const BASE_STYLE = { fill: 'var(--surface-2)', stroke: 'var(--border)', strokeWi
 
 export default function MuscleMap({ muscles, bodyPart }: { muscles?: string[]; bodyPart: BodyPart }) {
   const rawHighlights = (muscles ?? []).filter((m): m is MuscleRegion => VALID_REGIONS.has(m));
-  const highlights = rawHighlights.length > 0 ? rawHighlights : BODYPART_REGIONS[bodyPart];
+  const highlights = rawHighlights.length > 0 ? rawHighlights : (BODYPART_REGIONS[bodyPart] ?? []);
 
   const primary = highlights[0];
-  const view: 'front' | 'back' = FRONT_REGION_IDS.has(primary) ? 'front' : 'back';
+  const view: 'front' | 'back' = primary && FRONT_REGION_IDS.has(primary) ? 'front' : 'back';
   const groups = view === 'front' ? FRONT_GROUPS : BACK_GROUPS;
 
   // 렌더되는 뷰의 데이터에 실제로 존재하는 영역만 하이라이트 후보로 남긴다.
@@ -230,10 +230,12 @@ export default function MuscleMap({ muscles, bodyPart }: { muscles?: string[]; b
     return undefined;
   }
 
+  const ariaLabel = primary ? `자극 부위: ${REGION_KO[primary]}` : '자극 부위 정보 없음';
+
   return (
     <svg
       role="img"
-      aria-label={`자극 부위: ${REGION_KO[primary]}`}
+      aria-label={ariaLabel}
       data-view={view}
       width="100%"
       height="100%"
