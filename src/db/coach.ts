@@ -1,7 +1,7 @@
 import type { Exercise, Routine, Session } from '../types';
 import { maxWeight, sessionVolume } from './progress';
 import { sessionDuration } from './sessions';
-import { kgToDisplay, stepFor, unitFor } from './weightUnit';
+import { fmtWeightLabel, kgToDisplay, stepFor, unitFor } from './weightUnit';
 
 // 코치: 서버 없이 이미 로드된 기록에서 파생 계산하는 순수 함수 모음.
 // sessions는 listFinishedSessions() 결과(최신순·완료만)를 가정하되 방어 필터를 유지한다.
@@ -137,4 +137,79 @@ export function coachTip(
   }
 
   return { kind: 'steady', text: '꾸준히 잘하고 있어요. 오늘도 지난 기록보다 한 세트만 더!' };
+}
+
+export interface WeekVolume { weekStart: number; volumeKg: number }
+
+// 최근 N주 볼륨(원본 kg 합) — 오래된 주부터, 빈 주는 0
+export function weeklyVolumes(sessions: Session[], weeks: number, now: number = Date.now()): WeekVolume[] {
+  const first = weekStartMs(now) - (weeks - 1) * WEEK;
+  const out: WeekVolume[] = Array.from({ length: weeks }, (_, i) => ({ weekStart: first + i * WEEK, volumeKg: 0 }));
+  for (const s of sessions) {
+    if (s.finishedAt === undefined) continue;
+    const i = Math.round((weekStartMs(s.startedAt) - first) / WEEK);
+    if (i >= 0 && i < weeks) out[i].volumeKg += sessionVolume(s);
+  }
+  return out;
+}
+
+export interface Highlight { kind: 'pr' | 'up' | 'gap'; title: string; sub: string }
+
+// 기록 하이라이트: 무게 갱신 > 루틴 볼륨 상승 > 부위 공백, 최대 3개
+export function highlights(
+  sessions: Session[], exMap: Map<string, Exercise>, now: number = Date.now(),
+): Highlight[] {
+  const done = sessions.filter((s) => s.finishedAt !== undefined);
+  if (done.length === 0) return [];
+  const out: Highlight[] = [];
+
+  // pr: 최근 7일 세션에서 어떤 운동의 최고 무게가 그 이전 기록을 넘었으면
+  outer: for (const s of done) {
+    if (now - s.startedAt > 7 * DAY) break;
+    for (const e of s.entries) {
+      const ex = exMap.get(e.exerciseId);
+      if (!ex) continue;
+      const cur = maxWeight(e.sets);
+      const prev = lastTopWeight(done.filter((x) => x.startedAt < s.startedAt), e.exerciseId);
+      if (prev !== undefined && cur > prev) {
+        const d = new Date(s.startedAt);
+        out.push({
+          kind: 'pr',
+          title: `${ex.name} 무게 갱신`,
+          sub: `${d.getMonth() + 1}/${d.getDate()} · ${fmtWeightLabel(cur, unitFor(ex))}`,
+        });
+        break outer;
+      }
+    }
+  }
+
+  // up: coachTip과 동일 규칙 — 같은 루틴 직전 대비 볼륨 상승
+  const latest = done[0];
+  if (latest.routineName) {
+    const prev = done.find((s, i) => i > 0 && s.routineName === latest.routineName);
+    if (prev) {
+      const cur = sessionVolume(latest);
+      const before = sessionVolume(prev);
+      if (before > 0 && cur > before) {
+        out.push({
+          kind: 'up',
+          title: `${latest.routineName} 볼륨 상승`,
+          sub: `지난번보다 +${Math.round(((cur - before) / before) * 100)}%`,
+        });
+      }
+    }
+  }
+
+  // gap: 해본 적 있는 부위가 10일 이상 공백
+  for (const part of GAP_PARTS) {
+    const last = done.find((s) => s.entries.some((e) => exMap.get(e.exerciseId)?.bodyPart === part));
+    if (!last) continue;
+    const days = Math.floor((now - last.startedAt) / DAY);
+    if (days >= GAP_DAYS) {
+      out.push({ kind: 'gap', title: `${part} ${days}일 공백`, sub: '이번 주에 한 번 어때요?' });
+      break;
+    }
+  }
+
+  return out.slice(0, 3);
 }

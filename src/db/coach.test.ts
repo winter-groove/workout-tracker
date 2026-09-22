@@ -2,6 +2,7 @@ import type { Exercise, Routine, Session } from '../types';
 import {
   weekStartMs, weeklyGoalProgress, weekStreak,
   suggestRoutine, routineEstimate, lastTopWeight, coachTip,
+  weeklyVolumes, highlights,
 } from './coach';
 
 // 2026-09-22(화) 12:00 로컬 고정 기준
@@ -116,4 +117,42 @@ test('coachTip: 같은 루틴 볼륨 상승이면 up, 아니면 steady', () => {
     entries: [{ exerciseId: 'lib-bench-press', sets: [{ weight: 70, reps: 8, completedAt: 1 }] }],
   });
   expect(coachTip([single], exMap, NOW).kind).toBe('steady');
+});
+
+test('weeklyVolumes: 최근 N주를 오래된 주부터, 빈 주는 0으로 채운다', () => {
+  const sessions = [fin(0), fin(1), fin(15)]; // 이번 주 600×2, 지지난주 600
+  const v = weeklyVolumes(sessions, 3, NOW);
+  expect(v).toHaveLength(3);
+  expect(v[0].volumeKg).toBe(600);   // 지지난주
+  expect(v[1].volumeKg).toBe(0);     // 지난주 비어 있음
+  expect(v[2].volumeKg).toBe(1200);  // 이번 주
+  expect(v[2].weekStart).toBe(weekStartMs(NOW));
+  expect(weeklyVolumes([], 2, NOW).map((x) => x.volumeKg)).toEqual([0, 0]);
+});
+
+test('highlights: 무게 갱신(pr)이 최우선으로 잡힌다', () => {
+  const older = fin(10); // 벤치 60
+  const latest = fin(1, {
+    entries: [{ exerciseId: 'lib-bench-press', sets: [{ weight: 72.5, reps: 5, completedAt: 1 }] }],
+  });
+  const h = highlights([latest, older], exMap, NOW);
+  expect(h[0].kind).toBe('pr');
+  expect(h[0].title).toContain('벤치프레스');
+  expect(h[0].sub).toContain('72.5');
+});
+
+test('highlights: pr 없으면 up·gap 순서로, 기록 없으면 빈 배열', () => {
+  const prev = fin(8, { routineName: '가슴 날' });                    // 600
+  const legacyLeg = fin(12, {
+    entries: [{ exerciseId: 'lib-squat', sets: [{ weight: 100, reps: 5, completedAt: 1 }] }],
+  });
+  const latest = fin(1, {
+    routineName: '가슴 날',
+    entries: [{ exerciseId: 'lib-bench-press', sets: [{ weight: 60, reps: 12, completedAt: 1 }] }], // 720, 무게 동일 → pr 아님
+  });
+  const h = highlights([latest, prev, legacyLeg], exMap, NOW);
+  expect(h.map((x) => x.kind)).toEqual(['up', 'gap']);
+  expect(h[0].title).toContain('가슴 날');
+  expect(h[1].title).toContain('하체');
+  expect(highlights([], exMap, NOW)).toEqual([]);
 });
