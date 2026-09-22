@@ -30,6 +30,14 @@ test('리버스 펙덱 플라이가 존재한다', () => {
   expect(library.some((x) => x.name === '리버스 펙덱 플라이')).toBe(true);
 });
 
+test('illustration이 있으면 illustrations/<id>.svg 형식이다', () => {
+  for (const x of library) {
+    if ('illustration' in x && x.illustration) {
+      expect(x.illustration).toBe(`illustrations/${x.id}.svg`);
+    }
+  }
+});
+
 test('기존 55개의 id·libId·이름이 보존된다', () => {
   const byId = new Map(library.map((x) => [x.id, x]));
   expect(legacy.length).toBe(55);

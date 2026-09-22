@@ -1,5 +1,6 @@
 /// <reference types="vitest" />
 import { defineConfig } from 'vite';
+import { configDefaults } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
@@ -11,6 +12,7 @@ export default defineConfig({
       registerType: 'autoUpdate',
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+        globIgnores: ['illustrations/**'],
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         runtimeCaching: [
           {
@@ -18,6 +20,14 @@ export default defineConfig({
             handler: 'CacheFirst',
             options: {
               cacheName: 'exercise-images',
+              expiration: { maxEntries: 1000 },
+            },
+          },
+          {
+            urlPattern: /\/illustrations\/.+\.svg$/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'exercise-illustrations',
               expiration: { maxEntries: 1000 },
             },
           },
@@ -44,5 +54,7 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: './src/test/setup.ts',
+    // .tmp-workout-guide는 운동 일러스트 파이프라인용 임시 클론(커밋 안 됨) — 그 안의 테스트를 주워가지 않도록 제외
+    exclude: [...configDefaults.exclude, '.tmp-workout-guide/**'],
   },
 });

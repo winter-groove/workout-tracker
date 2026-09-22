@@ -3,7 +3,7 @@ import library from '../data/exercise-library.json';
 import type { BodyPart, Equipment, Exercise, IconKey } from '../types';
 import type { WeightUnit } from './weightUnit';
 
-export const LIBRARY_VERSION = 4;
+export const LIBRARY_VERSION = 5;
 
 export async function seedLibrary(): Promise<void> {
   const meta = await db.meta.get('libraryVersion');
@@ -19,6 +19,7 @@ export async function seedLibrary(): Promise<void> {
       imagePath: `exercises/${x.id}.webp`,
       isCustom: false,
       isHidden: false,
+      ...(x.illustration ? { illustration: x.illustration } : {}),
     }))
     .filter((r) => !byId.has(r.id));
   await db.exercises.bulkAdd(rows);
@@ -27,12 +28,16 @@ export async function seedLibrary(): Promise<void> {
   for (const x of library) {
     const cur = byId.get(`lib-${x.id}`);
     if (!cur || cur.isCustom) continue;
-    if (cur.name !== x.name || cur.bodyPart !== x.bodyPart || cur.equipment !== x.equipment) {
+    if (
+      cur.name !== x.name || cur.bodyPart !== x.bodyPart || cur.equipment !== x.equipment
+      || cur.illustration !== x.illustration
+    ) {
       updates.push({
         ...cur,
         name: x.name,
         bodyPart: x.bodyPart as BodyPart,
         equipment: x.equipment as Equipment,
+        illustration: x.illustration,
       });
     }
   }

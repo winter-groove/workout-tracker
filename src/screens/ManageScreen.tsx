@@ -259,6 +259,10 @@ export default function ManageScreen() {
         />
       </div>
 
+      <div className="d" style={{ fontSize: 11, textAlign: 'center', padding: '4px 0 8px' }}>
+        운동 일러스트: <a href="https://github.com/bryllim/workout-guide" target="_blank" rel="noreferrer" style={{ color: 'var(--muted)' }}>Workout Guide</a>(Bryl Lim) · Everkinetic — CC BY-SA 4.0
+      </div>
+
       {editing && <RoutineEditor routine={editing} onClose={() => setEditing(null)} />}
     </div>
   );
