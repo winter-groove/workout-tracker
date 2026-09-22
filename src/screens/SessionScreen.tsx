@@ -15,6 +15,9 @@ import ExerciseImage from '../components/ExerciseImage';
 import ExercisePicker, { dominantBodyPart } from '../components/ExercisePicker';
 import RestTimer from '../components/RestTimer';
 
+// 집중 존 무게 스텝(플레이트 단위) — 입력칸 미세 스텝(stepFor)과 별개
+const FOCUS_STEP: Record<WeightUnit, number> = { kg: 2.5, lb: 5 };
+
 function fmtElapsed(startedAt: number, now: number): string {
   const sec = Math.max(0, Math.floor((now - startedAt) / 1000));
   const mm = String(Math.floor(sec / 60)).padStart(2, '0');
@@ -57,6 +60,7 @@ export default function SessionScreen() {
   const [restUntil, setRestUntil] = useState(0);
   const [restTotal, setRestTotal] = useState(90);
   const [showPicker, setShowPicker] = useState(false);
+  const [focusSel, setFocusSel] = useState<{ entryIdx: number; setIdx: number } | null>(null);
   const [records, setRecords] = useState<Map<string, ExerciseRecord>>(new Map());
   const [now, setNow] = useState(Date.now());
   const exercises = useLiveQuery(() => listExercises({ includeHidden: true }), []) ?? [];
@@ -134,6 +138,35 @@ export default function SessionScreen() {
     }
   }
 
+  // 카드의 포커스 세트: 사용자가 고른 세트 > 첫 미완료 세트 > 마지막 세트
+  function focusedSetIdx(entryIdx: number): number {
+    if (!session) return 0;
+    const sets = session.entries[entryIdx].sets;
+    if (focusSel && focusSel.entryIdx === entryIdx && focusSel.setIdx < sets.length) return focusSel.setIdx;
+    const firstOpen = sets.findIndex((s) => s.completedAt === undefined);
+    return firstOpen === -1 ? sets.length - 1 : firstOpen;
+  }
+
+  function bumpFocused(entryIdx: number, field: 'weight' | 'reps', deltaDisplay: number, u: WeightUnit) {
+    if (!session) return;
+    const j = focusedSetIdx(entryIdx);
+    const s = session.entries[entryIdx].sets[j];
+    if (field === 'weight') {
+      const next = Math.max(0, kgToDisplay(s.weight, u) + deltaDisplay);
+      patchSet(entryIdx, j, { weight: displayToKg(next, u) });
+    } else {
+      patchSet(entryIdx, j, { reps: Math.max(0, s.reps + deltaDisplay) });
+    }
+  }
+
+  function completeFocused(entryIdx: number) {
+    if (!session) return;
+    const j = focusedSetIdx(entryIdx);
+    if (session.entries[entryIdx].sets[j].completedAt !== undefined) return;
+    setFocusSel(null); // 완료 후엔 파생 포커스(다음 미완료)로
+    toggleSet(entryIdx, j);
+  }
+
   function addSet(entryIdx: number) {
     if (!session) return;
     const seed = seedForNewSet(session.entries[entryIdx].sets);
@@ -169,6 +202,7 @@ export default function SessionScreen() {
       i !== entryIdx ? e : { ...e, sets: e.sets.slice(0, -1) },
     );
     void update({ ...session, entries });
+    setFocusSel(null);
   }
 
   function removeEntry(entryIdx: number) {
@@ -189,6 +223,7 @@ export default function SessionScreen() {
     const nextGroups = groupsOf(entries);
     const fallback = nextGroups.find((g) => g.includes(Math.min(idx, entries.length - 1)));
     setIdx(fallback ? fallback[0] : 0);
+    setFocusSel(null);
   }
 
   function pairWithNext() {
@@ -217,6 +252,7 @@ export default function SessionScreen() {
     const next = { ...session, entries: [...session.entries, newEntry] };
     await update(next);
     setIdx(next.entries.length - 1);
+    setFocusSel(null);
   }
 
   async function finish() {
@@ -296,12 +332,45 @@ export default function SessionScreen() {
                     📈 {overloadText}{isPRNow ? ' · 🏆 PR!' : ''}
                   </div>
                 )}
+                {e.sets.length > 0 && (() => {
+                  const fj = focusedSetIdx(entryIdx);
+                  const fs = e.sets[fj];
+                  const allDone = e.sets.every((s) => s.completedAt !== undefined);
+                  return (
+                    <div className="focus-zone" role="group" aria-label="현재 세트">
+                      <div className="fz-label">세트 {labels[fj]}{fs.isDrop ? ' · 드랍' : ''}</div>
+                      <div className="fz-nums">
+                        <button className="fz-step" aria-label={`무게 ${FOCUS_STEP[u]} 내리기`} onClick={() => bumpFocused(entryIdx, 'weight', -FOCUS_STEP[u], u)}>−</button>
+                        <span className="fz-num">{kgToDisplay(fs.weight, u)}<span className="fz-unit">{u}</span></span>
+                        <button className="fz-step" aria-label={`무게 ${FOCUS_STEP[u]} 올리기`} onClick={() => bumpFocused(entryIdx, 'weight', FOCUS_STEP[u], u)}>＋</button>
+                        <span className="fz-x">×</span>
+                        <button className="fz-step" aria-label="횟수 1 내리기" onClick={() => bumpFocused(entryIdx, 'reps', -1, u)}>−</button>
+                        <span className="fz-num">{fs.reps}<span className="fz-unit">회</span></span>
+                        <button className="fz-step" aria-label="횟수 1 올리기" onClick={() => bumpFocused(entryIdx, 'reps', 1, u)}>＋</button>
+                      </div>
+                      <div className="fz-dots" role="img" aria-label={`세트 진행 ${e.sets.filter((s) => s.completedAt !== undefined).length} / ${e.sets.length}`}>
+                        {e.sets.map((s, j) => (
+                          <span key={j} className={`fd${s.completedAt !== undefined ? ' done' : ''}${j === fj ? ' cur' : ''}${s.isDrop ? ' drop' : ''}`} />
+                        ))}
+                      </div>
+                      <button className="fz-go" disabled={allDone} onClick={() => completeFocused(entryIdx)}>
+                        {allDone ? '모든 세트 완료' : '세트 완료'}
+                      </button>
+                    </div>
+                  );
+                })()}
                 <div className="set-head" style={{ marginTop: 10 }}>
                   <span>세트</span><span>무게({u})</span><span>횟수</span><span>완료</span>
                 </div>
                 {e.sets.map((s, j) => (
                   <div key={j} className={`set-row ${s.completedAt ? 'done' : ''}`} style={{ marginTop: 8 }}>
-                    <span className="n">{labels[j]}</span>
+                    <button
+                      className={`n-btn${focusedSetIdx(entryIdx) === j ? ' on' : ''}`}
+                      aria-label={`세트 ${labels[j]} 선택`}
+                      onClick={() => setFocusSel({ entryIdx, setIdx: j })}
+                    >
+                      {labels[j]}
+                    </button>
                     <input
                       type="number" inputMode="decimal" step={stepFor(u)} min="0"
                       aria-label={`세트 ${labels[j]} 무게`}

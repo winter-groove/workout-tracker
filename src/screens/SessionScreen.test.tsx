@@ -483,3 +483,88 @@ test('드랍 뒤에 세트를 추가하면 드랍 무게가 아니라 마지막 
     expect(cur?.entries[0].sets[2].isDrop).toBeUndefined();
   });
 });
+
+test('집중 존: 첫 미완료 세트가 큰 숫자로 보인다', async () => {
+  const prev = await startSession(routine);
+  prev.entries[0].sets = [{ weight: 60, reps: 10, completedAt: Date.now() }];
+  const { finishSession } = await import('../db/sessions');
+  await finishSession(prev);
+
+  await startSession(routine); // 프리필 60kg×10
+  renderScreen();
+  await screen.findByText('벤치프레스');
+  const zone = await screen.findByRole('group', { name: '현재 세트' });
+  expect(zone).toHaveTextContent('세트 1');
+  expect(zone).toHaveTextContent('60');
+  expect(zone).toHaveTextContent('10회');
+});
+
+test('집중 존 스텝: 무게 +2.5/−2.5, 횟수 +1/−1이 저장된다', async () => {
+  await startSession(routine); // 기록 없음 → 0kg×10
+  renderScreen();
+  await screen.findByText('벤치프레스');
+  fireEvent.click(screen.getByRole('button', { name: '무게 2.5 올리기' }));
+  fireEvent.click(screen.getByRole('button', { name: '무게 2.5 올리기' }));
+  fireEvent.click(screen.getByRole('button', { name: '무게 2.5 내리기' }));
+  fireEvent.click(screen.getByRole('button', { name: '횟수 1 올리기' }));
+  await waitFor(async () => {
+    const s = await getActiveSession();
+    expect(s?.entries[0].sets[0].weight).toBe(2.5);
+    expect(s?.entries[0].sets[0].reps).toBe(11);
+  });
+  // 0 미만 금지
+  fireEvent.click(screen.getByRole('button', { name: '무게 2.5 내리기' }));
+  fireEvent.click(screen.getByRole('button', { name: '무게 2.5 내리기' }));
+  await waitFor(async () => {
+    expect((await getActiveSession())?.entries[0].sets[0].weight).toBe(0);
+  });
+});
+
+test('집중 존 세트 완료 버튼: 완료 처리 + 휴식 + 다음 세트로 포커스 이동', async () => {
+  await startSession(routine); // 벤치프레스 2세트
+  renderScreen();
+  await screen.findByText('벤치프레스');
+  fireEvent.click(screen.getByRole('button', { name: '세트 완료' }));
+  await waitFor(async () => {
+    expect((await getActiveSession())?.entries[0].sets[0].completedAt).toBeDefined();
+  });
+  expect(screen.getByText('건너뛰기')).toBeInTheDocument(); // 휴식 시작
+  expect(screen.getByRole('group', { name: '현재 세트' })).toHaveTextContent('세트 2'); // 포커스 이동
+});
+
+test('집중 존: 드랍이 뒤따르는 세트를 큰 버튼으로 완료하면 휴식이 뜨지 않는다', async () => {
+  const s = await startSession(routine);
+  s.entries[0].sets = [
+    { weight: 70, reps: 8 },
+    { weight: 56, reps: 8, isDrop: true },
+  ];
+  await saveSession(s);
+  renderScreen();
+  await screen.findByText('벤치프레스');
+  fireEvent.click(screen.getByRole('button', { name: '세트 완료' }));
+  await waitFor(async () => {
+    expect((await getActiveSession())?.entries[0].sets[0].completedAt).toBeDefined();
+  });
+  expect(screen.queryByText('건너뛰기')).not.toBeInTheDocument(); // 억제 유지
+  expect(screen.getByRole('group', { name: '현재 세트' })).toHaveTextContent('세트 1-1'); // 드랍으로 포커스
+});
+
+test('세트 번호를 탭하면 그 세트로 포커스가 옮겨진다', async () => {
+  await startSession(routine); // 2세트
+  renderScreen();
+  await screen.findByText('벤치프레스');
+  fireEvent.click(screen.getByRole('button', { name: '세트 2 선택' }));
+  expect(screen.getByRole('group', { name: '현재 세트' })).toHaveTextContent('세트 2');
+});
+
+test('모든 세트를 완료하면 집중 존 버튼이 완료 상태가 된다', async () => {
+  const single: Routine = {
+    id: 'rz', name: '한 세트',
+    items: [{ exerciseId: 'lib-bench-press', defaultSets: 1 }],
+  };
+  await startSession(single);
+  renderScreen();
+  await screen.findByText('벤치프레스');
+  fireEvent.click(screen.getByRole('button', { name: '세트 완료' }));
+  expect(await screen.findByRole('button', { name: '모든 세트 완료' })).toBeDisabled();
+});
