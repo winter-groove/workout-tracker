@@ -53,6 +53,15 @@ test('suggestRoutine은 가장 오래 안 쓴 루틴을 고른다', () => {
   expect(suggestRoutine([], sessions)).toBeUndefined();
 });
 
+test('suggestRoutine은 진행 중 세션을 무시한다', () => {
+  const r1: Routine = { id: 'r1', name: '가슴 날', items: [] };
+  const r2: Routine = { id: 'r2', name: '등 날', items: [] };
+  const finishedOld = fin(10, { routineName: '가슴 날' });
+  const unfinishedRecent: Session = { ...fin(0, { routineName: '등 날' }), finishedAt: undefined };
+  // 가드가 있으면: 등 날은 미사용 취급 → 등 날 추천. 가드가 없으면 등 날이 최근 사용으로 집계돼 가슴 날이 나온다.
+  expect(suggestRoutine([r1, r2], [unfinishedRecent, finishedOld])?.id).toBe('r2');
+});
+
 test('routineEstimate는 같은 이름 마지막 세션의 시간·볼륨을 준다', () => {
   const r: Routine = { id: 'r1', name: '가슴 날', items: [] };
   const ref = fin(3, { routineName: '가슴 날' }); // 60×10=600kg, 1시간

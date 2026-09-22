@@ -52,6 +52,7 @@ export function suggestRoutine(routines: Routine[], sessions: Session[]): Routin
   if (routines.length === 0) return undefined;
   const lastUsed = new Map<string, number>();
   for (const s of sessions) {
+    if (s.finishedAt === undefined) continue;
     if (s.routineName && !lastUsed.has(s.routineName)) lastUsed.set(s.routineName, s.startedAt);
   }
   return [...routines].sort(
