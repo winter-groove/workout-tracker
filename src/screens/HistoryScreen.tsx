@@ -8,9 +8,12 @@ import {
 import { listExercises } from '../db/exercises';
 import { listRoutines } from '../db/routines';
 import { annotateHistory, fmtVolumeDelta, fmtWeightDelta, sessionVolume } from '../db/progress';
+import { weeklyVolumes, highlights, weeklyGoalProgress, weekStreak } from '../db/coach';
+import { getWeeklyGoal } from '../db/settings';
 import { kgToDisplay, unitFor, fmtWeightLabel, type WeightUnit } from '../db/weightUnit';
 import MonthCalendar from '../components/MonthCalendar';
 import SessionDetails from '../components/SessionDetails';
+import GoalRing from '../components/GoalRing';
 
 function fmtDate(ts: number): string {
   const d = new Date(ts);
@@ -43,6 +46,13 @@ export default function HistoryScreen() {
   const annotations = history ? annotateHistory(history.map((h) => h.sets)) : [];
   const filterUnit = unitFor(exMap.get(filterId));
 
+  const goal = getWeeklyGoal();
+  const weekly = weeklyGoalProgress(sessions, goal);
+  const streak = weekStreak(sessions, goal);
+  const trend = weeklyVolumes(sessions, 8);
+  const hasTrend = trend.some((w) => w.volumeKg > 0);
+  const marks = highlights(sessions, exMap);
+
   const today = new Date();
   const workoutDays = new Set(
     sessions.map((s) => new Date(s.startedAt)).map((d) => `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`),
@@ -72,6 +82,59 @@ export default function HistoryScreen() {
   return (
     <div className="screen">
       <h1 className="screen-title">기록</h1>
+
+      <div className="grid-2">
+        <div className="card" style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <GoalRing done={weekly.done} goal={weekly.goal} />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <span style={{ fontSize: 13, fontWeight: 800 }}>주간 목표</span>
+            <span className="d" style={{ fontSize: 11.5 }}>
+              {weekly.done >= weekly.goal ? '이번 주 달성!' : `${weekly.goal - weekly.done}회 남음`}
+            </span>
+          </div>
+        </div>
+        <div className="card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 3 }}>
+          <span style={{ fontSize: 13, fontWeight: 800 }}>{streak}주 연속</span>
+          <span className="d" style={{ fontSize: 11.5, lineHeight: 1.5 }}>주간 목표 달성 스트릭</span>
+        </div>
+      </div>
+
+      <div className="card">
+        <div className="card-h">볼륨 추세 · 최근 8주</div>
+        {hasTrend ? (() => {
+          const W = 314;
+          const H = 96;
+          const max = Math.max(...trend.map((w) => w.volumeKg));
+          const pts = trend
+            .map((w, i) => `${10 + (i * (W - 20)) / (trend.length - 1)},${H - 12 - (w.volumeKg / max) * (H - 34)}`)
+            .join(' ');
+          const [lx, ly] = pts.split(' ').slice(-1)[0].split(',').map(Number);
+          return (
+            <svg
+              width="100%" viewBox={`0 0 ${W} ${H}`} role="img"
+              aria-label={`주간 볼륨 추세, 이번 주 ${kgToDisplay(trend[trend.length - 1].volumeKg, 'kg')}kg`}
+            >
+              <line x1="0" y1={H - 12} x2={W} y2={H - 12} stroke="var(--border)" strokeWidth="1" />
+              <polyline points={pts} fill="none" stroke="var(--accent)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+              <circle cx={lx} cy={ly} r="4.5" fill="var(--accent)" />
+            </svg>
+          );
+        })() : (
+          <div className="trend-empty">기록이 쌓이면 추세가 보여요</div>
+        )}
+      </div>
+
+      {marks.length > 0 && (
+        <div className="card">
+          <div className="card-h">하이라이트</div>
+          {marks.map((m, i) => (
+            <div key={i} className="hist-row">
+              <span>{m.title}</span>
+              <span className="d">{m.sub}</span>
+            </div>
+          ))}
+        </div>
+      )}
 
       <div className="card">
         <div className="card-h">달력</div>

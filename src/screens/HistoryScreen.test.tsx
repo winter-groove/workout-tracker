@@ -310,3 +310,22 @@ test('기록 탭: 미래 날짜에는 기록 추가 버튼이 없다', async () 
   expect(await screen.findByText('이 날은 운동 기록이 없어요')).toBeInTheDocument();
   expect(screen.queryByRole('button', { name: '＋ 이 날짜에 기록 추가' })).not.toBeInTheDocument();
 });
+
+test('기록 탭 상단에 주간 링·스트릭·볼륨 추세가 보인다', async () => {
+  await addFinishedSession(Date.now() - 3600_000, 'lib-bench-press', [{ weight: 60, reps: 10 }]);
+  renderScreen();
+  expect(await screen.findByRole('img', { name: '주간 목표 3회 중 1회 완료' })).toBeInTheDocument();
+  expect(screen.getByRole('img', { name: /주간 볼륨 추세/ })).toBeInTheDocument();
+});
+
+test('기록이 없으면 추세 자리에 빈 문구가 보인다', async () => {
+  renderScreen();
+  expect(await screen.findByText('기록이 쌓이면 추세가 보여요')).toBeInTheDocument();
+});
+
+test('하이라이트: 무게 갱신이 표시된다', async () => {
+  await addFinishedSession(Date.now() - 10 * 86_400_000, 'lib-bench-press', [{ weight: 60, reps: 10 }]);
+  await addFinishedSession(Date.now() - 3600_000, 'lib-bench-press', [{ weight: 72.5, reps: 5 }]);
+  renderScreen();
+  expect(await screen.findByText('벤치프레스 무게 갱신')).toBeInTheDocument();
+});
