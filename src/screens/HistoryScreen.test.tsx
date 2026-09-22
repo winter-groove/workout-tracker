@@ -265,6 +265,10 @@ test('기록 탭: 진행 중 세션이 있으면 백데이트가 차단된다', 
   await saveRoutine({ id: 'r1', name: '가슴운동', items: [] });
   await startSession();
   renderScreen();
+  // active 세션의 useLiveQuery 반영을 기다림 — 반영 전에 누르면 차단 대신 세션을 이어받아 네비게이션됨(레이스)
+  await waitFor(async () => {
+    expect(await getActiveSession()).toBeDefined();
+  });
   const now = new Date();
   fireEvent.click(await screen.findByRole('button', { name: `${now.getMonth() + 1}월 1일` }));
   fireEvent.click(await screen.findByRole('button', { name: '＋ 이 날짜에 기록 추가' }));
@@ -272,6 +276,8 @@ test('기록 탭: 진행 중 세션이 있으면 백데이트가 차단된다', 
   await waitFor(() => {
     expect(window.alert).toHaveBeenCalledWith('진행 중인 운동을 먼저 완료하세요');
   });
+  // 차단이 제대로 됐다면 /session으로 네비게이션되지 않았어야 함 — 레이스가 새면 여기서 드러남
+  expect(screen.queryByText('세션화면')).not.toBeInTheDocument();
 });
 
 test('기록 탭 달력: 기록 없는 날짜는 빈 문구가 보인다', async () => {
