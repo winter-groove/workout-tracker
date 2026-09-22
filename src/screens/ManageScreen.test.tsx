@@ -90,3 +90,10 @@ test('설정에서 무게 단위를 lb로 바꿀 수 있다', async () => {
     localStorage.removeItem('wt-weight-unit');
   }
 });
+
+test('주간 목표를 바꾸면 저장된다', async () => {
+  render(<MemoryRouter><ManageScreen /></MemoryRouter>);
+  const input = await screen.findByLabelText('주간 목표 (회)');
+  fireEvent.change(input, { target: { value: '5' } });
+  expect(localStorage.getItem('wt-weekly-goal')).toBe('5');
+});

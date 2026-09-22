@@ -5,7 +5,7 @@ import type { BodyPart, Routine } from '../types';
 import { listExercises, setExerciseHidden, deleteCustomExercise, setExerciseFavorite } from '../db/exercises';
 import { listRoutines, deleteRoutine, newRoutine } from '../db/routines';
 import { exportData, importData } from '../db/backup';
-import { getRestSeconds, setRestSeconds } from '../db/settings';
+import { getRestSeconds, setRestSeconds, getWeeklyGoal, setWeeklyGoal } from '../db/settings';
 import { getWeightUnit, setWeightUnit } from '../db/weightUnit';
 import type { WeightUnit } from '../db/weightUnit';
 import ExerciseImage from '../components/ExerciseImage';
@@ -22,6 +22,7 @@ export default function ManageScreen() {
   const [visibleCount, setVisibleCount] = useState(30);
   const [rest, setRest] = useState(getRestSeconds());
   const [unit, setUnit] = useState<WeightUnit>(getWeightUnit());
+  const [goal, setGoal] = useState(getWeeklyGoal());
   const fileRef = useRef<HTMLInputElement>(null);
   const routines = useLiveQuery(() => listRoutines(), []) ?? [];
   const exercises = useLiveQuery(() => listExercises({ includeHidden: true }), []) ?? [];
@@ -209,6 +210,18 @@ export default function ManageScreen() {
             <option value="kg">kg</option>
             <option value="lb">lb</option>
           </select>
+        </div>
+        <div className="field">
+          <label htmlFor="weekly-goal">주간 목표 (회)</label>
+          <input
+            id="weekly-goal" type="number" inputMode="numeric" min="1" max="14"
+            value={goal}
+            onChange={(e) => {
+              const n = Math.min(14, Math.max(1, Number(e.target.value) || 3));
+              setGoal(n);
+              setWeeklyGoal(n);
+            }}
+          />
         </div>
       </div>
 
