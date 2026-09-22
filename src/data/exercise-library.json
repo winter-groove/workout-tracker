@@ -36,14 +36,16 @@
     "libId": "Dumbbell_Flyes",
     "name": "덤벨 플라이",
     "bodyPart": "가슴",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/dumbbell-fly.svg"
   },
   {
     "id": "cable-crossover",
     "libId": "Cable_Crossover",
     "name": "케이블 크로스오버",
     "bodyPart": "가슴",
-    "equipment": "케이블"
+    "equipment": "케이블",
+    "illustration": "illustrations/cable-crossover.svg"
   },
   {
     "id": "pec-deck",
@@ -57,14 +59,16 @@
     "libId": "Dips_-_Chest_Version",
     "name": "딥스",
     "bodyPart": "가슴",
-    "equipment": "맨몸"
+    "equipment": "맨몸",
+    "illustration": "illustrations/chest-dips.svg"
   },
   {
     "id": "pushup",
     "libId": "Pushups",
     "name": "푸시업",
     "bodyPart": "가슴",
-    "equipment": "맨몸"
+    "equipment": "맨몸",
+    "illustration": "illustrations/pushup.svg"
   },
   {
     "id": "lat-pulldown",
@@ -79,14 +83,16 @@
     "libId": "Bent_Over_Barbell_Row",
     "name": "바벨 로우",
     "bodyPart": "등",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/barbell-row.svg"
   },
   {
     "id": "seated-cable-row",
     "libId": "Seated_Cable_Rows",
     "name": "시티드 케이블 로우",
     "bodyPart": "등",
-    "equipment": "케이블"
+    "equipment": "케이블",
+    "illustration": "illustrations/seated-cable-row.svg"
   },
   {
     "id": "one-arm-dumbbell-row",
@@ -101,7 +107,8 @@
     "libId": "Pullups",
     "name": "풀업",
     "bodyPart": "등",
-    "equipment": "맨몸"
+    "equipment": "맨몸",
+    "illustration": "illustrations/pullup.svg"
   },
   {
     "id": "chinup",
@@ -116,7 +123,8 @@
     "libId": "Barbell_Deadlift",
     "name": "데드리프트",
     "bodyPart": "등",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/deadlift.svg"
   },
   {
     "id": "straight-arm-pulldown",
@@ -131,14 +139,16 @@
     "libId": "Barbell_Squat",
     "name": "스쿼트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/squat.svg"
   },
   {
     "id": "front-squat",
     "libId": "Front_Barbell_Squat",
     "name": "프론트 스쿼트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/front-squat.svg"
   },
   {
     "id": "goblet-squat",
@@ -161,14 +171,16 @@
     "libId": "Leg_Extensions",
     "name": "레그 익스텐션",
     "bodyPart": "하체",
-    "equipment": "머신"
+    "equipment": "머신",
+    "illustration": "illustrations/leg-extension.svg"
   },
   {
     "id": "lying-leg-curl",
     "libId": "Lying_Leg_Curls",
     "name": "라잉 레그컬",
     "bodyPart": "하체",
-    "equipment": "머신"
+    "equipment": "머신",
+    "illustration": "illustrations/lying-leg-curl.svg"
   },
   {
     "id": "seated-leg-curl",
@@ -190,7 +202,8 @@
     "libId": "Dumbbell_Lunges",
     "name": "덤벨 런지",
     "bodyPart": "하체",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/dumbbell-lunge.svg"
   },
   {
     "id": "romanian-deadlift",
@@ -205,7 +218,8 @@
     "libId": "Standing_Calf_Raises",
     "name": "스탠딩 카프레이즈",
     "bodyPart": "하체",
-    "equipment": "머신"
+    "equipment": "머신",
+    "illustration": "illustrations/standing-calf-raise.svg"
   },
   {
     "id": "hip-thrust",
@@ -220,14 +234,16 @@
     "libId": "Barbell_Shoulder_Press",
     "name": "오버헤드 프레스",
     "bodyPart": "어깨",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/overhead-press.svg"
   },
   {
     "id": "dumbbell-shoulder-press",
     "libId": "Dumbbell_Shoulder_Press",
     "name": "덤벨 숄더프레스",
     "bodyPart": "어깨",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/dumbbell-shoulder-press.svg"
   },
   {
     "id": "arnold-press",
@@ -258,7 +274,8 @@
     "libId": "Reverse_Flyes",
     "name": "리버스 플라이",
     "bodyPart": "어깨",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/reverse-fly.svg"
   },
   {
     "id": "upright-row",
@@ -281,14 +298,16 @@
     "libId": "Barbell_Shrug",
     "name": "바벨 슈러그",
     "bodyPart": "어깨",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/barbell-shrug.svg"
   },
   {
     "id": "barbell-curl",
     "libId": "Barbell_Curl",
     "name": "바벨 컬",
     "bodyPart": "팔",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/barbell-curl.svg"
   },
   {
     "id": "dumbbell-curl",
@@ -303,7 +322,8 @@
     "libId": "Hammer_Curls",
     "name": "해머컬",
     "bodyPart": "팔",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/hammer-curl.svg"
   },
   {
     "id": "preacher-curl",
@@ -318,14 +338,16 @@
     "libId": "Concentration_Curls",
     "name": "컨센트레이션 컬",
     "bodyPart": "팔",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/concentration-curl.svg"
   },
   {
     "id": "triceps-pushdown",
     "libId": "Triceps_Pushdown",
     "name": "트라이셉스 푸시다운",
     "bodyPart": "팔",
-    "equipment": "케이블"
+    "equipment": "케이블",
+    "illustration": "illustrations/triceps-pushdown.svg"
   },
   {
     "id": "close-grip-bench",
@@ -340,28 +362,32 @@
     "libId": "Lying_Triceps_Press",
     "name": "라잉 트라이셉스 익스텐션",
     "bodyPart": "팔",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/lying-triceps-extension.svg"
   },
   {
     "id": "triceps-dips",
     "libId": "Dips_-_Triceps_Version",
     "name": "딥스(삼두)",
     "bodyPart": "팔",
-    "equipment": "맨몸"
+    "equipment": "맨몸",
+    "illustration": "illustrations/triceps-dips.svg"
   },
   {
     "id": "overhead-triceps-extension",
     "libId": "Standing_Dumbbell_Triceps_Extension",
     "name": "오버헤드 트라이셉스 익스텐션",
     "bodyPart": "팔",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/overhead-triceps-extension.svg"
   },
   {
     "id": "crunch",
     "libId": "Crunches",
     "name": "크런치",
     "bodyPart": "코어",
-    "equipment": "맨몸"
+    "equipment": "맨몸",
+    "illustration": "illustrations/crunch.svg"
   },
   {
     "id": "plank",
@@ -392,7 +418,8 @@
     "libId": "Ab_Roller",
     "name": "앱휠 롤아웃",
     "bodyPart": "코어",
-    "equipment": "기타"
+    "equipment": "기타",
+    "illustration": "illustrations/ab-rollout.svg"
   },
   {
     "id": "cable-crunch",
@@ -407,7 +434,8 @@
     "libId": "One-Arm_Kettlebell_Swings",
     "name": "케틀벨 스윙",
     "bodyPart": "기타",
-    "equipment": "기타"
+    "equipment": "기타",
+    "illustration": "illustrations/kettlebell-swing.svg"
   },
   {
     "id": "3-4-sit-up",
@@ -584,14 +612,16 @@
     "libId": "Ball_Leg_Curl",
     "name": "볼 레그컬",
     "bodyPart": "하체",
-    "equipment": "기타"
+    "equipment": "기타",
+    "illustration": "illustrations/ball-leg-curl.svg"
   },
   {
     "id": "band-assisted-pull-up",
     "libId": "Band_Assisted_Pull-Up",
     "name": "밴드 어시스트 풀업",
     "bodyPart": "등",
-    "equipment": "기타"
+    "equipment": "기타",
+    "illustration": "illustrations/band-assisted-pull-up.svg"
   },
   {
     "id": "band-good-morning",
@@ -655,7 +685,8 @@
     "libId": "Barbell_Full_Squat",
     "name": "바벨 풀스쿼트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/barbell-full-squat.svg"
   },
   {
     "id": "barbell-guillotine-bench-press",
@@ -670,7 +701,8 @@
     "libId": "Barbell_Hack_Squat",
     "name": "바벨 핵 스쿼트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/barbell-hack-squat.svg"
   },
   {
     "id": "barbell-hip-thrust",
@@ -728,14 +760,16 @@
     "libId": "Barbell_Side_Split_Squat",
     "name": "바벨 사이드스플릿스쿼트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/barbell-side-split-squat.svg"
   },
   {
     "id": "barbell-squat-to-a-bench",
     "libId": "Barbell_Squat_To_A_Bench",
     "name": "바벨 벤치스쿼트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/barbell-squat-to-a-bench.svg"
   },
   {
     "id": "barbell-step-ups",
@@ -770,7 +804,8 @@
     "libId": "Bench_Dips",
     "name": "벤치딥스",
     "bodyPart": "팔",
-    "equipment": "맨몸"
+    "equipment": "맨몸",
+    "illustration": "illustrations/bench-dips.svg"
   },
   {
     "id": "bench-jump",
@@ -833,7 +868,8 @@
     "libId": "Bent_Over_Dumbbell_Rear_Delt_Raise_With_Head_On_Bench",
     "name": "벤트오버 덤벨 리어델트레이즈 헤드온벤치",
     "bodyPart": "어깨",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/bent-over-dumbbell-rear-delt-raise-with-head-on-bench.svg"
   },
   {
     "id": "bent-over-low-pulley-side-lateral",
@@ -847,28 +883,32 @@
     "libId": "Bent_Over_One-Arm_Long_Bar_Row",
     "name": "벤트오버 원암 롱바로우",
     "bodyPart": "등",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/bent-over-one-arm-long-bar-row.svg"
   },
   {
     "id": "bent-over-two-arm-long-bar-row",
     "libId": "Bent_Over_Two-Arm_Long_Bar_Row",
     "name": "벤트오버 투암 롱바로우",
     "bodyPart": "등",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/bent-over-two-arm-long-bar-row.svg"
   },
   {
     "id": "bent-over-two-dumbbell-row",
     "libId": "Bent_Over_Two-Dumbbell_Row",
     "name": "벤트오버 투덤벨로우",
     "bodyPart": "등",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/bent-over-two-dumbbell-row.svg"
   },
   {
     "id": "bent-over-two-dumbbell-row-with-palms-in",
     "libId": "Bent_Over_Two-Dumbbell_Row_With_Palms_In",
     "name": "벤트오버 투덤벨로우 팜인",
     "bodyPart": "등",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/bent-over-two-dumbbell-row-with-palms-in.svg"
   },
   {
     "id": "bent-press",
@@ -910,7 +950,8 @@
     "libId": "Bodyweight_Mid_Row",
     "name": "맨몸 미드로우",
     "bodyPart": "등",
-    "equipment": "기타"
+    "equipment": "기타",
+    "illustration": "illustrations/bodyweight-mid-row.svg"
   },
   {
     "id": "bodyweight-squat",
@@ -968,21 +1009,24 @@
     "libId": "Box_Squat",
     "name": "박스스쿼트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/box-squat.svg"
   },
   {
     "id": "box-squat-with-bands",
     "libId": "Box_Squat_with_Bands",
     "name": "밴드 박스스쿼트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/box-squat-with-bands.svg"
   },
   {
     "id": "box-squat-with-chains",
     "libId": "Box_Squat_with_Chains",
     "name": "체인 박스스쿼트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/box-squat-with-chains.svg"
   },
   {
     "id": "bradford-rocky-presses",
@@ -1024,7 +1068,8 @@
     "libId": "Cable_Hammer_Curls_-_Rope_Attachment",
     "name": "케이블 로프 해머컬",
     "bodyPart": "팔",
-    "equipment": "케이블"
+    "equipment": "케이블",
+    "illustration": "illustrations/cable-hammer-curls---rope-attachment.svg"
   },
   {
     "id": "cable-hip-adduction",
@@ -1111,7 +1156,8 @@
     "libId": "Cable_Rope_Overhead_Triceps_Extension",
     "name": "케이블 로프 오버헤드 트라이셉스 익스텐션",
     "bodyPart": "팔",
-    "equipment": "케이블"
+    "equipment": "케이블",
+    "illustration": "illustrations/cable-rope-overhead-triceps-extension.svg"
   },
   {
     "id": "cable-rope-rear-delt-rows",
@@ -1177,14 +1223,16 @@
     "libId": "Calf_Press",
     "name": "카프 프레스",
     "bodyPart": "하체",
-    "equipment": "머신"
+    "equipment": "머신",
+    "illustration": "illustrations/calf-press.svg"
   },
   {
     "id": "calf-press-on-the-leg-press-machine",
     "libId": "Calf_Press_On_The_Leg_Press_Machine",
     "name": "레그프레스 머신 카프 프레스",
     "bodyPart": "하체",
-    "equipment": "머신"
+    "equipment": "머신",
+    "illustration": "illustrations/calf-press-on-the-leg-press-machine.svg"
   },
   {
     "id": "calf-raise-on-a-dumbbell",
@@ -1198,7 +1246,8 @@
     "libId": "Calf_Raises_-_With_Bands",
     "name": "밴드 카프레이즈",
     "bodyPart": "하체",
-    "equipment": "기타"
+    "equipment": "기타",
+    "illustration": "illustrations/calf-raises---with-bands.svg"
   },
   {
     "id": "car-deadlift",
@@ -1296,7 +1345,8 @@
     "libId": "Clean_Deadlift",
     "name": "클린 데드리프트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/clean-deadlift.svg"
   },
   {
     "id": "clean-pull",
@@ -1520,7 +1570,8 @@
     "libId": "Decline_Dumbbell_Flyes",
     "name": "디클라인 덤벨 플라이",
     "bodyPart": "가슴",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/decline-dumbbell-flyes.svg"
   },
   {
     "id": "decline-dumbbell-triceps-extension",
@@ -1534,7 +1585,8 @@
     "libId": "Decline_EZ_Bar_Triceps_Extension",
     "name": "디클라인 EZ바 트라이셉스 익스텐션",
     "bodyPart": "팔",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/decline-ez-bar-triceps-extension.svg"
   },
   {
     "id": "decline-oblique-crunch",
@@ -1586,14 +1638,16 @@
     "libId": "Dip_Machine",
     "name": "딥스 머신",
     "bodyPart": "팔",
-    "equipment": "머신"
+    "equipment": "머신",
+    "illustration": "illustrations/dip-machine.svg"
   },
   {
     "id": "donkey-calf-raises",
     "libId": "Donkey_Calf_Raises",
     "name": "동키 카프레이즈",
     "bodyPart": "하체",
-    "equipment": "기타"
+    "equipment": "기타",
+    "illustration": "illustrations/donkey-calf-raises.svg"
   },
   {
     "id": "double-kettlebell-alternating-hang-clean",
@@ -1694,7 +1748,8 @@
     "libId": "Dumbbell_Incline_Row",
     "name": "덤벨 인클라인 로우",
     "bodyPart": "등",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/dumbbell-incline-row.svg"
   },
   {
     "id": "dumbbell-incline-shoulder-raise",
@@ -1745,7 +1800,8 @@
     "libId": "Dumbbell_One-Arm_Triceps_Extension",
     "name": "덤벨 원암 트라이셉스 익스텐션",
     "bodyPart": "팔",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/dumbbell-one-arm-triceps-extension.svg"
   },
   {
     "id": "dumbbell-one-arm-upright-row",
@@ -1774,7 +1830,8 @@
     "libId": "Dumbbell_Rear_Lunge",
     "name": "덤벨 리어런지",
     "bodyPart": "하체",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/dumbbell-rear-lunge.svg"
   },
   {
     "id": "dumbbell-scaption",
@@ -1832,14 +1889,16 @@
     "libId": "Dumbbell_Step_Ups",
     "name": "덤벨 스텝업",
     "bodyPart": "하체",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/dumbbell-step-ups.svg"
   },
   {
     "id": "dumbbell-tricep-extension--pronated-grip",
     "libId": "Dumbbell_Tricep_Extension_-Pronated_Grip",
     "name": "프로네이션그립 덤벨 트라이셉스 익스텐션",
     "bodyPart": "팔",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/dumbbell-tricep-extension--pronated-grip.svg"
   },
   {
     "id": "ez-bar-curl",
@@ -1875,7 +1934,8 @@
     "libId": "Elevated_Cable_Rows",
     "name": "엘리베이티드 케이블 로우",
     "bodyPart": "등",
-    "equipment": "케이블"
+    "equipment": "케이블",
+    "illustration": "illustrations/elevated-cable-rows.svg"
   },
   {
     "id": "exercise-ball-crunch",
@@ -1945,7 +2005,8 @@
     "libId": "Flat_Bench_Cable_Flyes",
     "name": "플랫 벤치 케이블 플라이",
     "bodyPart": "가슴",
-    "equipment": "케이블"
+    "equipment": "케이블",
+    "illustration": "illustrations/flat-bench-cable-flyes.svg"
   },
   {
     "id": "flat-bench-leg-pull-in",
@@ -1967,7 +2028,8 @@
     "libId": "Flexor_Incline_Dumbbell_Curls",
     "name": "플렉서 인클라인 덤벨 컬",
     "bodyPart": "팔",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/flexor-incline-dumbbell-curls.svg"
   },
   {
     "id": "floor-glute-ham-raise",
@@ -2009,14 +2071,16 @@
     "libId": "Frankenstein_Squat",
     "name": "프랑켄슈타인 스쿼트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/frankenstein-squat.svg"
   },
   {
     "id": "freehand-jump-squat",
     "libId": "Freehand_Jump_Squat",
     "name": "프리핸드 점프 스쿼트",
     "bodyPart": "하체",
-    "equipment": "맨몸"
+    "equipment": "맨몸",
+    "illustration": "illustrations/freehand-jump-squat.svg"
   },
   {
     "id": "frog-sit-ups",
@@ -2030,7 +2094,8 @@
     "libId": "Front_Barbell_Squat_To_A_Bench",
     "name": "프론트 바벨 스쿼트 투 벤치",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/front-barbell-squat-to-a-bench.svg"
   },
   {
     "id": "front-box-jump",
@@ -2082,7 +2147,8 @@
     "libId": "Front_Squat_Clean_Grip",
     "name": "프론트 스쿼트 클린그립",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/front-squat-clean-grip.svg"
   },
   {
     "id": "front-squats-with-two-kettlebells",
@@ -2172,7 +2238,8 @@
     "libId": "Handstand_Push-Ups",
     "name": "핸드스탠드 푸시업",
     "bodyPart": "어깨",
-    "equipment": "맨몸"
+    "equipment": "맨몸",
+    "illustration": "illustrations/handstand-push-ups.svg"
   },
   {
     "id": "hang-clean",
@@ -2236,7 +2303,8 @@
     "libId": "High_Cable_Curls",
     "name": "하이 케이블 컬",
     "bodyPart": "팔",
-    "equipment": "케이블"
+    "equipment": "케이블",
+    "illustration": "illustrations/high-cable-curls.svg"
   },
   {
     "id": "hip-extension-with-bands",
@@ -2285,7 +2353,8 @@
     "libId": "Incline_Barbell_Triceps_Extension",
     "name": "인클라인 바벨 트라이셉스 익스텐션",
     "bodyPart": "팔",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/incline-barbell-triceps-extension.svg"
   },
   {
     "id": "incline-bench-pull",
@@ -2328,28 +2397,32 @@
     "libId": "Incline_Dumbbell_Flyes",
     "name": "인클라인 덤벨 플라이",
     "bodyPart": "가슴",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/incline-dumbbell-flyes.svg"
   },
   {
     "id": "incline-dumbbell-flyes---with-a-twist",
     "libId": "Incline_Dumbbell_Flyes_-_With_A_Twist",
     "name": "인클라인 덤벨 플라이 트위스트",
     "bodyPart": "가슴",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/incline-dumbbell-flyes---with-a-twist.svg"
   },
   {
     "id": "incline-hammer-curls",
     "libId": "Incline_Hammer_Curls",
     "name": "인클라인 해머컬",
     "bodyPart": "팔",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/incline-hammer-curls.svg"
   },
   {
     "id": "incline-inner-biceps-curl",
     "libId": "Incline_Inner_Biceps_Curl",
     "name": "인클라인 이너 바이셉스 컬",
     "bodyPart": "팔",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/incline-inner-biceps-curl.svg"
   },
   {
     "id": "incline-push-up",
@@ -2417,7 +2490,8 @@
     "libId": "Inverted_Row_with_Straps",
     "name": "스트랩 인버티드 로우",
     "bodyPart": "등",
-    "equipment": "기타"
+    "equipment": "기타",
+    "illustration": "illustrations/inverted-row-with-straps.svg"
   },
   {
     "id": "iron-cross",
@@ -2480,7 +2554,8 @@
     "libId": "Jefferson_Squats",
     "name": "제퍼슨 스쿼트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/jefferson-squats.svg"
   },
   {
     "id": "jerk-balance",
@@ -2494,7 +2569,8 @@
     "libId": "Jerk_Dip_Squat",
     "name": "저크 딥 스쿼트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/jerk-dip-squat.svg"
   },
   {
     "id": "keg-load",
@@ -2656,28 +2732,32 @@
     "libId": "Kneeling_High_Pulley_Row",
     "name": "닐링 하이 풀리 로우",
     "bodyPart": "등",
-    "equipment": "케이블"
+    "equipment": "케이블",
+    "illustration": "illustrations/kneeling-high-pulley-row.svg"
   },
   {
     "id": "kneeling-jump-squat",
     "libId": "Kneeling_Jump_Squat",
     "name": "닐링 점프 스쿼트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/kneeling-jump-squat.svg"
   },
   {
     "id": "kneeling-single-arm-high-pulley-row",
     "libId": "Kneeling_Single-Arm_High_Pulley_Row",
     "name": "닐링 원암 하이 풀리 로우",
     "bodyPart": "등",
-    "equipment": "케이블"
+    "equipment": "케이블",
+    "illustration": "illustrations/kneeling-single-arm-high-pulley-row.svg"
   },
   {
     "id": "kneeling-squat",
     "libId": "Kneeling_Squat",
     "name": "닐링 스쿼트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/kneeling-squat.svg"
   },
   {
     "id": "landmine-180s",
@@ -2719,7 +2799,8 @@
     "libId": "Lateral_Raise_-_With_Bands",
     "name": "밴드 레터럴 레이즈",
     "bodyPart": "어깨",
-    "equipment": "기타"
+    "equipment": "기타",
+    "illustration": "illustrations/lateral-raise---with-bands.svg"
   },
   {
     "id": "leg-over-floor-press",
@@ -2768,7 +2849,8 @@
     "libId": "Leverage_High_Row",
     "name": "레버리지 하이 로우",
     "bodyPart": "등",
-    "equipment": "머신"
+    "equipment": "머신",
+    "illustration": "illustrations/leverage-high-row.svg"
   },
   {
     "id": "leverage-incline-chest-press",
@@ -2782,7 +2864,8 @@
     "libId": "Leverage_Iso_Row",
     "name": "레버리지 아이소 로우",
     "bodyPart": "등",
-    "equipment": "머신"
+    "equipment": "머신",
+    "illustration": "illustrations/leverage-iso-row.svg"
   },
   {
     "id": "leverage-shoulder-press",
@@ -2838,7 +2921,8 @@
     "libId": "Low_Cable_Crossover",
     "name": "로우 케이블 크로스오버",
     "bodyPart": "가슴",
-    "equipment": "케이블"
+    "equipment": "케이블",
+    "illustration": "illustrations/low-cable-crossover.svg"
   },
   {
     "id": "low-cable-triceps-extension",
@@ -2881,7 +2965,8 @@
     "libId": "Lying_Cambered_Barbell_Row",
     "name": "라잉 캠버드 바벨 로우",
     "bodyPart": "등",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/lying-cambered-barbell-row.svg"
   },
   {
     "id": "lying-close-grip-bar-curl-on-high-pulley",
@@ -2895,21 +2980,24 @@
     "libId": "Lying_Close-Grip_Barbell_Triceps_Extension_Behind_The_Head",
     "name": "라잉 클로즈그립 바벨 비하인드헤드 트라이셉스 익스텐션",
     "bodyPart": "팔",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/lying-close-grip-barbell-triceps-extension-behind-the-head.svg"
   },
   {
     "id": "lying-close-grip-barbell-triceps-press-to-chin",
     "libId": "Lying_Close-Grip_Barbell_Triceps_Press_To_Chin",
     "name": "라잉 클로즈그립 바벨 트라이셉스 프레스 투 친",
     "bodyPart": "팔",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/lying-close-grip-barbell-triceps-press-to-chin.svg"
   },
   {
     "id": "lying-dumbbell-tricep-extension",
     "libId": "Lying_Dumbbell_Tricep_Extension",
     "name": "라잉 덤벨 트라이셉스 익스텐션",
     "bodyPart": "팔",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/lying-dumbbell-tricep-extension.svg"
   },
   {
     "id": "lying-face-down-plate-neck-resistance",
@@ -2966,7 +3054,8 @@
     "libId": "Lying_T-Bar_Row",
     "name": "라잉 T바 로우",
     "bodyPart": "등",
-    "equipment": "머신"
+    "equipment": "머신",
+    "illustration": "illustrations/lying-t-bar-row.svg"
   },
   {
     "id": "machine-bench-press",
@@ -2980,14 +3069,16 @@
     "libId": "Machine_Bicep_Curl",
     "name": "머신 바이셉스 컬",
     "bodyPart": "팔",
-    "equipment": "머신"
+    "equipment": "머신",
+    "illustration": "illustrations/machine-bicep-curl.svg"
   },
   {
     "id": "machine-preacher-curls",
     "libId": "Machine_Preacher_Curls",
     "name": "머신 프리처컬",
     "bodyPart": "팔",
-    "equipment": "머신"
+    "equipment": "머신",
+    "illustration": "illustrations/machine-preacher-curls.svg"
   },
   {
     "id": "machine-shoulder-military-press",
@@ -3079,21 +3170,24 @@
     "libId": "Narrow_Stance_Hack_Squats",
     "name": "내로우 스탠스 핵 스쿼트",
     "bodyPart": "하체",
-    "equipment": "머신"
+    "equipment": "머신",
+    "illustration": "illustrations/narrow-stance-hack-squats.svg"
   },
   {
     "id": "narrow-stance-leg-press",
     "libId": "Narrow_Stance_Leg_Press",
     "name": "내로우 스탠스 레그프레스",
     "bodyPart": "하체",
-    "equipment": "머신"
+    "equipment": "머신",
+    "illustration": "illustrations/narrow-stance-leg-press.svg"
   },
   {
     "id": "narrow-stance-squats",
     "libId": "Narrow_Stance_Squats",
     "name": "내로우 스탠스 스쿼트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/narrow-stance-squats.svg"
   },
   {
     "id": "natural-glute-ham-raise",
@@ -3114,21 +3208,24 @@
     "libId": "Oblique_Crunches",
     "name": "오블리크 크런치",
     "bodyPart": "코어",
-    "equipment": "맨몸"
+    "equipment": "맨몸",
+    "illustration": "illustrations/oblique-crunches.svg"
   },
   {
     "id": "oblique-crunches---on-the-floor",
     "libId": "Oblique_Crunches_-_On_The_Floor",
     "name": "플로어 오블리크 크런치",
     "bodyPart": "코어",
-    "equipment": "맨몸"
+    "equipment": "맨몸",
+    "illustration": "illustrations/oblique-crunches---on-the-floor.svg"
   },
   {
     "id": "olympic-squat",
     "libId": "Olympic_Squat",
     "name": "올림픽 스쿼트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/olympic-squat.svg"
   },
   {
     "id": "one-arm-flat-bench-dumbbell-flye",
@@ -3234,7 +3331,8 @@
     "libId": "One-Arm_Long_Bar_Row",
     "name": "원암 롱바로우",
     "bodyPart": "등",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/one-arm-long-bar-row.svg"
   },
   {
     "id": "one-arm-medicine-ball-slam",
@@ -3262,7 +3360,8 @@
     "libId": "One-Arm_Side_Deadlift",
     "name": "원암 사이드 데드리프트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/one-arm-side-deadlift.svg"
   },
   {
     "id": "one-arm-side-laterals",
@@ -3284,7 +3383,8 @@
     "libId": "One_Arm_Chin-Up",
     "name": "원암 친업",
     "bodyPart": "등",
-    "equipment": "기타"
+    "equipment": "기타",
+    "illustration": "illustrations/one-arm-chin-up.svg"
   },
   {
     "id": "one-arm-dumbbell-bench-press",
@@ -3335,7 +3435,8 @@
     "libId": "One_Leg_Barbell_Squat",
     "name": "싱글레그 바벨 스쿼트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/one-leg-barbell-squat.svg"
   },
   {
     "id": "open-palm-kettlebell-clean",
@@ -3371,7 +3472,8 @@
     "libId": "Overhead_Squat",
     "name": "오버헤드 스쿼트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/overhead-squat.svg"
   },
   {
     "id": "pallof-press",
@@ -3424,7 +3526,8 @@
     "libId": "Parallel_Bar_Dip",
     "name": "패러렐바 딥스",
     "bodyPart": "팔",
-    "equipment": "기타"
+    "equipment": "기타",
+    "illustration": "illustrations/parallel-bar-dip.svg"
   },
   {
     "id": "physioball-hip-bridge",
@@ -3574,14 +3677,16 @@
     "libId": "Push-Ups_-_Close_Triceps_Position",
     "name": "클로즈 트라이셉스 푸시업",
     "bodyPart": "팔",
-    "equipment": "맨몸"
+    "equipment": "맨몸",
+    "illustration": "illustrations/push-ups---close-triceps-position.svg"
   },
   {
     "id": "push-ups-with-feet-elevated",
     "libId": "Push-Ups_With_Feet_Elevated",
     "name": "발 올린 푸시업",
     "bodyPart": "가슴",
-    "equipment": "맨몸"
+    "equipment": "맨몸",
+    "illustration": "illustrations/push-ups-with-feet-elevated.svg"
   },
   {
     "id": "push-ups-with-feet-on-an-exercise-ball",
@@ -3640,14 +3745,16 @@
     "libId": "Rack_Pull_with_Bands",
     "name": "밴드 랙풀",
     "bodyPart": "등",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/rack-pull-with-bands.svg"
   },
   {
     "id": "rack-pulls",
     "libId": "Rack_Pulls",
     "name": "랙풀",
     "bodyPart": "등",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/rack-pulls.svg"
   },
   {
     "id": "return-push-from-stance",
@@ -3668,7 +3775,8 @@
     "libId": "Reverse_Band_Box_Squat",
     "name": "리버스 밴드 박스스쿼트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/reverse-band-box-squat.svg"
   },
   {
     "id": "reverse-band-deadlift",
@@ -3682,14 +3790,16 @@
     "libId": "Reverse_Band_Power_Squat",
     "name": "리버스 밴드 파워스쿼트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/reverse-band-power-squat.svg"
   },
   {
     "id": "reverse-band-sumo-deadlift",
     "libId": "Reverse_Band_Sumo_Deadlift",
     "name": "리버스 밴드 스모 데드리프트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/reverse-band-sumo-deadlift.svg"
   },
   {
     "id": "reverse-barbell-curl",
@@ -3704,7 +3814,8 @@
     "libId": "Reverse_Barbell_Preacher_Curls",
     "name": "리버스 바벨 프리처컬",
     "bodyPart": "팔",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/reverse-barbell-preacher-curls.svg"
   },
   {
     "id": "reverse-cable-curl",
@@ -3734,14 +3845,16 @@
     "libId": "Reverse_Grip_Bent-Over_Rows",
     "name": "리버스그립 벤트오버 로우",
     "bodyPart": "등",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/reverse-grip-bent-over-rows.svg"
   },
   {
     "id": "reverse-grip-triceps-pushdown",
     "libId": "Reverse_Grip_Triceps_Pushdown",
     "name": "리버스그립 트라이셉스 푸시다운",
     "bodyPart": "팔",
-    "equipment": "케이블"
+    "equipment": "케이블",
+    "illustration": "illustrations/reverse-grip-triceps-pushdown.svg"
   },
   {
     "id": "reverse-hyperextension",
@@ -3791,7 +3904,8 @@
     "libId": "Ring_Dips",
     "name": "링딥스",
     "bodyPart": "팔",
-    "equipment": "기타"
+    "equipment": "기타",
+    "illustration": "illustrations/ring-dips.svg"
   },
   {
     "id": "rocket-jump",
@@ -3892,21 +4006,24 @@
     "libId": "Seated_Bent-Over_One-Arm_Dumbbell_Triceps_Extension",
     "name": "시티드 벤트오버 원암 덤벨 트라이셉스 익스텐션",
     "bodyPart": "팔",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/seated-bent-over-one-arm-dumbbell-triceps-extension.svg"
   },
   {
     "id": "seated-bent-over-rear-delt-raise",
     "libId": "Seated_Bent-Over_Rear_Delt_Raise",
     "name": "시티드 벤트오버 리어델트 레이즈",
     "bodyPart": "어깨",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/seated-bent-over-rear-delt-raise.svg"
   },
   {
     "id": "seated-bent-over-two-arm-dumbbell-triceps-extension",
     "libId": "Seated_Bent-Over_Two-Arm_Dumbbell_Triceps_Extension",
     "name": "시티드 벤트오버 투암 덤벨 트라이셉스 익스텐션",
     "bodyPart": "팔",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/seated-bent-over-two-arm-dumbbell-triceps-extension.svg"
   },
   {
     "id": "seated-cable-shoulder-press",
@@ -3935,14 +4052,16 @@
     "libId": "Seated_Dumbbell_Curl",
     "name": "시티드 덤벨 컬",
     "bodyPart": "팔",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/seated-dumbbell-curl.svg"
   },
   {
     "id": "seated-dumbbell-inner-biceps-curl",
     "libId": "Seated_Dumbbell_Inner_Biceps_Curl",
     "name": "시티드 이너바이셉스 덤벨 컬",
     "bodyPart": "팔",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/seated-dumbbell-inner-biceps-curl.svg"
   },
   {
     "id": "seated-dumbbell-palms-down-wrist-curl",
@@ -4013,7 +4132,8 @@
     "libId": "Seated_One-arm_Cable_Pulley_Rows",
     "name": "시티드 원암 케이블 풀리 로우",
     "bodyPart": "등",
-    "equipment": "케이블"
+    "equipment": "케이블",
+    "illustration": "illustrations/seated-one-arm-cable-pulley-rows.svg"
   },
   {
     "id": "seated-palm-up-barbell-wrist-curl",
@@ -4044,7 +4164,8 @@
     "libId": "Seated_Triceps_Press",
     "name": "시티드 트라이셉스 프레스",
     "bodyPart": "팔",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/seated-triceps-press.svg"
   },
   {
     "id": "seated-two-arm-palms-up-low-pulley-wrist-curl",
@@ -4065,7 +4186,8 @@
     "libId": "Shotgun_Row",
     "name": "샷건 로우",
     "bodyPart": "등",
-    "equipment": "케이블"
+    "equipment": "케이블",
+    "illustration": "illustrations/shotgun-row.svg"
   },
   {
     "id": "shoulder-press---with-bands",
@@ -4129,7 +4251,8 @@
     "libId": "Single-Arm_Cable_Crossover",
     "name": "원암 케이블 크로스오버",
     "bodyPart": "가슴",
-    "equipment": "케이블"
+    "equipment": "케이블",
+    "illustration": "illustrations/single-arm-cable-crossover.svg"
   },
   {
     "id": "single-arm-linear-jammer",
@@ -4179,7 +4302,8 @@
     "libId": "Single-Leg_Leg_Extension",
     "name": "싱글레그 레그 익스텐션",
     "bodyPart": "하체",
-    "equipment": "머신"
+    "equipment": "머신",
+    "illustration": "illustrations/single-leg-leg-extension.svg"
   },
   {
     "id": "single-leg-stride-jump",
@@ -4300,14 +4424,16 @@
     "libId": "Smith_Machine_Bent_Over_Row",
     "name": "스미스머신 벤트오버 로우",
     "bodyPart": "등",
-    "equipment": "머신"
+    "equipment": "머신",
+    "illustration": "illustrations/smith-machine-bent-over-row.svg"
   },
   {
     "id": "smith-machine-calf-raise",
     "libId": "Smith_Machine_Calf_Raise",
     "name": "스미스머신 카프레이즈",
     "bodyPart": "하체",
-    "equipment": "머신"
+    "equipment": "머신",
+    "illustration": "illustrations/smith-machine-calf-raise.svg"
   },
   {
     "id": "smith-machine-close-grip-bench-press",
@@ -4350,14 +4476,16 @@
     "libId": "Smith_Machine_Leg_Press",
     "name": "스미스머신 레그프레스",
     "bodyPart": "하체",
-    "equipment": "머신"
+    "equipment": "머신",
+    "illustration": "illustrations/smith-machine-leg-press.svg"
   },
   {
     "id": "smith-machine-one-arm-upright-row",
     "libId": "Smith_Machine_One-Arm_Upright_Row",
     "name": "스미스머신 원암 업라이트 로우",
     "bodyPart": "어깨",
-    "equipment": "머신"
+    "equipment": "머신",
+    "illustration": "illustrations/smith-machine-one-arm-upright-row.svg"
   },
   {
     "id": "smith-machine-overhead-shoulder-press",
@@ -4372,7 +4500,8 @@
     "libId": "Smith_Machine_Pistol_Squat",
     "name": "스미스머신 피스톨 스쿼트",
     "bodyPart": "하체",
-    "equipment": "머신"
+    "equipment": "머신",
+    "illustration": "illustrations/smith-machine-pistol-squat.svg"
   },
   {
     "id": "smith-machine-reverse-calf-raises",
@@ -4401,7 +4530,8 @@
     "libId": "Smith_Machine_Upright_Row",
     "name": "스미스머신 업라이트 로우",
     "bodyPart": "등",
-    "equipment": "머신"
+    "equipment": "머신",
+    "illustration": "illustrations/smith-machine-upright-row.svg"
   },
   {
     "id": "smith-single-leg-split-squat",
@@ -4429,7 +4559,8 @@
     "libId": "Snatch_Deadlift",
     "name": "스내치 데드리프트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/snatch-deadlift.svg"
   },
   {
     "id": "snatch-pull",
@@ -4465,14 +4596,16 @@
     "libId": "Speed_Box_Squat",
     "name": "스피드 박스스쿼트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/speed-box-squat.svg"
   },
   {
     "id": "speed-squats",
     "libId": "Speed_Squats",
     "name": "스피드 스쿼트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/speed-squats.svg"
   },
   {
     "id": "spell-caster",
@@ -4529,35 +4662,40 @@
     "libId": "Split_Squat_with_Dumbbells",
     "name": "덤벨 스플릿 스쿼트",
     "bodyPart": "하체",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/split-squat-with-dumbbells.svg"
   },
   {
     "id": "squat-jerk",
     "libId": "Squat_Jerk",
     "name": "스쿼트 저크",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/squat-jerk.svg"
   },
   {
     "id": "squat-with-bands",
     "libId": "Squat_with_Bands",
     "name": "밴드 스쿼트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/squat-with-bands.svg"
   },
   {
     "id": "squat-with-chains",
     "libId": "Squat_with_Chains",
     "name": "체인 스쿼트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/squat-with-chains.svg"
   },
   {
     "id": "squat-with-plate-movers",
     "libId": "Squat_with_Plate_Movers",
     "name": "플레이트 무버 스쿼트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/squat-with-plate-movers.svg"
   },
   {
     "id": "squats---with-bands",
@@ -4593,14 +4731,16 @@
     "libId": "Standing_Bent-Over_One-Arm_Dumbbell_Triceps_Extension",
     "name": "스탠딩 벤트오버 원암 덤벨 트라이셉스 익스텐션",
     "bodyPart": "팔",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/standing-bent-over-one-arm-dumbbell-triceps-extension.svg"
   },
   {
     "id": "standing-bent-over-two-arm-dumbbell-triceps-extension",
     "libId": "Standing_Bent-Over_Two-Arm_Dumbbell_Triceps_Extension",
     "name": "스탠딩 벤트오버 투암 덤벨 트라이셉스 익스텐션",
     "bodyPart": "팔",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/standing-bent-over-two-arm-dumbbell-triceps-extension.svg"
   },
   {
     "id": "standing-biceps-cable-curl",
@@ -4695,7 +4835,8 @@
     "libId": "Standing_Inner-Biceps_Curl",
     "name": "스탠딩 이너 바이셉스 컬",
     "bodyPart": "팔",
-    "equipment": "덤벨"
+    "equipment": "덤벨",
+    "illustration": "illustrations/standing-inner-biceps-curl.svg"
   },
   {
     "id": "standing-leg-curl",
@@ -4834,7 +4975,8 @@
     "libId": "Stiff-Legged_Barbell_Deadlift",
     "name": "스티프레그 바벨 데드리프트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/stiff-legged-barbell-deadlift.svg"
   },
   {
     "id": "stiff-legged-dumbbell-deadlift",
@@ -4891,14 +5033,16 @@
     "libId": "Sumo_Deadlift_with_Bands",
     "name": "밴드 스모 데드리프트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/sumo-deadlift-with-bands.svg"
   },
   {
     "id": "sumo-deadlift-with-chains",
     "libId": "Sumo_Deadlift_with_Chains",
     "name": "체인 스모 데드리프트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/sumo-deadlift-with-chains.svg"
   },
   {
     "id": "supine-chest-throw",
@@ -4947,7 +5091,8 @@
     "libId": "Suspended_Row",
     "name": "서스펜디드 로우",
     "bodyPart": "등",
-    "equipment": "기타"
+    "equipment": "기타",
+    "illustration": "illustrations/suspended-row.svg"
   },
   {
     "id": "suspended-split-squat",
@@ -4968,7 +5113,8 @@
     "libId": "T-Bar_Row_with_Handle",
     "name": "핸들 T바 로우",
     "bodyPart": "등",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/t-bar-row-with-handle.svg"
   },
   {
     "id": "tate-press",
@@ -5019,21 +5165,24 @@
     "libId": "Triceps_Overhead_Extension_with_Rope",
     "name": "로프 트라이셉스 오버헤드 익스텐션",
     "bodyPart": "팔",
-    "equipment": "케이블"
+    "equipment": "케이블",
+    "illustration": "illustrations/triceps-overhead-extension-with-rope.svg"
   },
   {
     "id": "triceps-pushdown---rope-attachment",
     "libId": "Triceps_Pushdown_-_Rope_Attachment",
     "name": "로프 트라이셉스 푸시다운",
     "bodyPart": "팔",
-    "equipment": "케이블"
+    "equipment": "케이블",
+    "illustration": "illustrations/triceps-pushdown---rope-attachment.svg"
   },
   {
     "id": "triceps-pushdown---v-bar-attachment",
     "libId": "Triceps_Pushdown_-_V-Bar_Attachment",
     "name": "V바 트라이셉스 푸시다운",
     "bodyPart": "팔",
-    "equipment": "케이블"
+    "equipment": "케이블",
+    "illustration": "illustrations/triceps-pushdown---v-bar-attachment.svg"
   },
   {
     "id": "tuck-crunch",
@@ -5111,7 +5260,8 @@
     "libId": "V-Bar_Pullup",
     "name": "V바 풀업",
     "bodyPart": "등",
-    "equipment": "맨몸"
+    "equipment": "맨몸",
+    "illustration": "illustrations/v-bar-pullup.svg"
   },
   {
     "id": "vertical-swing",
@@ -5139,35 +5289,40 @@
     "libId": "Weighted_Bench_Dip",
     "name": "웨이트 벤치 딥스",
     "bodyPart": "팔",
-    "equipment": "기타"
+    "equipment": "기타",
+    "illustration": "illustrations/weighted-bench-dip.svg"
   },
   {
     "id": "weighted-crunches",
     "libId": "Weighted_Crunches",
     "name": "웨이트 크런치",
     "bodyPart": "코어",
-    "equipment": "기타"
+    "equipment": "기타",
+    "illustration": "illustrations/weighted-crunches.svg"
   },
   {
     "id": "weighted-jump-squat",
     "libId": "Weighted_Jump_Squat",
     "name": "웨이트 점프 스쿼트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/weighted-jump-squat.svg"
   },
   {
     "id": "weighted-pull-ups",
     "libId": "Weighted_Pull_Ups",
     "name": "웨이트 풀업",
     "bodyPart": "등",
-    "equipment": "기타"
+    "equipment": "기타",
+    "illustration": "illustrations/weighted-pull-ups.svg"
   },
   {
     "id": "weighted-sissy-squat",
     "libId": "Weighted_Sissy_Squat",
     "name": "웨이트 시시 스쿼트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/weighted-sissy-squat.svg"
   },
   {
     "id": "weighted-sit-ups---with-bands",
@@ -5233,7 +5388,8 @@
     "libId": "Wide_Stance_Barbell_Squat",
     "name": "와이드스탠스 바벨 스쿼트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/wide-stance-barbell-squat.svg"
   },
   {
     "id": "wide-stance-stiff-legs",
@@ -5275,7 +5431,8 @@
     "libId": "Zercher_Squats",
     "name": "저처 스쿼트",
     "bodyPart": "하체",
-    "equipment": "바벨"
+    "equipment": "바벨",
+    "illustration": "illustrations/zercher-squats.svg"
   },
   {
     "id": "zottman-curl",
