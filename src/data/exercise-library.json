@@ -1540,7 +1540,14 @@
     "libId": "Bodyweight_Walking_Lunge",
     "name": "맨몸 워킹런지",
     "bodyPart": "하체",
-    "equipment": "기타"
+    "equipment": "기타",
+    "gif": "gifs/bodyweight-walking-lunge.gif",
+    "muscles": [
+      "gluteal",
+      "quadriceps",
+      "hamstring",
+      "calves"
+    ]
   },
   {
     "id": "bosu-ball-cable-crunch-with-side-bends",
@@ -3126,7 +3133,15 @@
     "libId": "Farmers_Walk",
     "name": "파머스 워크",
     "bodyPart": "팔",
-    "equipment": "기타"
+    "equipment": "기타",
+    "gif": "gifs/farmers-walk.gif",
+    "muscles": [
+      "quadriceps",
+      "calves",
+      "forearm",
+      "abs",
+      "obliques"
+    ]
   },
   {
     "id": "fast-skipping",
@@ -5901,7 +5916,6 @@
     "bodyPart": "팔",
     "equipment": "케이블",
     "illustration": "illustrations/reverse-grip-triceps-pushdown.svg",
-    "gif": "gifs/reverse-grip-triceps-pushdown.gif",
     "muscles": [
       "triceps",
       "front-deltoids"
@@ -6583,12 +6597,7 @@
     "libId": "Sit-Up",
     "name": "싯업",
     "bodyPart": "코어",
-    "equipment": "맨몸",
-    "gif": "gifs/sit-up.gif",
-    "muscles": [
-      "abs",
-      "abductors"
-    ]
+    "equipment": "맨몸"
   },
   {
     "id": "sled-drag---harness",

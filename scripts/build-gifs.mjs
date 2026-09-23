@@ -27,7 +27,7 @@ const PART_COMPAT = new Map([
   ['shoulders', '어깨'], ['upper arms', '팔'], ['lower arms', '팔'], ['waist', '코어'],
 ]);
 // 이름 토큰 중 '장비어' — 완화 매칭에서 그쪽 이름에 추가로 있어도 되는 토큰 (한정어 incline/seated 등은 절대 아님)
-const EQUIP_WORDS = new Set(['barbell', 'dumbbell', 'cable', 'lever', 'smith', 'sled', 'band', 'kettlebell', 'ez', 'olympic', 'weighted', 'assisted', 'machine', 'bodyweight']);
+const EQUIP_WORDS = new Set(['barbell', 'dumbbell', 'cable', 'lever', 'smith', 'sled', 'band', 'kettlebell', 'ez', 'olympic', 'weighted', 'machine', 'bodyweight']);
 // 그쪽 근육 어휘 → 우리 근육맵 영역 id (src/data/muscle-regions.ts의 17개만)
 const MUSCLE_TO_REGION = new Map([
   ['pectorals', ['chest']], ['upper chest', ['chest']], ['chest', ['chest']], ['serratus anterior', ['obliques']],
@@ -74,7 +74,8 @@ async function loadManifest() {
 }
 
 const norm = (s) => s.toLowerCase().replace(/\(.*?\)/g, ' ').replace(/[_\-\/]/g, ' ').replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, ' ').trim();
-const tokens = (s) => new Set(norm(s).split(' ').filter(Boolean).map((t) => t.replace(/s$/, '')));
+// 동의어: ExerciseDB의 'lever'(레버리지 머신)는 우리 어휘의 'machine'과 같은 키로 취급 — 양쪽 토큰화 모두 이 함수를 거치므로 자동으로 양측에 적용됨
+const tokens = (s) => new Set(norm(s).split(' ').filter(Boolean).map((t) => t.replace(/s$/, '')).map((t) => (t === 'lever' ? 'machine' : t)));
 const setEq = (a, b) => a.size === b.size && [...a].every((t) => b.has(t));
 const compatible = (x, e) => PART_COMPAT.get(e.bodyParts[0]) === x.bodyPart
   && (EQUIP_COMPAT.get(e.equipments[0]) ?? []).includes(x.equipment);
@@ -204,12 +205,27 @@ for (const f of await readdir(OUT)) {
   if (!keepIds.has(m[1])) await rm(`${OUT}/${f}`);
 }
 
+// 같은 우리 id라도 매칭 소스(ExerciseDB id)가 바뀌면 파일 존재만으로는 감지 안 됨 — 이전 소스 기록과 비교해 강제 재다운로드
+const SOURCES_FILE = `${TMP}/gif-sources.json`;
+let prevSources = {};
+try { prevSources = JSON.parse(await readFile(SOURCES_FILE, 'utf8')); } catch { /* 최초 실행 */ }
+for (const [ourId, entry] of picks) {
+  if (prevSources[ourId] && prevSources[ourId] !== entry.id) {
+    await rm(`${OUT}/${ourId}.gif`, { force: true });
+    await rm(`${OUT}/${ourId}.webp`, { force: true });
+  }
+}
+
 for (const [ourId, entry] of picks) {
   const downloaded = await downloadOne(ourId, entry.gifUrl);
   if (downloaded) stats.download++;
 }
 
 stats.poster = runPoster();
+
+const nextSources = {};
+for (const [ourId, entry] of picks) nextSources[ourId] = entry.id;
+await writeFile(SOURCES_FILE, `${JSON.stringify(nextSources, null, 2)}\n`);
 
 const next = lib.map((x) => {
   const matched = picks.get(x.id);
