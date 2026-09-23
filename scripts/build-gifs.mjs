@@ -95,7 +95,16 @@ function regionsFor(target, secondary) {
 function classify(x, manifest) {
   const xt = tokens(x.libId);
   const exactCands = manifest.filter((e) => setEq(tokens(e.name), xt) && compatible(x, e));
-  if (exactCands.length === 1) return { tier: 'exact', match: exactCands[0] };
+  const ourHasParen = x.libId.includes('(');
+  // 괄호 한정어가 붙은 단독 후보는 자동 채택하지 않는다(예: "barbell squat (on knees)"가 "Barbell_Squat"의 유일 exact 후보였던
+  // 오매칭 사고) — 우리 libId에 괄호가 없는데 후보 이름에 괄호가 있으면 사람이 별칭으로 확정하도록 ambiguous로 보낸다.
+  let disqualified = null;
+  if (exactCands.length === 1) {
+    if (ourHasParen || !exactCands[0].name.includes('(')) {
+      return { tier: 'exact', match: exactCands[0] };
+    }
+    disqualified = exactCands[0];
+  }
   if (exactCands.length > 1) {
     const bare = exactCands.filter((e) => !e.name.includes('('));
     if (bare.length === 1) return { tier: 'exactStripped', match: bare[0] };
@@ -106,8 +115,8 @@ function classify(x, manifest) {
     return [...core].every((t) => xt.has(t)) && [...xt].every((t) => et.has(t)) && compatible(x, e);
   });
   if (relaxedCands.length === 1) return { tier: 'relaxed', match: relaxedCands[0] };
-  const cands = relaxedCands.length > 0 ? relaxedCands : exactCands;
-  if (cands.length > 1) return { tier: 'ambiguous', candidates: cands };
+  const cands = relaxedCands.length > 0 ? relaxedCands : (exactCands.length > 0 ? exactCands : (disqualified ? [disqualified] : []));
+  if (cands.length > 0) return { tier: 'ambiguous', candidates: cands };
   return { tier: 'none' };
 }
 
