@@ -48,6 +48,10 @@ export function groupsOf(entries: { pairedWithNext?: boolean }[]): number[][] {
   return groups;
 }
 
+function doneCountOf(session: Session): number {
+  return session.entries.flatMap((e) => e.sets).filter((s) => s.completedAt !== undefined).length;
+}
+
 interface ExerciseRecord {
   last?: SetRecord[];
   pr: number;
@@ -60,6 +64,7 @@ export default function SessionScreen() {
   const [restUntil, setRestUntil] = useState(0);
   const [restTotal, setRestTotal] = useState(90);
   const [showPicker, setShowPicker] = useState(false);
+  const [exitOpen, setExitOpen] = useState(false);
   const [focusSel, setFocusSel] = useState<{ entryIdx: number; setIdx: number } | null>(null);
   const [records, setRecords] = useState<Map<string, ExerciseRecord>>(new Map());
   const [now, setNow] = useState(Date.now());
@@ -198,7 +203,10 @@ export default function SessionScreen() {
   function removeSet(entryIdx: number) {
     if (!session) return;
     const target = session.entries[entryIdx];
-    if (target.sets.length <= 1) return;
+    if (target.sets.length <= 1) {
+      removeEntry(entryIdx, '마지막 세트예요. 이 운동 자체를 뺄까요?');
+      return;
+    }
     const last = target.sets[target.sets.length - 1];
     if (last.completedAt && !window.confirm('완료한 세트예요. 삭제할까요?')) return;
     const entries = session.entries.map((e, i) =>
@@ -208,12 +216,11 @@ export default function SessionScreen() {
     setFocusSel(null);
   }
 
-  function removeEntry(entryIdx: number) {
+  function removeEntry(entryIdx: number, msg?: string) {
     if (!session) return;
     const target = session.entries[entryIdx];
     const hasDone = target.sets.some((s) => s.completedAt !== undefined);
-    const msg = hasDone ? '완료한 세트가 있어요. 이 운동을 뺄까요?' : '이 운동을 뺄까요?';
-    if (!window.confirm(msg)) return;
+    if (!window.confirm(msg ?? (hasDone ? '완료한 세트가 있어요. 이 운동을 뺄까요?' : '이 운동을 뺄까요?'))) return;
     // 그룹 마지막을 빼면 직전 flag 해제(엉뚱한 다음 운동과 묶임 방지), 중간이면 유지(그룹 축소)
     const entries = session.entries
       .map((e, i) =>
@@ -260,8 +267,8 @@ export default function SessionScreen() {
 
   async function finish() {
     if (!session) return;
-    const doneCount = session.entries.flatMap((e) => e.sets).filter((s) => s.completedAt).length;
-    if (doneCount === 0) {
+    const count = doneCountOf(session);
+    if (count === 0) {
       if (window.confirm('완료한 세트가 없어요. 세션을 버릴까요? 되돌릴 수 없어요.')) {
         await discardSession(session.id);
         navigate('/', { replace: true });
@@ -273,7 +280,20 @@ export default function SessionScreen() {
     navigate(`/summary/${session.id}`, { replace: true });
   }
 
+  async function completeAndLeave() {
+    if (!session) return;
+    await finishSession(session);
+    navigate(`/summary/${session.id}`, { replace: true });
+  }
+
+  async function discardAndLeave() {
+    if (!session) return;
+    await discardSession(session.id);
+    navigate('/', { replace: true });
+  }
+
   const total = groups.length;
+  const doneCount = doneCountOf(session);
   const startDate = new Date(session.startedAt);
   const isBackdated = startDate.toDateString() !== new Date(now).toDateString();
   const canPair = group.length > 0 && group[group.length - 1] < session.entries.length - 1;
@@ -281,7 +301,7 @@ export default function SessionScreen() {
   return (
     <>
       <div className="topnav">
-        <button onClick={finish} aria-label="세션 종료">✕</button>
+        <button onClick={() => setExitOpen(true)} aria-label="세션 종료">✕</button>
         <span className="title">{sessionTitle(session, exMap)} · <span>{total > 0 ? `${gPos + 1} / ${total}` : '운동 없음'}</span></span>
         <span className="clock">
           {isBackdated ? `${startDate.getMonth() + 1}/${startDate.getDate()}` : fmtElapsed(session.startedAt, now)}
@@ -407,7 +427,7 @@ export default function SessionScreen() {
                     ↓ 드랍 추가
                   </button>
                   <button
-                    className="btn btn-ghost" disabled={e.sets.length <= 1} onClick={() => removeSet(entryIdx)}
+                    className="btn btn-ghost" onClick={() => removeSet(entryIdx)}
                   >
                     − 세트 삭제
                   </button>
@@ -437,6 +457,17 @@ export default function SessionScreen() {
           )}
         </div>
       </div>
+      {exitOpen && (
+        <div className="sheet-backdrop" onClick={() => setExitOpen(false)}>
+          <div className="sheet" role="dialog" aria-modal="true" aria-labelledby="exit-title" onClick={(e) => e.stopPropagation()}>
+            <div id="exit-title" className="sheet-title">{doneCount > 0 ? '운동을 끝낼까요?' : '완료한 세트가 없어요'}</div>
+            <div className="sheet-body">{doneCount > 0 ? `완료한 세트 ${doneCount}개가 기록돼요.` : '이 세션을 버리면 되돌릴 수 없어요.'}</div>
+            {doneCount > 0 && <button className="btn btn-primary" onClick={completeAndLeave}>운동 완료</button>}
+            <button className="btn btn-danger" onClick={discardAndLeave}>{doneCount > 0 ? '기록 버리고 나가기' : '세션 버리기'}</button>
+            <button className="btn btn-ghost" onClick={() => setExitOpen(false)}>계속하기</button>
+          </div>
+        </div>
+      )}
       {showPicker && (
         <ExercisePicker
           initialFilter={

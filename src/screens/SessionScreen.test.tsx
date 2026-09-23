@@ -1,4 +1,6 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import {
+  render, screen, fireEvent, waitFor, within,
+} from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { db } from '../db/db';
 import { seedLibrary } from '../db/exercises';
@@ -137,6 +139,85 @@ test('운동 완료 시 요약 화면으로 이동한다', async () => {
   expect(await screen.findByText('요약화면')).toBeInTheDocument();
 });
 
+test('✕: 완료 세트가 있으면 완료/버리기/계속 다이얼로그가 뜨고 계속하기는 닫기만 한다', async () => {
+  await startSession(routine);
+  renderScreen();
+  await screen.findByText('벤치프레스');
+  fireEvent.click(screen.getByLabelText('세트 1 완료'));
+
+  fireEvent.click(screen.getByLabelText('세션 종료'));
+  const dialog = await screen.findByRole('dialog');
+  expect(within(dialog).getByRole('button', { name: '운동 완료' })).toBeInTheDocument();
+  expect(within(dialog).getByRole('button', { name: '기록 버리고 나가기' })).toBeInTheDocument();
+  expect(within(dialog).getByRole('button', { name: '계속하기' })).toBeInTheDocument();
+
+  fireEvent.click(within(dialog).getByRole('button', { name: '계속하기' }));
+  await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+  expect(await getActiveSession()).toBeDefined();
+});
+
+test('✕ → 운동 완료: 세션이 완료되고 요약으로 이동한다', async () => {
+  const confirmSpy = vi.spyOn(window, 'confirm');
+  const single: Routine = {
+    id: 'r2', name: '한 운동',
+    items: [{ exerciseId: 'lib-bench-press', defaultSets: 1 }],
+  };
+  const started = await startSession(single);
+  render(
+    <MemoryRouter initialEntries={['/session']}>
+      <Routes>
+        <Route path="/session" element={<SessionScreen />} />
+        <Route path="/summary/:sessionId" element={<div>요약화면</div>} />
+      </Routes>
+    </MemoryRouter>,
+  );
+  await screen.findByText('벤치프레스');
+  fireEvent.click(screen.getByLabelText('세트 1 완료'));
+
+  fireEvent.click(screen.getByLabelText('세션 종료'));
+  const dialog = await screen.findByRole('dialog');
+  fireEvent.click(within(dialog).getByRole('button', { name: '운동 완료' }));
+
+  expect(await screen.findByText('요약화면')).toBeInTheDocument();
+  expect((await db.sessions.get(started.id))?.finishedAt).toBeDefined();
+  expect(confirmSpy).not.toHaveBeenCalled();
+});
+
+test('✕ → 기록 버리고 나가기: 세션이 삭제되고 홈으로 이동한다', async () => {
+  const confirmSpy = vi.spyOn(window, 'confirm');
+  const started = await startSession(routine);
+  render(
+    <MemoryRouter initialEntries={['/session']}>
+      <Routes>
+        <Route path="/" element={<div>홈화면</div>} />
+        <Route path="/session" element={<SessionScreen />} />
+      </Routes>
+    </MemoryRouter>,
+  );
+  await screen.findByText('벤치프레스');
+  fireEvent.click(screen.getByLabelText('세트 1 완료'));
+
+  fireEvent.click(screen.getByLabelText('세션 종료'));
+  const dialog = await screen.findByRole('dialog');
+  fireEvent.click(within(dialog).getByRole('button', { name: '기록 버리고 나가기' }));
+
+  expect(await screen.findByText('홈화면')).toBeInTheDocument();
+  expect(await db.sessions.get(started.id)).toBeUndefined();
+  expect(confirmSpy).not.toHaveBeenCalled();
+});
+
+test('✕: 완료 세트가 없으면 완료 버튼 없이 세션 버리기만 제공한다', async () => {
+  await startSession(routine);
+  renderScreen();
+  await screen.findByText('벤치프레스');
+
+  fireEvent.click(screen.getByLabelText('세션 종료'));
+  const dialog = await screen.findByRole('dialog');
+  expect(within(dialog).getByRole('button', { name: '세션 버리기' })).toBeInTheDocument();
+  expect(within(dialog).getByRole('button', { name: '계속하기' })).toBeInTheDocument();
+  expect(within(dialog).queryByRole('button', { name: '운동 완료' })).toBeNull();
+});
+
 test('무게가 0이면 입력란이 빈칸으로 보이고 입력하면 그대로 반영된다', async () => {
   await startSession(routine); // 지난 기록 없음 → 무게 0으로 프리필
   renderScreen();
@@ -212,7 +293,7 @@ test('시간이 흘러도 지난 기록을 매초 다시 조회하지 않는다'
   }
 });
 
-test('세트 삭제 버튼이 마지막 미완료 세트를 즉시 삭제하고 1개 남으면 비활성화된다', async () => {
+test('세트 삭제: 1개 남으면 마지막 세트 안내 confirm 후 운동 자체를 뺀다', async () => {
   await startSession(routine); // 벤치프레스 defaultSets 2
   renderScreen();
   await screen.findByText('벤치프레스');
@@ -221,7 +302,18 @@ test('세트 삭제 버튼이 마지막 미완료 세트를 즉시 삭제하고 
     const s = await getActiveSession();
     expect(s?.entries[0].sets).toHaveLength(1);
   });
-  expect(screen.getByRole('button', { name: '− 세트 삭제' })).toBeDisabled();
+  expect(screen.getByRole('button', { name: '− 세트 삭제' })).toBeEnabled();
+
+  const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(false);
+  fireEvent.click(screen.getByRole('button', { name: '− 세트 삭제' }));
+  expect(confirmSpy).toHaveBeenCalledWith('마지막 세트예요. 이 운동 자체를 뺄까요?');
+  expect(screen.getByText('벤치프레스')).toBeInTheDocument();
+
+  confirmSpy.mockClear();
+  confirmSpy.mockReturnValue(true);
+  fireEvent.click(screen.getByRole('button', { name: '− 세트 삭제' }));
+  await waitFor(() => expect(screen.queryByText('벤치프레스')).not.toBeInTheDocument());
+  expect(confirmSpy).toHaveBeenCalledTimes(1);
 });
 
 test('완료된 마지막 세트는 confirm 취소 시 유지, 수락 시 삭제된다', async () => {

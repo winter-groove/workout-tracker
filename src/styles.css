@@ -28,6 +28,7 @@
   --green: var(--positive);
   --green-bg: var(--positive-bg);
   --red: var(--danger);
+  --scrim: rgba(0, 0, 0, 0.55);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; }
@@ -59,6 +60,11 @@ input, select { font: inherit; }
 .btn-primary { background: var(--accent); color: var(--on-accent); }
 .btn-ghost { background: var(--surface-2); color: var(--text-2); }
 .btn-danger { background: var(--danger-bg); color: var(--danger); }
+
+.sheet-backdrop { position: fixed; inset: 0; background: var(--scrim); z-index: 30; display: flex; align-items: flex-end; justify-content: center; }
+.sheet { width: 100%; max-width: 480px; background: var(--surface); border-radius: 18px 18px 0 0; padding: 18px 16px calc(16px + env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; gap: 10px; }
+.sheet-title { font-size: 17px; font-weight: 800; }
+.sheet-body { color: var(--muted); font-size: 13.5px; margin-bottom: 4px; }
 .btn-row { display: flex; gap: 8px; }
 .btn-row .btn { flex: 1; }
 .btn-sm { display: inline-block; width: auto; padding: 8px 14px; font-size: 13px; border-radius: 10px; }
