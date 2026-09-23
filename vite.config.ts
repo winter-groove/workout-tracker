@@ -16,23 +16,23 @@ export default defineConfig({
       registerType: 'autoUpdate',
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
-        globIgnores: ['illustrations/**'],
+        globIgnores: ['illustrations/**', 'gifs/**'],
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         runtimeCaching: [
-          {
-            urlPattern: /\/exercises\/.+\.webp$/,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'exercise-images',
-              expiration: { maxEntries: 1000 },
-            },
-          },
           {
             urlPattern: /\/illustrations\/.+\.svg$/,
             handler: 'CacheFirst',
             options: {
               cacheName: 'exercise-illustrations',
               expiration: { maxEntries: 1000 },
+            },
+          },
+          {
+            urlPattern: /\/gifs\/.+\.(gif|webp)$/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'exercise-gifs',
+              expiration: { maxEntries: 1500 },
             },
           },
         ],
