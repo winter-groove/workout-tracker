@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import library from './exercise-library.json';
 import legacy from './legacy-55.json';
 import { BODY_PARTS, EQUIPMENTS } from '../types';
@@ -58,6 +60,21 @@ test('일러스트 매칭 운동은 -2/-3 프레임 규약을 지킨다', () => 
   for (const x of withIllu) {
     expect(x.illustration).toMatch(/^illustrations\/[a-z0-9-]+\.svg$/);
   }
+});
+
+test('gif가 있으면 gifs/<id>.gif 형식이고 gif·webp 파일이 모두 존재한다', () => {
+  const withGif = library.filter((x) => x.gif);
+  expect(withGif.length).toBeGreaterThanOrEqual(350);
+  for (const x of withGif) {
+    expect(x.gif).toBe(`gifs/${x.id}.gif`);
+    expect(fs.existsSync(path.join('public', x.gif!))).toBe(true);
+    expect(fs.existsSync(path.join('public', x.gif!.replace(/\.gif$/, '.webp')))).toBe(true);
+  }
+});
+
+test('public/gifs에 라이브러리가 참조하지 않는 고아 파일이 없다', () => {
+  const referenced = new Set(library.filter((x) => x.gif).flatMap((x) => [path.basename(x.gif!), path.basename(x.gif!).replace(/\.gif$/, '.webp')]));
+  for (const f of fs.readdirSync('public/gifs')) expect(referenced.has(f)).toBe(true);
 });
 
 test('muscles 필드는 근육맵 영역 id 어휘만 사용하고 주동근이 첫 원소다', () => {
