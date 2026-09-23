@@ -89,3 +89,18 @@ test('reduced-motion이면 GIF 대신 포스터(webp)를 렌더한다', () => {
     expect(container.querySelector('img')!.src).toContain('gifs/bench-press.webp');
   } finally { window.matchMedia = orig; }
 });
+
+test('GIF 로드 실패 시 선화 폴백으로 전환되고 애니가 재가동된다', () => {
+  vi.useFakeTimers();
+  try {
+    const { container } = render(<ExerciseHero exercise={{ ...bench, gif: 'gifs/bench-press.gif' }} />);
+    const gifImg = container.querySelector<HTMLImageElement>('img')!;
+    fireEvent.error(gifImg);
+
+    const imgs = [...container.querySelectorAll<HTMLImageElement>('img')];
+    expect(imgs).toHaveLength(2);
+    expect(frameOpacities(container)).toEqual(['1', '0']);
+    act(() => vi.advanceTimersByTime(650));
+    expect(frameOpacities(container)).toEqual(['0', '1']);
+  } finally { vi.useRealTimers(); }
+});

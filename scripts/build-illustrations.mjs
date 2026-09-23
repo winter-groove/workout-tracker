@@ -88,6 +88,12 @@ function compatible(entry, m) {
   return part === entry.bodyPart && Array.isArray(equips) && equips.includes(entry.equipment);
 }
 
+// 라이브러리 항목 직렬화 키 순서 고정 — 어느 파이프라인을 재실행해도 diff가 나지 않게 한다
+function canonical(entry) {
+  const { illustration, muscles, gif, ...base } = entry;
+  return { ...base, ...(illustration ? { illustration } : {}), ...(muscles && muscles.length ? { muscles } : {}), ...(gif ? { gif } : {}) };
+}
+
 const stats = { alias: 0, exact: 0, relaxed: 0, excluded: 0, none: 0, framesMissing: 0 };
 const picks = new Map(); // our id → their slug
 
@@ -127,18 +133,17 @@ for (const [id, slug] of picks) {
 }
 
 const next = lib.map((x) => {
-  // illustration만 벗겨내고 재부여 — muscles는 GIF-only 항목(Task 1이 ExerciseDB에서 채움)에 대해
+  // illustration만 갱신 — muscles는 GIF-only 항목(Task 1이 ExerciseDB에서 채움)에 대해
   // 그대로 보존해야 한다. 매칭 픽에 한해서만 Everkinetic 근육을 우선 적용(아래 덮어쓰기).
-  const { illustration: _dropIllu, ...rest } = x;
-  if (!picks.has(x.id)) return rest;
+  if (!picks.has(x.id)) return canonical(x);
   const slug = picks.get(x.id);
   const m = bySlug.get(slug);
-  const muscles = regionsFor(m);
-  return {
-    ...rest,
+  const regionMuscles = regionsFor(m);
+  return canonical({
+    ...x,
     illustration: `illustrations/${x.id}.svg`,
-    ...(muscles.length > 0 ? { muscles } : {}),
-  };
+    muscles: regionMuscles.length > 0 ? regionMuscles : x.muscles,
+  });
 });
 await writeFile('src/data/exercise-library.json', `${JSON.stringify(next, null, 2)}\n`);
 

@@ -227,17 +227,23 @@ const nextSources = {};
 for (const [ourId, entry] of picks) nextSources[ourId] = entry.id;
 await writeFile(SOURCES_FILE, `${JSON.stringify(nextSources, null, 2)}\n`);
 
+// 라이브러리 항목 직렬화 키 순서 고정 — 어느 파이프라인을 재실행해도 diff가 나지 않게 한다
+function canonical(entry) {
+  const { illustration, muscles, gif, ...base } = entry;
+  return { ...base, ...(illustration ? { illustration } : {}), ...(muscles && muscles.length ? { muscles } : {}), ...(gif ? { gif } : {}) };
+}
+
 const next = lib.map((x) => {
   const matched = picks.get(x.id);
-  const { gif: _dropGif, muscles: existingMuscles, ...rest } = x;
+  const existingMuscles = x.muscles;
   const muscles = Array.isArray(existingMuscles) && existingMuscles.length > 0
     ? existingMuscles
     : (matched ? regionsFor(matched.target, matched.secondary) : []);
-  return {
-    ...rest,
-    ...(matched ? { gif: `gifs/${x.id}.gif` } : {}),
-    ...(muscles.length > 0 ? { muscles } : {}),
-  };
+  return canonical({
+    ...x,
+    gif: matched ? `gifs/${x.id}.gif` : undefined,
+    muscles,
+  });
 });
 await writeFile('src/data/exercise-library.json', `${JSON.stringify(next, null, 2)}\n`);
 

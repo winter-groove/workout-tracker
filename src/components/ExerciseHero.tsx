@@ -32,13 +32,14 @@ export default function ExerciseHero({ exercise }: { exercise: Exercise }) {
   }, [exercise.id]);
 
   useEffect(() => {
-    if (gifUrl || urls.length === 0 || reduced) return;
+    // GIF가 살아있는 동안은 선화 애니를 돌리지 않음 — GIF가 없거나 죽었을 때만(선화 경로가 실제로 보일 때만) 순환
+    if ((gifUrl && !gifDead) || urls.length === 0 || reduced) return;
     const t = setInterval(() => {
       if (document.hidden) return; // 백그라운드 일시정지
       setStep((s) => (s + 1) % SEQ.length);
     }, FRAME_MS);
     return () => clearInterval(t);
-  }, [gifUrl, urls.length, reduced]);
+  }, [gifUrl, gifDead, urls.length, reduced]);
 
   // 로드 실패 프레임은 순환에서 제외 — 현재 스텝이 죽은 프레임이면 살아있는 프레임 중 첫 번째 표시
   const liveFrame = (() => {
