@@ -1,4 +1,4 @@
-import { render, screen, act, fireEvent } from '@testing-library/react';
+import { render, act, fireEvent } from '@testing-library/react';
 import { vi } from 'vitest';
 import type { Exercise } from '../types';
 import ExerciseHero from './ExerciseHero';
@@ -28,15 +28,10 @@ test('선화 폴백은 1↔3 프레임을 왕복한다', () => {
   } finally { vi.useRealTimers(); }
 });
 
-test('illustration이 없으면 픽토그램 + 근육맵만 렌더한다', () => {
+test('illustration이 없으면 픽토그램만 렌더한다', () => {
   const { container } = render(<ExerciseHero exercise={{ ...bench, illustration: undefined, muscles: undefined }} />);
   expect(container.querySelectorAll('img')).toHaveLength(0);
-  expect(screen.getByRole('img', { name: /자극 부위/ })).toBeInTheDocument();
-});
-
-test('근육맵이 muscles 기반으로 함께 렌더된다', () => {
-  render(<ExerciseHero exercise={bench} />);
-  expect(screen.getByRole('img', { name: '자극 부위: 가슴' })).toBeInTheDocument();
+  expect(container.querySelector('.hero-icon')).toBeInTheDocument();
 });
 
 test('운동 교체 시 애니 상태를 초기화한다 (인스턴스 재사용 잔존 방지)', () => {

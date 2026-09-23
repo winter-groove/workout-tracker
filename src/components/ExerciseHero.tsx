@@ -1,12 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { Exercise } from '../types';
 import ExerciseIcon from './ExerciseIcon';
-import MuscleMap from './MuscleMap';
 
 const FRAME_MS = 650;
 const SEQ = [0, 1]; // 1↔3 프레임 왕복 (frame-2는 은퇴)
 
-// 세션 히어로: GIF(있으면) 흰 패널 렌더, 없으면 선화 2포즈 왕복 + 근육맵.
+// 세션 히어로: GIF(있으면) 흰 패널 렌더, 없으면 선화 2포즈 왕복, 그것도 없으면 픽토그램.
 // 프레임/GIF 상태는 이 컴포넌트 내부 — 부모 재렌더 유발 금지.
 export default function ExerciseHero({ exercise }: { exercise: Exercise }) {
   const gifUrl = exercise.gif ? import.meta.env.BASE_URL + exercise.gif : null;
@@ -80,9 +79,6 @@ export default function ExerciseHero({ exercise }: { exercise: Exercise }) {
           <ExerciseIcon iconKey={exercise.iconKey ?? 'barbell'} />
         </div>
       )}
-      <div style={{ width: 108, background: 'var(--bg)', borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 8 }}>
-        <MuscleMap muscles={exercise.muscles} bodyPart={exercise.bodyPart} />
-      </div>
     </div>
   );
 }

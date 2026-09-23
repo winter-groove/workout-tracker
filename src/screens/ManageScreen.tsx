@@ -261,7 +261,6 @@ export default function ManageScreen() {
 
       <div className="d" style={{ fontSize: 11, textAlign: 'center', padding: '4px 0 8px' }}>
         운동 동작 GIF: <a href="https://ascendapi.com" target="_blank" rel="noreferrer" style={{ color: 'var(--muted)' }}>ExerciseDB (AscendAPI)</a> · 운동 일러스트: <a href="https://github.com/bryllim/workout-guide" target="_blank" rel="noreferrer" style={{ color: 'var(--muted)' }}>Workout Guide</a>(Bryl Lim) · Everkinetic — CC BY-SA 4.0
-        · 근육맵: <a href="https://github.com/giavinh79/react-body-highlighter" target="_blank" rel="noreferrer" style={{ color: 'var(--muted)' }}>react-body-highlighter</a> (MIT)
         <br />빌드 {__BUILD_DATE__}
       </div>
 
