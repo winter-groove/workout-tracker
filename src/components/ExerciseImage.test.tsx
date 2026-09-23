@@ -25,3 +25,8 @@ test('illustration 로드 실패 시 픽토그램으로 폴백한다', () => {
   fireEvent.error(screen.getByRole('img'));
   expect(screen.queryByRole('img')).not.toBeInTheDocument();
 });
+
+test('gif가 있으면 포스터(webp)를 썸네일로 렌더한다', () => {
+  render(<ExerciseImage exercise={{ ...ex('d', '운동D', 'illustrations/bench-press.svg'), gif: 'gifs/bench-press.gif' }} />);
+  expect(screen.getByRole('img').getAttribute('src')).toContain('gifs/bench-press.webp');
+});

@@ -5,13 +5,13 @@
     "name": "벤치프레스",
     "bodyPart": "가슴",
     "equipment": "바벨",
-    "illustration": "illustrations/bench-press.svg",
     "gif": "gifs/bench-press.gif",
     "muscles": [
       "chest",
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/bench-press.svg"
   },
   {
     "id": "dumbbell-bench-press",
@@ -19,13 +19,13 @@
     "name": "덤벨 벤치프레스",
     "bodyPart": "가슴",
     "equipment": "덤벨",
-    "illustration": "illustrations/dumbbell-bench-press.svg",
     "gif": "gifs/dumbbell-bench-press.gif",
     "muscles": [
       "chest",
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/dumbbell-bench-press.svg"
   },
   {
     "id": "incline-bench-press",
@@ -33,13 +33,13 @@
     "name": "인클라인 벤치프레스",
     "bodyPart": "가슴",
     "equipment": "바벨",
-    "illustration": "illustrations/incline-bench-press.svg",
     "gif": "gifs/incline-bench-press.gif",
     "muscles": [
       "chest",
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/incline-bench-press.svg"
   },
   {
     "id": "incline-dumbbell-press",
@@ -47,13 +47,13 @@
     "name": "인클라인 덤벨프레스",
     "bodyPart": "가슴",
     "equipment": "덤벨",
-    "illustration": "illustrations/incline-dumbbell-press.svg",
     "gif": "gifs/incline-dumbbell-press.gif",
     "muscles": [
       "chest",
       "front-deltoids",
       "triceps"
-    ]
+    ],
+    "illustration": "illustrations/incline-dumbbell-press.svg"
   },
   {
     "id": "dumbbell-fly",
@@ -61,12 +61,12 @@
     "name": "덤벨 플라이",
     "bodyPart": "가슴",
     "equipment": "덤벨",
-    "illustration": "illustrations/dumbbell-fly.svg",
     "gif": "gifs/dumbbell-fly.gif",
     "muscles": [
       "chest",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/dumbbell-fly.svg"
   },
   {
     "id": "cable-crossover",
@@ -74,12 +74,12 @@
     "name": "케이블 크로스오버",
     "bodyPart": "가슴",
     "equipment": "케이블",
-    "illustration": "illustrations/cable-crossover.svg",
     "gif": "gifs/cable-crossover.gif",
     "muscles": [
       "chest",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/cable-crossover.svg"
   },
   {
     "id": "pec-deck",
@@ -100,13 +100,13 @@
     "name": "딥스",
     "bodyPart": "가슴",
     "equipment": "맨몸",
-    "illustration": "illustrations/chest-dips.svg",
     "gif": "gifs/chest-dips.gif",
     "muscles": [
       "chest",
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/chest-dips.svg"
   },
   {
     "id": "pushup",
@@ -114,14 +114,14 @@
     "name": "푸시업",
     "bodyPart": "가슴",
     "equipment": "맨몸",
-    "illustration": "illustrations/pushup.svg",
     "gif": "gifs/pushup.gif",
     "muscles": [
       "chest",
       "triceps",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/pushup.svg"
   },
   {
     "id": "lat-pulldown",
@@ -129,12 +129,12 @@
     "name": "랫 풀다운",
     "bodyPart": "등",
     "equipment": "케이블",
-    "illustration": "illustrations/lat-pulldown.svg",
     "gif": "gifs/lat-pulldown.gif",
     "muscles": [
       "upper-back",
       "biceps"
-    ]
+    ],
+    "illustration": "illustrations/lat-pulldown.svg"
   },
   {
     "id": "barbell-row",
@@ -142,14 +142,14 @@
     "name": "바벨 로우",
     "bodyPart": "등",
     "equipment": "바벨",
-    "illustration": "illustrations/barbell-row.svg",
     "gif": "gifs/barbell-row.gif",
     "muscles": [
       "upper-back",
       "lower-back",
       "biceps",
       "back-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/barbell-row.svg"
   },
   {
     "id": "seated-cable-row",
@@ -157,14 +157,14 @@
     "name": "시티드 케이블 로우",
     "bodyPart": "등",
     "equipment": "케이블",
-    "illustration": "illustrations/seated-cable-row.svg",
     "gif": "gifs/seated-cable-row.gif",
     "muscles": [
       "upper-back",
       "lower-back",
       "biceps",
       "back-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/seated-cable-row.svg"
   },
   {
     "id": "one-arm-dumbbell-row",
@@ -172,13 +172,13 @@
     "name": "원암 덤벨 로우",
     "bodyPart": "등",
     "equipment": "덤벨",
-    "illustration": "illustrations/one-arm-dumbbell-row.svg",
     "gif": "gifs/one-arm-dumbbell-row.gif",
     "muscles": [
       "upper-back",
       "lower-back",
       "biceps"
-    ]
+    ],
+    "illustration": "illustrations/one-arm-dumbbell-row.svg"
   },
   {
     "id": "pullup",
@@ -186,14 +186,14 @@
     "name": "풀업",
     "bodyPart": "등",
     "equipment": "맨몸",
-    "illustration": "illustrations/pullup.svg",
     "gif": "gifs/pullup.gif",
     "muscles": [
       "upper-back",
       "biceps",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/pullup.svg"
   },
   {
     "id": "chinup",
@@ -201,12 +201,12 @@
     "name": "친업",
     "bodyPart": "등",
     "equipment": "맨몸",
-    "illustration": "illustrations/chinup.svg",
     "gif": "gifs/chinup.gif",
     "muscles": [
       "biceps",
       "upper-back"
-    ]
+    ],
+    "illustration": "illustrations/chinup.svg"
   },
   {
     "id": "deadlift",
@@ -214,14 +214,14 @@
     "name": "데드리프트",
     "bodyPart": "등",
     "equipment": "바벨",
-    "illustration": "illustrations/deadlift.svg",
     "gif": "gifs/deadlift.gif",
     "muscles": [
       "hamstring",
       "gluteal",
       "lower-back",
       "upper-back"
-    ]
+    ],
+    "illustration": "illustrations/deadlift.svg"
   },
   {
     "id": "straight-arm-pulldown",
@@ -229,13 +229,13 @@
     "name": "스트레이트암 풀다운",
     "bodyPart": "등",
     "equipment": "케이블",
-    "illustration": "illustrations/straight-arm-pulldown.svg",
     "gif": "gifs/straight-arm-pulldown.gif",
     "muscles": [
       "upper-back",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/straight-arm-pulldown.svg"
   },
   {
     "id": "squat",
@@ -243,14 +243,14 @@
     "name": "스쿼트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/squat.svg",
     "gif": "gifs/squat.gif",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/squat.svg"
   },
   {
     "id": "front-squat",
@@ -258,14 +258,14 @@
     "name": "프론트 스쿼트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/front-squat.svg",
     "gif": "gifs/front-squat.gif",
     "muscles": [
       "quadriceps",
       "abs",
       "obliques",
       "gluteal"
-    ]
+    ],
+    "illustration": "illustrations/front-squat.svg"
   },
   {
     "id": "goblet-squat",
@@ -273,14 +273,14 @@
     "name": "고블릿 스쿼트",
     "bodyPart": "하체",
     "equipment": "덤벨",
-    "illustration": "illustrations/goblet-squat.svg",
     "gif": "gifs/goblet-squat.gif",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/goblet-squat.svg"
   },
   {
     "id": "leg-press",
@@ -288,13 +288,13 @@
     "name": "레그프레스",
     "bodyPart": "하체",
     "equipment": "머신",
-    "illustration": "illustrations/leg-press.svg",
     "gif": "gifs/leg-press.gif",
     "muscles": [
       "quadriceps",
       "gluteal",
       "hamstring"
-    ]
+    ],
+    "illustration": "illustrations/leg-press.svg"
   },
   {
     "id": "leg-extension",
@@ -302,11 +302,11 @@
     "name": "레그 익스텐션",
     "bodyPart": "하체",
     "equipment": "머신",
-    "illustration": "illustrations/leg-extension.svg",
     "gif": "gifs/leg-extension.gif",
     "muscles": [
       "quadriceps"
-    ]
+    ],
+    "illustration": "illustrations/leg-extension.svg"
   },
   {
     "id": "lying-leg-curl",
@@ -314,12 +314,12 @@
     "name": "라잉 레그컬",
     "bodyPart": "하체",
     "equipment": "머신",
-    "illustration": "illustrations/lying-leg-curl.svg",
     "gif": "gifs/lying-leg-curl.gif",
     "muscles": [
       "hamstring",
       "calves"
-    ]
+    ],
+    "illustration": "illustrations/lying-leg-curl.svg"
   },
   {
     "id": "seated-leg-curl",
@@ -327,12 +327,12 @@
     "name": "시티드 레그컬",
     "bodyPart": "하체",
     "equipment": "머신",
-    "illustration": "illustrations/seated-leg-curl.svg",
     "gif": "gifs/seated-leg-curl.gif",
     "muscles": [
       "hamstring",
       "calves"
-    ]
+    ],
+    "illustration": "illustrations/seated-leg-curl.svg"
   },
   {
     "id": "barbell-lunge",
@@ -354,13 +354,13 @@
     "name": "덤벨 런지",
     "bodyPart": "하체",
     "equipment": "덤벨",
-    "illustration": "illustrations/dumbbell-lunge.svg",
     "gif": "gifs/dumbbell-lunge.gif",
     "muscles": [
       "quadriceps",
       "gluteal",
       "hamstring"
-    ]
+    ],
+    "illustration": "illustrations/dumbbell-lunge.svg"
   },
   {
     "id": "romanian-deadlift",
@@ -368,13 +368,13 @@
     "name": "루마니안 데드리프트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/romanian-deadlift.svg",
     "gif": "gifs/romanian-deadlift.gif",
     "muscles": [
       "hamstring",
       "gluteal",
       "lower-back"
-    ]
+    ],
+    "illustration": "illustrations/romanian-deadlift.svg"
   },
   {
     "id": "standing-calf-raise",
@@ -382,11 +382,11 @@
     "name": "스탠딩 카프레이즈",
     "bodyPart": "하체",
     "equipment": "머신",
-    "illustration": "illustrations/standing-calf-raise.svg",
     "gif": "gifs/standing-calf-raise.gif",
     "muscles": [
       "calves"
-    ]
+    ],
+    "illustration": "illustrations/standing-calf-raise.svg"
   },
   {
     "id": "hip-thrust",
@@ -394,14 +394,14 @@
     "name": "힙 스러스트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/hip-thrust.svg",
     "gif": "gifs/hip-thrust.gif",
     "muscles": [
       "gluteal",
       "hamstring",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/hip-thrust.svg"
   },
   {
     "id": "overhead-press",
@@ -409,12 +409,12 @@
     "name": "오버헤드 프레스",
     "bodyPart": "어깨",
     "equipment": "바벨",
-    "illustration": "illustrations/overhead-press.svg",
     "gif": "gifs/overhead-press.gif",
     "muscles": [
       "front-deltoids",
       "triceps"
-    ]
+    ],
+    "illustration": "illustrations/overhead-press.svg"
   },
   {
     "id": "dumbbell-shoulder-press",
@@ -422,14 +422,14 @@
     "name": "덤벨 숄더프레스",
     "bodyPart": "어깨",
     "equipment": "덤벨",
-    "illustration": "illustrations/dumbbell-shoulder-press.svg",
     "gif": "gifs/dumbbell-shoulder-press.gif",
     "muscles": [
       "front-deltoids",
       "triceps",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/dumbbell-shoulder-press.svg"
   },
   {
     "id": "arnold-press",
@@ -437,12 +437,12 @@
     "name": "아놀드 프레스",
     "bodyPart": "어깨",
     "equipment": "덤벨",
-    "illustration": "illustrations/arnold-press.svg",
     "gif": "gifs/arnold-press.gif",
     "muscles": [
       "front-deltoids",
       "triceps"
-    ]
+    ],
+    "illustration": "illustrations/arnold-press.svg"
   },
   {
     "id": "lateral-raise",
@@ -450,13 +450,13 @@
     "name": "사이드 레터럴 레이즈",
     "bodyPart": "어깨",
     "equipment": "덤벨",
-    "illustration": "illustrations/lateral-raise.svg",
     "gif": "gifs/lateral-raise.gif",
     "muscles": [
       "front-deltoids",
       "upper-back",
       "trapezius"
-    ]
+    ],
+    "illustration": "illustrations/lateral-raise.svg"
   },
   {
     "id": "front-raise",
@@ -464,12 +464,12 @@
     "name": "프론트 레이즈",
     "bodyPart": "어깨",
     "equipment": "덤벨",
-    "illustration": "illustrations/front-raise.svg",
     "gif": "gifs/front-raise.gif",
     "muscles": [
       "front-deltoids",
       "chest"
-    ]
+    ],
+    "illustration": "illustrations/front-raise.svg"
   },
   {
     "id": "reverse-fly",
@@ -477,13 +477,13 @@
     "name": "리버스 플라이",
     "bodyPart": "어깨",
     "equipment": "덤벨",
-    "illustration": "illustrations/reverse-fly.svg",
     "gif": "gifs/reverse-fly.gif",
     "muscles": [
       "back-deltoids",
       "upper-back",
       "trapezius"
-    ]
+    ],
+    "illustration": "illustrations/reverse-fly.svg"
   },
   {
     "id": "upright-row",
@@ -491,14 +491,14 @@
     "name": "업라이트 로우",
     "bodyPart": "어깨",
     "equipment": "바벨",
-    "illustration": "illustrations/upright-row.svg",
     "gif": "gifs/upright-row.gif",
     "muscles": [
       "front-deltoids",
       "upper-back",
       "trapezius",
       "biceps"
-    ]
+    ],
+    "illustration": "illustrations/upright-row.svg"
   },
   {
     "id": "face-pull",
@@ -506,13 +506,13 @@
     "name": "페이스 풀",
     "bodyPart": "어깨",
     "equipment": "케이블",
-    "illustration": "illustrations/face-pull.svg",
     "muscles": [
       "upper-back",
       "trapezius",
       "back-deltoids",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/face-pull.svg"
   },
   {
     "id": "barbell-shrug",
@@ -520,13 +520,13 @@
     "name": "바벨 슈러그",
     "bodyPart": "어깨",
     "equipment": "바벨",
-    "illustration": "illustrations/barbell-shrug.svg",
     "gif": "gifs/barbell-shrug.gif",
     "muscles": [
       "upper-back",
       "trapezius",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/barbell-shrug.svg"
   },
   {
     "id": "barbell-curl",
@@ -534,12 +534,12 @@
     "name": "바벨 컬",
     "bodyPart": "팔",
     "equipment": "바벨",
-    "illustration": "illustrations/barbell-curl.svg",
     "gif": "gifs/barbell-curl.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/barbell-curl.svg"
   },
   {
     "id": "dumbbell-curl",
@@ -547,12 +547,12 @@
     "name": "덤벨 컬",
     "bodyPart": "팔",
     "equipment": "덤벨",
-    "illustration": "illustrations/dumbbell-curl.svg",
     "gif": "gifs/dumbbell-curl.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/dumbbell-curl.svg"
   },
   {
     "id": "hammer-curl",
@@ -560,12 +560,12 @@
     "name": "해머컬",
     "bodyPart": "팔",
     "equipment": "덤벨",
-    "illustration": "illustrations/hammer-curl.svg",
     "gif": "gifs/hammer-curl.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/hammer-curl.svg"
   },
   {
     "id": "preacher-curl",
@@ -573,12 +573,12 @@
     "name": "프리처컬",
     "bodyPart": "팔",
     "equipment": "바벨",
-    "illustration": "illustrations/preacher-curl.svg",
     "gif": "gifs/preacher-curl.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/preacher-curl.svg"
   },
   {
     "id": "concentration-curl",
@@ -586,12 +586,12 @@
     "name": "컨센트레이션 컬",
     "bodyPart": "팔",
     "equipment": "덤벨",
-    "illustration": "illustrations/concentration-curl.svg",
     "gif": "gifs/concentration-curl.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/concentration-curl.svg"
   },
   {
     "id": "triceps-pushdown",
@@ -599,12 +599,12 @@
     "name": "트라이셉스 푸시다운",
     "bodyPart": "팔",
     "equipment": "케이블",
-    "illustration": "illustrations/triceps-pushdown.svg",
     "gif": "gifs/triceps-pushdown.gif",
     "muscles": [
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/triceps-pushdown.svg"
   },
   {
     "id": "close-grip-bench",
@@ -612,13 +612,13 @@
     "name": "클로즈그립 벤치프레스",
     "bodyPart": "팔",
     "equipment": "바벨",
-    "illustration": "illustrations/close-grip-bench.svg",
     "gif": "gifs/close-grip-bench.gif",
     "muscles": [
       "triceps",
       "chest",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/close-grip-bench.svg"
   },
   {
     "id": "lying-triceps-extension",
@@ -626,12 +626,12 @@
     "name": "라잉 트라이셉스 익스텐션",
     "bodyPart": "팔",
     "equipment": "바벨",
-    "illustration": "illustrations/lying-triceps-extension.svg",
     "gif": "gifs/lying-triceps-extension.gif",
     "muscles": [
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/lying-triceps-extension.svg"
   },
   {
     "id": "triceps-dips",
@@ -639,13 +639,13 @@
     "name": "딥스(삼두)",
     "bodyPart": "팔",
     "equipment": "맨몸",
-    "illustration": "illustrations/triceps-dips.svg",
     "gif": "gifs/triceps-dips.gif",
     "muscles": [
       "triceps",
       "chest",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/triceps-dips.svg"
   },
   {
     "id": "overhead-triceps-extension",
@@ -653,12 +653,12 @@
     "name": "오버헤드 트라이셉스 익스텐션",
     "bodyPart": "팔",
     "equipment": "덤벨",
-    "illustration": "illustrations/overhead-triceps-extension.svg",
     "gif": "gifs/overhead-triceps-extension.gif",
     "muscles": [
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/overhead-triceps-extension.svg"
   },
   {
     "id": "crunch",
@@ -666,12 +666,12 @@
     "name": "크런치",
     "bodyPart": "코어",
     "equipment": "맨몸",
-    "illustration": "illustrations/crunch.svg",
     "gif": "gifs/crunch.gif",
     "muscles": [
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/crunch.svg"
   },
   {
     "id": "plank",
@@ -679,12 +679,12 @@
     "name": "플랭크",
     "bodyPart": "코어",
     "equipment": "맨몸",
-    "illustration": "illustrations/plank.svg",
     "muscles": [
       "abs",
       "obliques",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/plank.svg"
   },
   {
     "id": "hanging-leg-raise",
@@ -692,12 +692,12 @@
     "name": "행잉 레그레이즈",
     "bodyPart": "코어",
     "equipment": "맨몸",
-    "illustration": "illustrations/hanging-leg-raise.svg",
     "gif": "gifs/hanging-leg-raise.gif",
     "muscles": [
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/hanging-leg-raise.svg"
   },
   {
     "id": "russian-twist",
@@ -705,13 +705,13 @@
     "name": "러시안 트위스트",
     "bodyPart": "코어",
     "equipment": "맨몸",
-    "illustration": "illustrations/russian-twist.svg",
     "gif": "gifs/russian-twist.gif",
     "muscles": [
       "abs",
       "obliques",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/russian-twist.svg"
   },
   {
     "id": "ab-rollout",
@@ -719,13 +719,13 @@
     "name": "앱휠 롤아웃",
     "bodyPart": "코어",
     "equipment": "기타",
-    "illustration": "illustrations/ab-rollout.svg",
     "gif": "gifs/ab-rollout.gif",
     "muscles": [
       "abs",
       "obliques",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/ab-rollout.svg"
   },
   {
     "id": "cable-crunch",
@@ -733,12 +733,12 @@
     "name": "케이블 크런치",
     "bodyPart": "코어",
     "equipment": "케이블",
-    "illustration": "illustrations/cable-crunch.svg",
     "gif": "gifs/cable-crunch.gif",
     "muscles": [
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/cable-crunch.svg"
   },
   {
     "id": "kettlebell-swing",
@@ -746,14 +746,14 @@
     "name": "케틀벨 스윙",
     "bodyPart": "기타",
     "equipment": "기타",
-    "illustration": "illustrations/kettlebell-swing.svg",
     "gif": "gifs/kettlebell-swing.gif",
     "muscles": [
       "gluteal",
       "hamstring",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/kettlebell-swing.svg"
   },
   {
     "id": "3-4-sit-up",
@@ -811,12 +811,12 @@
     "name": "얼터네이트 해머컬",
     "bodyPart": "팔",
     "equipment": "덤벨",
-    "illustration": "illustrations/alternate-hammer-curl.svg",
     "gif": "gifs/alternate-hammer-curl.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/alternate-hammer-curl.svg"
   },
   {
     "id": "alternate-heel-touchers",
@@ -836,12 +836,12 @@
     "name": "얼터네이트 인클라인 덤벨 컬",
     "bodyPart": "팔",
     "equipment": "덤벨",
-    "illustration": "illustrations/alternate-incline-dumbbell-curl.svg",
     "gif": "gifs/alternate-incline-dumbbell-curl.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/alternate-incline-dumbbell-curl.svg"
   },
   {
     "id": "alternate-leg-diagonal-bound",
@@ -1006,13 +1006,13 @@
     "name": "볼 레그컬",
     "bodyPart": "하체",
     "equipment": "기타",
-    "illustration": "illustrations/ball-leg-curl.svg",
     "muscles": [
       "hamstring",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/ball-leg-curl.svg"
   },
   {
     "id": "band-assisted-pull-up",
@@ -1020,12 +1020,12 @@
     "name": "밴드 어시스트 풀업",
     "bodyPart": "등",
     "equipment": "기타",
-    "illustration": "illustrations/band-assisted-pull-up.svg",
     "gif": "gifs/band-assisted-pull-up.gif",
     "muscles": [
       "upper-back",
       "biceps"
-    ]
+    ],
+    "illustration": "illustrations/band-assisted-pull-up.svg"
   },
   {
     "id": "band-good-morning",
@@ -1054,13 +1054,13 @@
     "name": "밴드 풀어파트",
     "bodyPart": "어깨",
     "equipment": "기타",
-    "illustration": "illustrations/band-pull-apart.svg",
     "muscles": [
       "upper-back",
       "trapezius",
       "back-deltoids",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/band-pull-apart.svg"
   },
   {
     "id": "band-skull-crusher",
@@ -1096,14 +1096,14 @@
     "name": "바벨 풀스쿼트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/barbell-full-squat.svg",
     "gif": "gifs/barbell-full-squat.gif",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/barbell-full-squat.svg"
   },
   {
     "id": "barbell-guillotine-bench-press",
@@ -1111,13 +1111,13 @@
     "name": "바벨 길로틴 벤치프레스",
     "bodyPart": "가슴",
     "equipment": "바벨",
-    "illustration": "illustrations/barbell-guillotine-bench-press.svg",
     "gif": "gifs/barbell-guillotine-bench-press.gif",
     "muscles": [
       "chest",
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/barbell-guillotine-bench-press.svg"
   },
   {
     "id": "barbell-hack-squat",
@@ -1125,14 +1125,14 @@
     "name": "바벨 핵 스쿼트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/barbell-hack-squat.svg",
     "gif": "gifs/barbell-hack-squat.gif",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/barbell-hack-squat.svg"
   },
   {
     "id": "barbell-hip-thrust",
@@ -1140,11 +1140,11 @@
     "name": "바벨 힙 스러스트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/barbell-hip-thrust.svg",
     "muscles": [
       "gluteal",
       "hamstring"
-    ]
+    ],
+    "illustration": "illustrations/barbell-hip-thrust.svg"
   },
   {
     "id": "barbell-incline-shoulder-raise",
@@ -1198,12 +1198,12 @@
     "name": "바벨 비하인드백 슈러그",
     "bodyPart": "등",
     "equipment": "바벨",
-    "illustration": "illustrations/barbell-shrug-behind-the-back.svg",
     "muscles": [
       "upper-back",
       "trapezius",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/barbell-shrug-behind-the-back.svg"
   },
   {
     "id": "barbell-side-bend",
@@ -1218,14 +1218,14 @@
     "name": "바벨 사이드스플릿스쿼트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/barbell-side-split-squat.svg",
     "gif": "gifs/barbell-side-split-squat.gif",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/barbell-side-split-squat.svg"
   },
   {
     "id": "barbell-squat-to-a-bench",
@@ -1233,14 +1233,14 @@
     "name": "바벨 벤치스쿼트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/barbell-squat-to-a-bench.svg",
     "gif": "gifs/barbell-squat-to-a-bench.gif",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/barbell-squat-to-a-bench.svg"
   },
   {
     "id": "barbell-step-ups",
@@ -1290,13 +1290,13 @@
     "name": "벤치딥스",
     "bodyPart": "팔",
     "equipment": "맨몸",
-    "illustration": "illustrations/bench-dips.svg",
     "gif": "gifs/bench-dips.gif",
     "muscles": [
       "triceps",
       "chest",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/bench-dips.svg"
   },
   {
     "id": "bench-jump",
@@ -1378,13 +1378,13 @@
     "name": "벤트오버 덤벨 리어델트레이즈 헤드온벤치",
     "bodyPart": "어깨",
     "equipment": "덤벨",
-    "illustration": "illustrations/bent-over-dumbbell-rear-delt-raise-with-head-on-bench.svg",
     "gif": "gifs/bent-over-dumbbell-rear-delt-raise-with-head-on-bench.gif",
     "muscles": [
       "back-deltoids",
       "upper-back",
       "trapezius"
-    ]
+    ],
+    "illustration": "illustrations/bent-over-dumbbell-rear-delt-raise-with-head-on-bench.svg"
   },
   {
     "id": "bent-over-low-pulley-side-lateral",
@@ -1399,14 +1399,14 @@
     "name": "벤트오버 원암 롱바로우",
     "bodyPart": "등",
     "equipment": "바벨",
-    "illustration": "illustrations/bent-over-one-arm-long-bar-row.svg",
     "gif": "gifs/bent-over-one-arm-long-bar-row.gif",
     "muscles": [
       "upper-back",
       "lower-back",
       "biceps",
       "back-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/bent-over-one-arm-long-bar-row.svg"
   },
   {
     "id": "bent-over-two-arm-long-bar-row",
@@ -1414,13 +1414,13 @@
     "name": "벤트오버 투암 롱바로우",
     "bodyPart": "등",
     "equipment": "바벨",
-    "illustration": "illustrations/bent-over-two-arm-long-bar-row.svg",
     "muscles": [
       "upper-back",
       "lower-back",
       "biceps",
       "back-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/bent-over-two-arm-long-bar-row.svg"
   },
   {
     "id": "bent-over-two-dumbbell-row",
@@ -1428,14 +1428,14 @@
     "name": "벤트오버 투덤벨로우",
     "bodyPart": "등",
     "equipment": "덤벨",
-    "illustration": "illustrations/bent-over-two-dumbbell-row.svg",
     "gif": "gifs/bent-over-two-dumbbell-row.gif",
     "muscles": [
       "upper-back",
       "lower-back",
       "biceps",
       "back-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/bent-over-two-dumbbell-row.svg"
   },
   {
     "id": "bent-over-two-dumbbell-row-with-palms-in",
@@ -1443,14 +1443,14 @@
     "name": "벤트오버 투덤벨로우 팜인",
     "bodyPart": "등",
     "equipment": "덤벨",
-    "illustration": "illustrations/bent-over-two-dumbbell-row-with-palms-in.svg",
     "gif": "gifs/bent-over-two-dumbbell-row-with-palms-in.gif",
     "muscles": [
       "upper-back",
       "lower-back",
       "biceps",
       "back-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/bent-over-two-dumbbell-row-with-palms-in.svg"
   },
   {
     "id": "bent-press",
@@ -1511,14 +1511,14 @@
     "name": "맨몸 미드로우",
     "bodyPart": "등",
     "equipment": "기타",
-    "illustration": "illustrations/bodyweight-mid-row.svg",
     "muscles": [
       "upper-back",
       "lower-back",
       "biceps",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/bodyweight-mid-row.svg"
   },
   {
     "id": "bodyweight-squat",
@@ -1526,14 +1526,14 @@
     "name": "맨몸 스쿼트",
     "bodyPart": "하체",
     "equipment": "맨몸",
-    "illustration": "illustrations/bodyweight-squat.svg",
     "muscles": [
       "quadriceps",
       "gluteal",
       "hamstring",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/bodyweight-squat.svg"
   },
   {
     "id": "bodyweight-walking-lunge",
@@ -1555,12 +1555,12 @@
     "name": "보수볼 케이블크런치 사이드벤드",
     "bodyPart": "코어",
     "equipment": "케이블",
-    "illustration": "illustrations/bosu-ball-cable-crunch-with-side-bends.svg",
     "gif": "gifs/bosu-ball-cable-crunch-with-side-bends.gif",
     "muscles": [
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/bosu-ball-cable-crunch-with-side-bends.svg"
   },
   {
     "id": "bottoms-up-clean-from-the-hang-position",
@@ -1608,13 +1608,13 @@
     "name": "박스스쿼트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/box-squat.svg",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/box-squat.svg"
   },
   {
     "id": "box-squat-with-bands",
@@ -1622,13 +1622,13 @@
     "name": "밴드 박스스쿼트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/box-squat-with-bands.svg",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/box-squat-with-bands.svg"
   },
   {
     "id": "box-squat-with-chains",
@@ -1636,13 +1636,13 @@
     "name": "체인 박스스쿼트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/box-squat-with-chains.svg",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/box-squat-with-chains.svg"
   },
   {
     "id": "bradford-rocky-presses",
@@ -1704,12 +1704,12 @@
     "name": "케이블 로프 해머컬",
     "bodyPart": "팔",
     "equipment": "케이블",
-    "illustration": "illustrations/cable-hammer-curls---rope-attachment.svg",
     "gif": "gifs/cable-hammer-curls---rope-attachment.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/cable-hammer-curls---rope-attachment.svg"
   },
   {
     "id": "cable-hip-adduction",
@@ -1818,12 +1818,12 @@
     "name": "케이블 프리처컬",
     "bodyPart": "팔",
     "equipment": "케이블",
-    "illustration": "illustrations/cable-preacher-curl.svg",
     "gif": "gifs/cable-preacher-curl.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/cable-preacher-curl.svg"
   },
   {
     "id": "cable-rear-delt-fly",
@@ -1831,12 +1831,12 @@
     "name": "케이블 리어델트플라이",
     "bodyPart": "어깨",
     "equipment": "케이블",
-    "illustration": "illustrations/cable-rear-delt-fly.svg",
     "muscles": [
       "back-deltoids",
       "upper-back",
       "trapezius"
-    ]
+    ],
+    "illustration": "illustrations/cable-rear-delt-fly.svg"
   },
   {
     "id": "cable-reverse-crunch",
@@ -1844,12 +1844,12 @@
     "name": "케이블 리버스 크런치",
     "bodyPart": "코어",
     "equipment": "케이블",
-    "illustration": "illustrations/cable-reverse-crunch.svg",
     "gif": "gifs/cable-reverse-crunch.gif",
     "muscles": [
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/cable-reverse-crunch.svg"
   },
   {
     "id": "cable-rope-overhead-triceps-extension",
@@ -1857,12 +1857,12 @@
     "name": "케이블 로프 오버헤드 트라이셉스 익스텐션",
     "bodyPart": "팔",
     "equipment": "케이블",
-    "illustration": "illustrations/cable-rope-overhead-triceps-extension.svg",
     "gif": "gifs/cable-rope-overhead-triceps-extension.gif",
     "muscles": [
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/cable-rope-overhead-triceps-extension.svg"
   },
   {
     "id": "cable-rope-rear-delt-rows",
@@ -1897,12 +1897,12 @@
     "name": "케이블 시티드 크런치",
     "bodyPart": "코어",
     "equipment": "케이블",
-    "illustration": "illustrations/cable-seated-crunch.svg",
     "gif": "gifs/cable-seated-crunch.gif",
     "muscles": [
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/cable-seated-crunch.svg"
   },
   {
     "id": "cable-seated-lateral-raise",
@@ -1910,13 +1910,13 @@
     "name": "케이블 시티드 레터럴 레이즈",
     "bodyPart": "어깨",
     "equipment": "케이블",
-    "illustration": "illustrations/cable-seated-lateral-raise.svg",
     "gif": "gifs/cable-seated-lateral-raise.gif",
     "muscles": [
       "front-deltoids",
       "upper-back",
       "trapezius"
-    ]
+    ],
+    "illustration": "illustrations/cable-seated-lateral-raise.svg"
   },
   {
     "id": "cable-shoulder-press",
@@ -1949,12 +1949,12 @@
     "name": "케이블 리스트컬",
     "bodyPart": "팔",
     "equipment": "케이블",
-    "illustration": "illustrations/cable-wrist-curl.svg",
     "gif": "gifs/cable-wrist-curl.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/cable-wrist-curl.svg"
   },
   {
     "id": "calf-machine-shoulder-shrug",
@@ -1969,11 +1969,11 @@
     "name": "카프 프레스",
     "bodyPart": "하체",
     "equipment": "머신",
-    "illustration": "illustrations/calf-press.svg",
     "gif": "gifs/calf-press.gif",
     "muscles": [
       "calves"
-    ]
+    ],
+    "illustration": "illustrations/calf-press.svg"
   },
   {
     "id": "calf-press-on-the-leg-press-machine",
@@ -1981,11 +1981,11 @@
     "name": "레그프레스 머신 카프 프레스",
     "bodyPart": "하체",
     "equipment": "머신",
-    "illustration": "illustrations/calf-press-on-the-leg-press-machine.svg",
     "gif": "gifs/calf-press-on-the-leg-press-machine.gif",
     "muscles": [
       "calves"
-    ]
+    ],
+    "illustration": "illustrations/calf-press-on-the-leg-press-machine.svg"
   },
   {
     "id": "calf-raise-on-a-dumbbell",
@@ -2004,11 +2004,11 @@
     "name": "밴드 카프레이즈",
     "bodyPart": "하체",
     "equipment": "기타",
-    "illustration": "illustrations/calf-raises---with-bands.svg",
     "gif": "gifs/calf-raises---with-bands.gif",
     "muscles": [
       "calves"
-    ]
+    ],
+    "illustration": "illustrations/calf-raises---with-bands.svg"
   },
   {
     "id": "car-deadlift",
@@ -2147,13 +2147,13 @@
     "name": "클린 데드리프트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/clean-deadlift.svg",
     "muscles": [
       "hamstring",
       "gluteal",
       "lower-back",
       "upper-back"
-    ]
+    ],
+    "illustration": "illustrations/clean-deadlift.svg"
   },
   {
     "id": "clean-pull",
@@ -2168,12 +2168,12 @@
     "name": "클린 슈러그",
     "bodyPart": "등",
     "equipment": "바벨",
-    "illustration": "illustrations/clean-shrug.svg",
     "muscles": [
       "upper-back",
       "trapezius",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/clean-shrug.svg"
   },
   {
     "id": "clean-and-jerk",
@@ -2202,14 +2202,14 @@
     "name": "클락 푸시업",
     "bodyPart": "가슴",
     "equipment": "맨몸",
-    "illustration": "illustrations/clock-push-up.svg",
     "gif": "gifs/clock-push-up.gif",
     "muscles": [
       "chest",
       "triceps",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/clock-push-up.svg"
   },
   {
     "id": "close-grip-dumbbell-press",
@@ -2230,11 +2230,11 @@
     "name": "밴드 클로즈그립 EZ바 컬",
     "bodyPart": "팔",
     "equipment": "바벨",
-    "illustration": "illustrations/close-grip-ez-bar-curl-with-band.svg",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/close-grip-ez-bar-curl-with-band.svg"
   },
   {
     "id": "close-grip-ez-bar-press",
@@ -2255,12 +2255,12 @@
     "name": "클로즈그립 EZ바 컬",
     "bodyPart": "팔",
     "equipment": "바벨",
-    "illustration": "illustrations/close-grip-ez-bar-curl.svg",
     "gif": "gifs/close-grip-ez-bar-curl.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/close-grip-ez-bar-curl.svg"
   },
   {
     "id": "close-grip-front-lat-pulldown",
@@ -2268,11 +2268,11 @@
     "name": "클로즈그립 프론트 랫 풀다운",
     "bodyPart": "등",
     "equipment": "케이블",
-    "illustration": "illustrations/close-grip-front-lat-pulldown.svg",
     "muscles": [
       "upper-back",
       "biceps"
-    ]
+    ],
+    "illustration": "illustrations/close-grip-front-lat-pulldown.svg"
   },
   {
     "id": "close-grip-push-up-off-of-a-dumbbell",
@@ -2319,12 +2319,12 @@
     "name": "크로스바디 크런치",
     "bodyPart": "코어",
     "equipment": "맨몸",
-    "illustration": "illustrations/cross-body-crunch.svg",
     "gif": "gifs/cross-body-crunch.gif",
     "muscles": [
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/cross-body-crunch.svg"
   },
   {
     "id": "cross-body-hammer-curl",
@@ -2332,12 +2332,12 @@
     "name": "크로스바디 해머컬",
     "bodyPart": "팔",
     "equipment": "덤벨",
-    "illustration": "illustrations/cross-body-hammer-curl.svg",
     "gif": "gifs/cross-body-hammer-curl.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/cross-body-hammer-curl.svg"
   },
   {
     "id": "cross-over---with-bands",
@@ -2359,11 +2359,11 @@
     "name": "핸즈 오버헤드 크런치",
     "bodyPart": "코어",
     "equipment": "맨몸",
-    "illustration": "illustrations/crunch---hands-overhead.svg",
     "muscles": [
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/crunch---hands-overhead.svg"
   },
   {
     "id": "crunch---legs-on-exercise-ball",
@@ -2371,11 +2371,11 @@
     "name": "짐볼 레그 크런치",
     "bodyPart": "코어",
     "equipment": "맨몸",
-    "illustration": "illustrations/crunch---legs-on-exercise-ball.svg",
     "muscles": [
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/crunch---legs-on-exercise-ball.svg"
   },
   {
     "id": "cuban-press",
@@ -2396,7 +2396,6 @@
     "name": "데드버그",
     "bodyPart": "코어",
     "equipment": "맨몸",
-    "illustration": "illustrations/dead-bug.svg",
     "gif": "gifs/dead-bug.gif",
     "muscles": [
       "abs",
@@ -2404,7 +2403,8 @@
       "quadriceps",
       "hamstring",
       "gluteal"
-    ]
+    ],
+    "illustration": "illustrations/dead-bug.svg"
   },
   {
     "id": "deadlift-with-bands",
@@ -2426,13 +2426,13 @@
     "name": "디클라인 바벨 벤치프레스",
     "bodyPart": "가슴",
     "equipment": "바벨",
-    "illustration": "illustrations/decline-barbell-bench-press.svg",
     "gif": "gifs/decline-barbell-bench-press.gif",
     "muscles": [
       "chest",
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/decline-barbell-bench-press.svg"
   },
   {
     "id": "decline-close-grip-bench-to-skull-crusher",
@@ -2440,12 +2440,12 @@
     "name": "디클라인 클로즈그립 벤치 스컬크러셔",
     "bodyPart": "팔",
     "equipment": "바벨",
-    "illustration": "illustrations/decline-close-grip-bench-to-skull-crusher.svg",
     "gif": "gifs/decline-close-grip-bench-to-skull-crusher.gif",
     "muscles": [
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/decline-close-grip-bench-to-skull-crusher.svg"
   },
   {
     "id": "decline-crunch",
@@ -2453,12 +2453,12 @@
     "name": "디클라인 크런치",
     "bodyPart": "코어",
     "equipment": "맨몸",
-    "illustration": "illustrations/decline-crunch.svg",
     "gif": "gifs/decline-crunch.gif",
     "muscles": [
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/decline-crunch.svg"
   },
   {
     "id": "decline-dumbbell-bench-press",
@@ -2466,13 +2466,13 @@
     "name": "디클라인 덤벨 벤치프레스",
     "bodyPart": "가슴",
     "equipment": "덤벨",
-    "illustration": "illustrations/decline-dumbbell-bench-press.svg",
     "gif": "gifs/decline-dumbbell-bench-press.gif",
     "muscles": [
       "chest",
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/decline-dumbbell-bench-press.svg"
   },
   {
     "id": "decline-dumbbell-flyes",
@@ -2480,12 +2480,12 @@
     "name": "디클라인 덤벨 플라이",
     "bodyPart": "가슴",
     "equipment": "덤벨",
-    "illustration": "illustrations/decline-dumbbell-flyes.svg",
     "gif": "gifs/decline-dumbbell-flyes.gif",
     "muscles": [
       "chest",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/decline-dumbbell-flyes.svg"
   },
   {
     "id": "decline-dumbbell-triceps-extension",
@@ -2505,12 +2505,12 @@
     "name": "디클라인 EZ바 트라이셉스 익스텐션",
     "bodyPart": "팔",
     "equipment": "바벨",
-    "illustration": "illustrations/decline-ez-bar-triceps-extension.svg",
     "gif": "gifs/decline-ez-bar-triceps-extension.gif",
     "muscles": [
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/decline-ez-bar-triceps-extension.svg"
   },
   {
     "id": "decline-oblique-crunch",
@@ -2518,11 +2518,11 @@
     "name": "디클라인 오블리크 크런치",
     "bodyPart": "코어",
     "equipment": "맨몸",
-    "illustration": "illustrations/decline-oblique-crunch.svg",
     "muscles": [
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/decline-oblique-crunch.svg"
   },
   {
     "id": "decline-push-up",
@@ -2530,14 +2530,14 @@
     "name": "디클라인 푸시업",
     "bodyPart": "가슴",
     "equipment": "기타",
-    "illustration": "illustrations/decline-push-up.svg",
     "muscles": [
       "chest",
       "front-deltoids",
       "triceps",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/decline-push-up.svg"
   },
   {
     "id": "decline-reverse-crunch",
@@ -2545,12 +2545,12 @@
     "name": "디클라인 리버스 크런치",
     "bodyPart": "코어",
     "equipment": "맨몸",
-    "illustration": "illustrations/decline-reverse-crunch.svg",
     "gif": "gifs/decline-reverse-crunch.gif",
     "muscles": [
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/decline-reverse-crunch.svg"
   },
   {
     "id": "decline-smith-press",
@@ -2585,11 +2585,11 @@
     "name": "딥스 머신",
     "bodyPart": "팔",
     "equipment": "머신",
-    "illustration": "illustrations/dip-machine.svg",
     "muscles": [
       "triceps",
       "chest"
-    ]
+    ],
+    "illustration": "illustrations/dip-machine.svg"
   },
   {
     "id": "donkey-calf-raises",
@@ -2597,10 +2597,10 @@
     "name": "동키 카프레이즈",
     "bodyPart": "하체",
     "equipment": "기타",
-    "illustration": "illustrations/donkey-calf-raises.svg",
     "muscles": [
       "calves"
-    ]
+    ],
+    "illustration": "illustrations/donkey-calf-raises.svg"
   },
   {
     "id": "double-kettlebell-alternating-hang-clean",
@@ -2685,12 +2685,12 @@
     "name": "드래그컬",
     "bodyPart": "팔",
     "equipment": "바벨",
-    "illustration": "illustrations/drag-curl.svg",
     "gif": "gifs/drag-curl.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/drag-curl.svg"
   },
   {
     "id": "drop-push",
@@ -2705,12 +2705,12 @@
     "name": "덤벨 얼터네이트 바이셉스 컬",
     "bodyPart": "팔",
     "equipment": "덤벨",
-    "illustration": "illustrations/dumbbell-alternate-bicep-curl.svg",
     "gif": "gifs/dumbbell-alternate-bicep-curl.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/dumbbell-alternate-bicep-curl.svg"
   },
   {
     "id": "dumbbell-bench-press-with-neutral-grip",
@@ -2718,12 +2718,12 @@
     "name": "뉴트럴그립 덤벨 벤치프레스",
     "bodyPart": "가슴",
     "equipment": "덤벨",
-    "illustration": "illustrations/dumbbell-bench-press-with-neutral-grip.svg",
     "muscles": [
       "chest",
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/dumbbell-bench-press-with-neutral-grip.svg"
   },
   {
     "id": "dumbbell-clean",
@@ -2752,14 +2752,14 @@
     "name": "덤벨 인클라인 로우",
     "bodyPart": "등",
     "equipment": "덤벨",
-    "illustration": "illustrations/dumbbell-incline-row.svg",
     "gif": "gifs/dumbbell-incline-row.gif",
     "muscles": [
       "upper-back",
       "lower-back",
       "biceps",
       "back-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/dumbbell-incline-row.svg"
   },
   {
     "id": "dumbbell-incline-shoulder-raise",
@@ -2780,13 +2780,13 @@
     "name": "덤벨 라잉 원암 리어 레터럴 레이즈",
     "bodyPart": "어깨",
     "equipment": "덤벨",
-    "illustration": "illustrations/dumbbell-lying-one-arm-rear-lateral-raise.svg",
     "gif": "gifs/dumbbell-lying-one-arm-rear-lateral-raise.gif",
     "muscles": [
       "front-deltoids",
       "upper-back",
       "trapezius"
-    ]
+    ],
+    "illustration": "illustrations/dumbbell-lying-one-arm-rear-lateral-raise.svg"
   },
   {
     "id": "dumbbell-lying-pronation",
@@ -2807,13 +2807,13 @@
     "name": "덤벨 라잉 리어 레터럴 레이즈",
     "bodyPart": "어깨",
     "equipment": "덤벨",
-    "illustration": "illustrations/dumbbell-lying-rear-lateral-raise.svg",
     "gif": "gifs/dumbbell-lying-rear-lateral-raise.gif",
     "muscles": [
       "front-deltoids",
       "upper-back",
       "trapezius"
-    ]
+    ],
+    "illustration": "illustrations/dumbbell-lying-rear-lateral-raise.svg"
   },
   {
     "id": "dumbbell-lying-supination",
@@ -2847,12 +2847,12 @@
     "name": "덤벨 원암 트라이셉스 익스텐션",
     "bodyPart": "팔",
     "equipment": "덤벨",
-    "illustration": "illustrations/dumbbell-one-arm-triceps-extension.svg",
     "gif": "gifs/dumbbell-one-arm-triceps-extension.gif",
     "muscles": [
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/dumbbell-one-arm-triceps-extension.svg"
   },
   {
     "id": "dumbbell-one-arm-upright-row",
@@ -2873,12 +2873,12 @@
     "name": "덤벨 프론 인클라인 컬",
     "bodyPart": "팔",
     "equipment": "덤벨",
-    "illustration": "illustrations/dumbbell-prone-incline-curl.svg",
     "gif": "gifs/dumbbell-prone-incline-curl.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/dumbbell-prone-incline-curl.svg"
   },
   {
     "id": "dumbbell-raise",
@@ -2899,13 +2899,13 @@
     "name": "덤벨 리어런지",
     "bodyPart": "하체",
     "equipment": "덤벨",
-    "illustration": "illustrations/dumbbell-rear-lunge.svg",
     "gif": "gifs/dumbbell-rear-lunge.gif",
     "muscles": [
       "quadriceps",
       "gluteal",
       "hamstring"
-    ]
+    ],
+    "illustration": "illustrations/dumbbell-rear-lunge.svg"
   },
   {
     "id": "dumbbell-scaption",
@@ -2940,13 +2940,13 @@
     "name": "덤벨 슈러그",
     "bodyPart": "등",
     "equipment": "덤벨",
-    "illustration": "illustrations/dumbbell-shrug.svg",
     "gif": "gifs/dumbbell-shrug.gif",
     "muscles": [
       "upper-back",
       "trapezius",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/dumbbell-shrug.svg"
   },
   {
     "id": "dumbbell-side-bend",
@@ -2954,12 +2954,12 @@
     "name": "덤벨 사이드벤드",
     "bodyPart": "코어",
     "equipment": "덤벨",
-    "illustration": "illustrations/dumbbell-side-bend.svg",
     "gif": "gifs/dumbbell-side-bend.gif",
     "muscles": [
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/dumbbell-side-bend.svg"
   },
   {
     "id": "dumbbell-squat",
@@ -2995,12 +2995,12 @@
     "name": "덤벨 스텝업",
     "bodyPart": "하체",
     "equipment": "덤벨",
-    "illustration": "illustrations/dumbbell-step-ups.svg",
     "gif": "gifs/dumbbell-step-ups.gif",
     "muscles": [
       "quadriceps",
       "gluteal"
-    ]
+    ],
+    "illustration": "illustrations/dumbbell-step-ups.svg"
   },
   {
     "id": "dumbbell-tricep-extension--pronated-grip",
@@ -3008,12 +3008,12 @@
     "name": "프로네이션그립 덤벨 트라이셉스 익스텐션",
     "bodyPart": "팔",
     "equipment": "덤벨",
-    "illustration": "illustrations/dumbbell-tricep-extension--pronated-grip.svg",
     "gif": "gifs/dumbbell-tricep-extension--pronated-grip.gif",
     "muscles": [
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/dumbbell-tricep-extension--pronated-grip.svg"
   },
   {
     "id": "ez-bar-curl",
@@ -3021,12 +3021,12 @@
     "name": "EZ바 컬",
     "bodyPart": "팔",
     "equipment": "바벨",
-    "illustration": "illustrations/ez-bar-curl.svg",
     "gif": "gifs/ez-bar-curl.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/ez-bar-curl.svg"
   },
   {
     "id": "ez-bar-skullcrusher",
@@ -3060,14 +3060,14 @@
     "name": "엘리베이티드 케이블 로우",
     "bodyPart": "등",
     "equipment": "케이블",
-    "illustration": "illustrations/elevated-cable-rows.svg",
     "gif": "gifs/elevated-cable-rows.gif",
     "muscles": [
       "upper-back",
       "lower-back",
       "biceps",
       "back-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/elevated-cable-rows.svg"
   },
   {
     "id": "exercise-ball-crunch",
@@ -3167,11 +3167,11 @@
     "name": "플랫 벤치 케이블 플라이",
     "bodyPart": "가슴",
     "equipment": "케이블",
-    "illustration": "illustrations/flat-bench-cable-flyes.svg",
     "muscles": [
       "chest",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/flat-bench-cable-flyes.svg"
   },
   {
     "id": "flat-bench-leg-pull-in",
@@ -3192,13 +3192,13 @@
     "name": "플랫 벤치 라잉 레그 레이즈",
     "bodyPart": "코어",
     "equipment": "맨몸",
-    "illustration": "illustrations/flat-bench-lying-leg-raise.svg",
     "gif": "gifs/flat-bench-lying-leg-raise.gif",
     "muscles": [
       "abs",
       "obliques",
       "quadriceps"
-    ]
+    ],
+    "illustration": "illustrations/flat-bench-lying-leg-raise.svg"
   },
   {
     "id": "flexor-incline-dumbbell-curls",
@@ -3206,12 +3206,12 @@
     "name": "플렉서 인클라인 덤벨 컬",
     "bodyPart": "팔",
     "equipment": "덤벨",
-    "illustration": "illustrations/flexor-incline-dumbbell-curls.svg",
     "gif": "gifs/flexor-incline-dumbbell-curls.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/flexor-incline-dumbbell-curls.svg"
   },
   {
     "id": "floor-glute-ham-raise",
@@ -3260,14 +3260,14 @@
     "name": "프랑켄슈타인 스쿼트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/frankenstein-squat.svg",
     "gif": "gifs/frankenstein-squat.gif",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/frankenstein-squat.svg"
   },
   {
     "id": "freehand-jump-squat",
@@ -3275,13 +3275,13 @@
     "name": "프리핸드 점프 스쿼트",
     "bodyPart": "하체",
     "equipment": "맨몸",
-    "illustration": "illustrations/freehand-jump-squat.svg",
     "gif": "gifs/freehand-jump-squat.gif",
     "muscles": [
       "quadriceps",
       "gluteal",
       "calves"
-    ]
+    ],
+    "illustration": "illustrations/freehand-jump-squat.svg"
   },
   {
     "id": "frog-sit-ups",
@@ -3296,14 +3296,14 @@
     "name": "프론트 바벨 스쿼트 투 벤치",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/front-barbell-squat-to-a-bench.svg",
     "gif": "gifs/front-barbell-squat-to-a-bench.gif",
     "muscles": [
       "quadriceps",
       "abs",
       "obliques",
       "gluteal"
-    ]
+    ],
+    "illustration": "illustrations/front-barbell-squat-to-a-bench.svg"
   },
   {
     "id": "front-box-jump",
@@ -3318,12 +3318,12 @@
     "name": "프론트 케이블 레이즈",
     "bodyPart": "어깨",
     "equipment": "케이블",
-    "illustration": "illustrations/front-cable-raise.svg",
     "gif": "gifs/front-cable-raise.gif",
     "muscles": [
       "front-deltoids",
       "chest"
-    ]
+    ],
+    "illustration": "illustrations/front-cable-raise.svg"
   },
   {
     "id": "front-cone-hops-or-hurdle-hops",
@@ -3338,12 +3338,12 @@
     "name": "프론트 인클라인 덤벨 레이즈",
     "bodyPart": "어깨",
     "equipment": "덤벨",
-    "illustration": "illustrations/front-incline-dumbbell-raise.svg",
     "gif": "gifs/front-incline-dumbbell-raise.gif",
     "muscles": [
       "front-deltoids",
       "chest"
-    ]
+    ],
+    "illustration": "illustrations/front-incline-dumbbell-raise.svg"
   },
   {
     "id": "front-plate-raise",
@@ -3351,11 +3351,11 @@
     "name": "프론트 플레이트 레이즈",
     "bodyPart": "어깨",
     "equipment": "기타",
-    "illustration": "illustrations/front-plate-raise.svg",
     "muscles": [
       "front-deltoids",
       "chest"
-    ]
+    ],
+    "illustration": "illustrations/front-plate-raise.svg"
   },
   {
     "id": "front-raise-and-pullover",
@@ -3376,14 +3376,14 @@
     "name": "프론트 스쿼트 클린그립",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/front-squat-clean-grip.svg",
     "gif": "gifs/front-squat-clean-grip.gif",
     "muscles": [
       "quadriceps",
       "abs",
       "obliques",
       "gluteal"
-    ]
+    ],
+    "illustration": "illustrations/front-squat-clean-grip.svg"
   },
   {
     "id": "front-squats-with-two-kettlebells",
@@ -3405,12 +3405,12 @@
     "name": "프론트 투덤벨 레이즈",
     "bodyPart": "어깨",
     "equipment": "덤벨",
-    "illustration": "illustrations/front-two-dumbbell-raise.svg",
     "gif": "gifs/front-two-dumbbell-raise.gif",
     "muscles": [
       "front-deltoids",
       "chest"
-    ]
+    ],
+    "illustration": "illustrations/front-two-dumbbell-raise.svg"
   },
   {
     "id": "full-range-of-motion-lat-pulldown",
@@ -3418,12 +3418,12 @@
     "name": "풀 레인지 랫 풀다운",
     "bodyPart": "등",
     "equipment": "케이블",
-    "illustration": "illustrations/full-range-of-motion-lat-pulldown.svg",
     "gif": "gifs/full-range-of-motion-lat-pulldown.gif",
     "muscles": [
       "upper-back",
       "biceps"
-    ]
+    ],
+    "illustration": "illustrations/full-range-of-motion-lat-pulldown.svg"
   },
   {
     "id": "gironda-sternum-chins",
@@ -3452,13 +3452,13 @@
     "name": "굿모닝",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/good-morning.svg",
     "gif": "gifs/good-morning.gif",
     "muscles": [
       "hamstring",
       "gluteal",
       "lower-back"
-    ]
+    ],
+    "illustration": "illustrations/good-morning.svg"
   },
   {
     "id": "good-morning-off-pins",
@@ -3466,13 +3466,13 @@
     "name": "핀 굿모닝",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/good-morning-off-pins.svg",
     "gif": "gifs/good-morning-off-pins.gif",
     "muscles": [
       "hamstring",
       "gluteal",
       "lower-back"
-    ]
+    ],
+    "illustration": "illustrations/good-morning-off-pins.svg"
   },
   {
     "id": "gorilla-chin-crunch",
@@ -3480,11 +3480,11 @@
     "name": "고릴라 친업 크런치",
     "bodyPart": "코어",
     "equipment": "맨몸",
-    "illustration": "illustrations/gorilla-chin-crunch.svg",
     "muscles": [
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/gorilla-chin-crunch.svg"
   },
   {
     "id": "hack-squat",
@@ -3492,12 +3492,12 @@
     "name": "핵 스쿼트",
     "bodyPart": "하체",
     "equipment": "머신",
-    "illustration": "illustrations/hack-squat.svg",
     "gif": "gifs/hack-squat.gif",
     "muscles": [
       "quadriceps",
       "gluteal"
-    ]
+    ],
+    "illustration": "illustrations/hack-squat.svg"
   },
   {
     "id": "hammer-grip-incline-db-bench-press",
@@ -3512,14 +3512,14 @@
     "name": "핸드스탠드 푸시업",
     "bodyPart": "어깨",
     "equipment": "맨몸",
-    "illustration": "illustrations/handstand-push-ups.svg",
     "muscles": [
       "front-deltoids",
       "triceps",
       "abs",
       "obliques",
       "chest"
-    ]
+    ],
+    "illustration": "illustrations/handstand-push-ups.svg"
   },
   {
     "id": "hang-clean",
@@ -3555,12 +3555,12 @@
     "name": "행잉 바 굿모닝",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/hanging-bar-good-morning.svg",
     "muscles": [
       "hamstring",
       "gluteal",
       "lower-back"
-    ]
+    ],
+    "illustration": "illustrations/hanging-bar-good-morning.svg"
   },
   {
     "id": "hanging-pike",
@@ -3595,11 +3595,11 @@
     "name": "하이 케이블 컬",
     "bodyPart": "팔",
     "equipment": "케이블",
-    "illustration": "illustrations/high-cable-curls.svg",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/high-cable-curls.svg"
   },
   {
     "id": "hip-extension-with-bands",
@@ -3661,12 +3661,12 @@
     "name": "인클라인 바벨 트라이셉스 익스텐션",
     "bodyPart": "팔",
     "equipment": "바벨",
-    "illustration": "illustrations/incline-barbell-triceps-extension.svg",
     "gif": "gifs/incline-barbell-triceps-extension.gif",
     "muscles": [
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/incline-barbell-triceps-extension.svg"
   },
   {
     "id": "incline-bench-pull",
@@ -3720,12 +3720,12 @@
     "name": "인클라인 덤벨 컬",
     "bodyPart": "팔",
     "equipment": "덤벨",
-    "illustration": "illustrations/incline-dumbbell-curl.svg",
     "gif": "gifs/incline-dumbbell-curl.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/incline-dumbbell-curl.svg"
   },
   {
     "id": "incline-dumbbell-flyes",
@@ -3733,12 +3733,12 @@
     "name": "인클라인 덤벨 플라이",
     "bodyPart": "가슴",
     "equipment": "덤벨",
-    "illustration": "illustrations/incline-dumbbell-flyes.svg",
     "gif": "gifs/incline-dumbbell-flyes.gif",
     "muscles": [
       "chest",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/incline-dumbbell-flyes.svg"
   },
   {
     "id": "incline-dumbbell-flyes---with-a-twist",
@@ -3746,12 +3746,12 @@
     "name": "인클라인 덤벨 플라이 트위스트",
     "bodyPart": "가슴",
     "equipment": "덤벨",
-    "illustration": "illustrations/incline-dumbbell-flyes---with-a-twist.svg",
     "gif": "gifs/incline-dumbbell-flyes---with-a-twist.gif",
     "muscles": [
       "chest",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/incline-dumbbell-flyes---with-a-twist.svg"
   },
   {
     "id": "incline-hammer-curls",
@@ -3759,12 +3759,12 @@
     "name": "인클라인 해머컬",
     "bodyPart": "팔",
     "equipment": "덤벨",
-    "illustration": "illustrations/incline-hammer-curls.svg",
     "gif": "gifs/incline-hammer-curls.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/incline-hammer-curls.svg"
   },
   {
     "id": "incline-inner-biceps-curl",
@@ -3772,12 +3772,12 @@
     "name": "인클라인 이너 바이셉스 컬",
     "bodyPart": "팔",
     "equipment": "덤벨",
-    "illustration": "illustrations/incline-inner-biceps-curl.svg",
     "gif": "gifs/incline-inner-biceps-curl.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/incline-inner-biceps-curl.svg"
   },
   {
     "id": "incline-push-up",
@@ -3785,7 +3785,6 @@
     "name": "인클라인 푸시업",
     "bodyPart": "가슴",
     "equipment": "맨몸",
-    "illustration": "illustrations/incline-push-up.svg",
     "gif": "gifs/incline-push-up.gif",
     "muscles": [
       "chest",
@@ -3793,7 +3792,8 @@
       "front-deltoids",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/incline-push-up.svg"
   },
   {
     "id": "incline-push-up-close-grip",
@@ -3821,14 +3821,14 @@
     "name": "인클라인 푸시업 미디엄그립",
     "bodyPart": "가슴",
     "equipment": "맨몸",
-    "illustration": "illustrations/incline-push-up-medium.svg",
     "gif": "gifs/incline-push-up-medium.gif",
     "muscles": [
       "chest",
       "triceps",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/incline-push-up-medium.svg"
   },
   {
     "id": "incline-push-up-reverse-grip",
@@ -3836,14 +3836,14 @@
     "name": "인클라인 푸시업 리버스그립",
     "bodyPart": "가슴",
     "equipment": "맨몸",
-    "illustration": "illustrations/incline-push-up-reverse-grip.svg",
     "gif": "gifs/incline-push-up-reverse-grip.gif",
     "muscles": [
       "chest",
       "triceps",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/incline-push-up-reverse-grip.svg"
   },
   {
     "id": "incline-push-up-wide",
@@ -3851,13 +3851,13 @@
     "name": "인클라인 푸시업 와이드그립",
     "bodyPart": "가슴",
     "equipment": "맨몸",
-    "illustration": "illustrations/incline-push-up-wide.svg",
     "muscles": [
       "chest",
       "triceps",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/incline-push-up-wide.svg"
   },
   {
     "id": "internal-rotation-with-band",
@@ -3872,14 +3872,14 @@
     "name": "인버티드 로우",
     "bodyPart": "등",
     "equipment": "기타",
-    "illustration": "illustrations/inverted-row.svg",
     "muscles": [
       "upper-back",
       "lower-back",
       "biceps",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/inverted-row.svg"
   },
   {
     "id": "inverted-row-with-straps",
@@ -3887,14 +3887,14 @@
     "name": "스트랩 인버티드 로우",
     "bodyPart": "등",
     "equipment": "기타",
-    "illustration": "illustrations/inverted-row-with-straps.svg",
     "muscles": [
       "upper-back",
       "lower-back",
       "biceps",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/inverted-row-with-straps.svg"
   },
   {
     "id": "iron-cross",
@@ -3995,14 +3995,14 @@
     "name": "제퍼슨 스쿼트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/jefferson-squats.svg",
     "gif": "gifs/jefferson-squats.gif",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/jefferson-squats.svg"
   },
   {
     "id": "jerk-balance",
@@ -4017,13 +4017,13 @@
     "name": "저크 딥 스쿼트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/jerk-dip-squat.svg",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/jerk-dip-squat.svg"
   },
   {
     "id": "keg-load",
@@ -4232,11 +4232,11 @@
     "name": "닐링 케이블 크런치 얼터네이팅 오블리크 트위스트",
     "bodyPart": "코어",
     "equipment": "케이블",
-    "illustration": "illustrations/kneeling-cable-crunch-with-alternating-oblique-twists.svg",
     "muscles": [
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/kneeling-cable-crunch-with-alternating-oblique-twists.svg"
   },
   {
     "id": "kneeling-cable-triceps-extension",
@@ -4256,13 +4256,13 @@
     "name": "닐링 하이 풀리 로우",
     "bodyPart": "등",
     "equipment": "케이블",
-    "illustration": "illustrations/kneeling-high-pulley-row.svg",
     "muscles": [
       "upper-back",
       "lower-back",
       "biceps",
       "back-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/kneeling-high-pulley-row.svg"
   },
   {
     "id": "kneeling-jump-squat",
@@ -4270,14 +4270,14 @@
     "name": "닐링 점프 스쿼트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/kneeling-jump-squat.svg",
     "gif": "gifs/kneeling-jump-squat.gif",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/kneeling-jump-squat.svg"
   },
   {
     "id": "kneeling-single-arm-high-pulley-row",
@@ -4285,13 +4285,13 @@
     "name": "닐링 원암 하이 풀리 로우",
     "bodyPart": "등",
     "equipment": "케이블",
-    "illustration": "illustrations/kneeling-single-arm-high-pulley-row.svg",
     "muscles": [
       "upper-back",
       "lower-back",
       "biceps",
       "back-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/kneeling-single-arm-high-pulley-row.svg"
   },
   {
     "id": "kneeling-squat",
@@ -4299,13 +4299,13 @@
     "name": "닐링 스쿼트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/kneeling-squat.svg",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/kneeling-squat.svg"
   },
   {
     "id": "landmine-180s",
@@ -4354,12 +4354,12 @@
     "name": "밴드 레터럴 레이즈",
     "bodyPart": "어깨",
     "equipment": "기타",
-    "illustration": "illustrations/lateral-raise---with-bands.svg",
     "muscles": [
       "front-deltoids",
       "upper-back",
       "trapezius"
-    ]
+    ],
+    "illustration": "illustrations/lateral-raise---with-bands.svg"
   },
   {
     "id": "leg-over-floor-press",
@@ -4427,13 +4427,13 @@
     "name": "레버리지 하이 로우",
     "bodyPart": "등",
     "equipment": "머신",
-    "illustration": "illustrations/leverage-high-row.svg",
     "gif": "gifs/leverage-high-row.gif",
     "muscles": [
       "upper-back",
       "lower-back",
       "biceps"
-    ]
+    ],
+    "illustration": "illustrations/leverage-high-row.svg"
   },
   {
     "id": "leverage-incline-chest-press",
@@ -4454,12 +4454,12 @@
     "name": "레버리지 아이소 로우",
     "bodyPart": "등",
     "equipment": "머신",
-    "illustration": "illustrations/leverage-iso-row.svg",
     "muscles": [
       "upper-back",
       "lower-back",
       "biceps"
-    ]
+    ],
+    "illustration": "illustrations/leverage-iso-row.svg"
   },
   {
     "id": "leverage-shoulder-press",
@@ -4529,12 +4529,12 @@
     "name": "로우 케이블 크로스오버",
     "bodyPart": "가슴",
     "equipment": "케이블",
-    "illustration": "illustrations/low-cable-crossover.svg",
     "gif": "gifs/low-cable-crossover.gif",
     "muscles": [
       "chest",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/low-cable-crossover.svg"
   },
   {
     "id": "low-cable-triceps-extension",
@@ -4584,12 +4584,12 @@
     "name": "라잉 케이블 컬",
     "bodyPart": "팔",
     "equipment": "케이블",
-    "illustration": "illustrations/lying-cable-curl.svg",
     "gif": "gifs/lying-cable-curl.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/lying-cable-curl.svg"
   },
   {
     "id": "lying-cambered-barbell-row",
@@ -4597,14 +4597,14 @@
     "name": "라잉 캠버드 바벨 로우",
     "bodyPart": "등",
     "equipment": "바벨",
-    "illustration": "illustrations/lying-cambered-barbell-row.svg",
     "gif": "gifs/lying-cambered-barbell-row.gif",
     "muscles": [
       "upper-back",
       "lower-back",
       "biceps",
       "back-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/lying-cambered-barbell-row.svg"
   },
   {
     "id": "lying-close-grip-bar-curl-on-high-pulley",
@@ -4624,12 +4624,12 @@
     "name": "라잉 클로즈그립 바벨 비하인드헤드 트라이셉스 익스텐션",
     "bodyPart": "팔",
     "equipment": "바벨",
-    "illustration": "illustrations/lying-close-grip-barbell-triceps-extension-behind-the-head.svg",
     "gif": "gifs/lying-close-grip-barbell-triceps-extension-behind-the-head.gif",
     "muscles": [
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/lying-close-grip-barbell-triceps-extension-behind-the-head.svg"
   },
   {
     "id": "lying-close-grip-barbell-triceps-press-to-chin",
@@ -4637,12 +4637,12 @@
     "name": "라잉 클로즈그립 바벨 트라이셉스 프레스 투 친",
     "bodyPart": "팔",
     "equipment": "바벨",
-    "illustration": "illustrations/lying-close-grip-barbell-triceps-press-to-chin.svg",
     "gif": "gifs/lying-close-grip-barbell-triceps-press-to-chin.gif",
     "muscles": [
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/lying-close-grip-barbell-triceps-press-to-chin.svg"
   },
   {
     "id": "lying-dumbbell-tricep-extension",
@@ -4650,12 +4650,12 @@
     "name": "라잉 덤벨 트라이셉스 익스텐션",
     "bodyPart": "팔",
     "equipment": "덤벨",
-    "illustration": "illustrations/lying-dumbbell-tricep-extension.svg",
     "gif": "gifs/lying-dumbbell-tricep-extension.gif",
     "muscles": [
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/lying-dumbbell-tricep-extension.svg"
   },
   {
     "id": "lying-face-down-plate-neck-resistance",
@@ -4698,13 +4698,13 @@
     "name": "라잉 원암 레터럴 레이즈",
     "bodyPart": "어깨",
     "equipment": "덤벨",
-    "illustration": "illustrations/lying-one-arm-lateral-raise.svg",
     "gif": "gifs/lying-one-arm-lateral-raise.gif",
     "muscles": [
       "front-deltoids",
       "upper-back",
       "trapezius"
-    ]
+    ],
+    "illustration": "illustrations/lying-one-arm-lateral-raise.svg"
   },
   {
     "id": "lying-rear-delt-raise",
@@ -4737,13 +4737,13 @@
     "name": "라잉 T바 로우",
     "bodyPart": "등",
     "equipment": "머신",
-    "illustration": "illustrations/lying-t-bar-row.svg",
     "muscles": [
       "upper-back",
       "lower-back",
       "biceps",
       "back-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/lying-t-bar-row.svg"
   },
   {
     "id": "machine-bench-press",
@@ -4758,12 +4758,12 @@
     "name": "머신 바이셉스 컬",
     "bodyPart": "팔",
     "equipment": "머신",
-    "illustration": "illustrations/machine-bicep-curl.svg",
     "gif": "gifs/machine-bicep-curl.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/machine-bicep-curl.svg"
   },
   {
     "id": "machine-preacher-curls",
@@ -4771,12 +4771,12 @@
     "name": "머신 프리처컬",
     "bodyPart": "팔",
     "equipment": "머신",
-    "illustration": "illustrations/machine-preacher-curls.svg",
     "gif": "gifs/machine-preacher-curls.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/machine-preacher-curls.svg"
   },
   {
     "id": "machine-shoulder-military-press",
@@ -4784,11 +4784,11 @@
     "name": "머신 밀리터리 숄더프레스",
     "bodyPart": "어깨",
     "equipment": "머신",
-    "illustration": "illustrations/machine-shoulder-military-press.svg",
     "muscles": [
       "front-deltoids",
       "triceps"
-    ]
+    ],
+    "illustration": "illustrations/machine-shoulder-military-press.svg"
   },
   {
     "id": "machine-triceps-extension",
@@ -4884,11 +4884,11 @@
     "name": "내로우 스탠스 핵 스쿼트",
     "bodyPart": "하체",
     "equipment": "머신",
-    "illustration": "illustrations/narrow-stance-hack-squats.svg",
     "muscles": [
       "quadriceps",
       "gluteal"
-    ]
+    ],
+    "illustration": "illustrations/narrow-stance-hack-squats.svg"
   },
   {
     "id": "narrow-stance-leg-press",
@@ -4896,12 +4896,12 @@
     "name": "내로우 스탠스 레그프레스",
     "bodyPart": "하체",
     "equipment": "머신",
-    "illustration": "illustrations/narrow-stance-leg-press.svg",
     "muscles": [
       "quadriceps",
       "gluteal",
       "hamstring"
-    ]
+    ],
+    "illustration": "illustrations/narrow-stance-leg-press.svg"
   },
   {
     "id": "narrow-stance-squats",
@@ -4909,14 +4909,14 @@
     "name": "내로우 스탠스 스쿼트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/narrow-stance-squats.svg",
     "gif": "gifs/narrow-stance-squats.gif",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/narrow-stance-squats.svg"
   },
   {
     "id": "natural-glute-ham-raise",
@@ -4944,12 +4944,12 @@
     "name": "오블리크 크런치",
     "bodyPart": "코어",
     "equipment": "맨몸",
-    "illustration": "illustrations/oblique-crunches.svg",
     "gif": "gifs/oblique-crunches.gif",
     "muscles": [
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/oblique-crunches.svg"
   },
   {
     "id": "oblique-crunches---on-the-floor",
@@ -4957,12 +4957,12 @@
     "name": "플로어 오블리크 크런치",
     "bodyPart": "코어",
     "equipment": "맨몸",
-    "illustration": "illustrations/oblique-crunches---on-the-floor.svg",
     "gif": "gifs/oblique-crunches---on-the-floor.gif",
     "muscles": [
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/oblique-crunches---on-the-floor.svg"
   },
   {
     "id": "olympic-squat",
@@ -4970,13 +4970,13 @@
     "name": "올림픽 스쿼트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/olympic-squat.svg",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/olympic-squat.svg"
   },
   {
     "id": "one-arm-flat-bench-dumbbell-flye",
@@ -5003,13 +5003,13 @@
     "name": "원암 인클라인 레터럴 레이즈",
     "bodyPart": "어깨",
     "equipment": "덤벨",
-    "illustration": "illustrations/one-arm-incline-lateral-raise.svg",
     "gif": "gifs/one-arm-incline-lateral-raise.gif",
     "muscles": [
       "front-deltoids",
       "upper-back",
       "trapezius"
-    ]
+    ],
+    "illustration": "illustrations/one-arm-incline-lateral-raise.svg"
   },
   {
     "id": "one-arm-kettlebell-clean",
@@ -5142,13 +5142,13 @@
     "name": "원암 롱바로우",
     "bodyPart": "등",
     "equipment": "바벨",
-    "illustration": "illustrations/one-arm-long-bar-row.svg",
     "muscles": [
       "upper-back",
       "lower-back",
       "biceps",
       "back-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/one-arm-long-bar-row.svg"
   },
   {
     "id": "one-arm-medicine-ball-slam",
@@ -5184,14 +5184,14 @@
     "name": "원암 사이드 데드리프트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/one-arm-side-deadlift.svg",
     "gif": "gifs/one-arm-side-deadlift.gif",
     "muscles": [
       "hamstring",
       "gluteal",
       "lower-back",
       "upper-back"
-    ]
+    ],
+    "illustration": "illustrations/one-arm-side-deadlift.svg"
   },
   {
     "id": "one-arm-side-laterals",
@@ -5212,11 +5212,11 @@
     "name": "싱글레그 케이블 킥백",
     "bodyPart": "하체",
     "equipment": "케이블",
-    "illustration": "illustrations/one-legged-cable-kickback.svg",
     "muscles": [
       "gluteal",
       "hamstring"
-    ]
+    ],
+    "illustration": "illustrations/one-legged-cable-kickback.svg"
   },
   {
     "id": "one-arm-chin-up",
@@ -5224,11 +5224,11 @@
     "name": "원암 친업",
     "bodyPart": "등",
     "equipment": "기타",
-    "illustration": "illustrations/one-arm-chin-up.svg",
     "muscles": [
       "biceps",
       "upper-back"
-    ]
+    ],
+    "illustration": "illustrations/one-arm-chin-up.svg"
   },
   {
     "id": "one-arm-dumbbell-bench-press",
@@ -5236,13 +5236,13 @@
     "name": "원암 덤벨 벤치프레스",
     "bodyPart": "가슴",
     "equipment": "덤벨",
-    "illustration": "illustrations/one-arm-dumbbell-bench-press.svg",
     "gif": "gifs/one-arm-dumbbell-bench-press.gif",
     "muscles": [
       "chest",
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/one-arm-dumbbell-bench-press.svg"
   },
   {
     "id": "one-arm-dumbbell-preacher-curl",
@@ -5270,12 +5270,12 @@
     "name": "원암 랫 풀다운",
     "bodyPart": "등",
     "equipment": "케이블",
-    "illustration": "illustrations/one-arm-lat-pulldown.svg",
     "gif": "gifs/one-arm-lat-pulldown.gif",
     "muscles": [
       "upper-back",
       "biceps"
-    ]
+    ],
+    "illustration": "illustrations/one-arm-lat-pulldown.svg"
   },
   {
     "id": "one-arm-pronated-dumbbell-triceps-extension",
@@ -5307,14 +5307,14 @@
     "name": "싱글레그 바벨 스쿼트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/one-leg-barbell-squat.svg",
     "gif": "gifs/one-leg-barbell-squat.gif",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/one-leg-barbell-squat.svg"
   },
   {
     "id": "open-palm-kettlebell-clean",
@@ -5336,12 +5336,12 @@
     "name": "오버헤드 케이블 컬",
     "bodyPart": "팔",
     "equipment": "케이블",
-    "illustration": "illustrations/overhead-cable-curl.svg",
     "gif": "gifs/overhead-cable-curl.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/overhead-cable-curl.svg"
   },
   {
     "id": "overhead-slam",
@@ -5363,14 +5363,14 @@
     "name": "오버헤드 스쿼트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/overhead-squat.svg",
     "gif": "gifs/overhead-squat.gif",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/overhead-squat.svg"
   },
   {
     "id": "pallof-press",
@@ -5378,12 +5378,12 @@
     "name": "팔로프 프레스",
     "bodyPart": "코어",
     "equipment": "케이블",
-    "illustration": "illustrations/pallof-press.svg",
     "muscles": [
       "abs",
       "obliques",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/pallof-press.svg"
   },
   {
     "id": "pallof-press-with-rotation",
@@ -5391,12 +5391,12 @@
     "name": "회전 팔로프 프레스",
     "bodyPart": "코어",
     "equipment": "케이블",
-    "illustration": "illustrations/pallof-press-with-rotation.svg",
     "muscles": [
       "abs",
       "obliques",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/pallof-press-with-rotation.svg"
   },
   {
     "id": "palms-down-dumbbell-wrist-curl-over-a-bench",
@@ -5416,11 +5416,11 @@
     "name": "벤치 리버스 리스트컬",
     "bodyPart": "팔",
     "equipment": "바벨",
-    "illustration": "illustrations/palms-down-wrist-curl-over-a-bench.svg",
     "gif": "gifs/palms-down-wrist-curl-over-a-bench.gif",
     "muscles": [
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/palms-down-wrist-curl-over-a-bench.svg"
   },
   {
     "id": "palms-up-barbell-wrist-curl-over-a-bench",
@@ -5428,11 +5428,11 @@
     "name": "벤치 바벨 리스트컬",
     "bodyPart": "팔",
     "equipment": "바벨",
-    "illustration": "illustrations/palms-up-barbell-wrist-curl-over-a-bench.svg",
     "gif": "gifs/palms-up-barbell-wrist-curl-over-a-bench.gif",
     "muscles": [
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/palms-up-barbell-wrist-curl-over-a-bench.svg"
   },
   {
     "id": "palms-up-dumbbell-wrist-curl-over-a-bench",
@@ -5453,12 +5453,12 @@
     "name": "패러렐바 딥스",
     "bodyPart": "팔",
     "equipment": "기타",
-    "illustration": "illustrations/parallel-bar-dip.svg",
     "muscles": [
       "triceps",
       "chest",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/parallel-bar-dip.svg"
   },
   {
     "id": "physioball-hip-bridge",
@@ -5520,14 +5520,14 @@
     "name": "플라이오 푸시업",
     "bodyPart": "가슴",
     "equipment": "맨몸",
-    "illustration": "illustrations/plyo-push-up.svg",
     "gif": "gifs/plyo-push-up.gif",
     "muscles": [
       "chest",
       "triceps",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/plyo-push-up.svg"
   },
   {
     "id": "power-clean",
@@ -5591,12 +5591,12 @@
     "name": "프리처 해머 덤벨 컬",
     "bodyPart": "팔",
     "equipment": "덤벨",
-    "illustration": "illustrations/preacher-hammer-dumbbell-curl.svg",
     "gif": "gifs/preacher-hammer-dumbbell-curl.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/preacher-hammer-dumbbell-curl.svg"
   },
   {
     "id": "press-sit-up",
@@ -5637,14 +5637,14 @@
     "name": "와이드 푸시업",
     "bodyPart": "가슴",
     "equipment": "맨몸",
-    "illustration": "illustrations/push-up-wide.svg",
     "gif": "gifs/push-up-wide.gif",
     "muscles": [
       "chest",
       "triceps",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/push-up-wide.svg"
   },
   {
     "id": "push-ups---close-triceps-position",
@@ -5652,7 +5652,6 @@
     "name": "클로즈 트라이셉스 푸시업",
     "bodyPart": "팔",
     "equipment": "맨몸",
-    "illustration": "illustrations/push-ups---close-triceps-position.svg",
     "gif": "gifs/push-ups---close-triceps-position.gif",
     "muscles": [
       "triceps",
@@ -5660,7 +5659,8 @@
       "front-deltoids",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/push-ups---close-triceps-position.svg"
   },
   {
     "id": "push-ups-with-feet-elevated",
@@ -5668,13 +5668,13 @@
     "name": "발 올린 푸시업",
     "bodyPart": "가슴",
     "equipment": "맨몸",
-    "illustration": "illustrations/push-ups-with-feet-elevated.svg",
     "muscles": [
       "chest",
       "triceps",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/push-ups-with-feet-elevated.svg"
   },
   {
     "id": "push-ups-with-feet-on-an-exercise-ball",
@@ -5689,12 +5689,12 @@
     "name": "푸시프레스",
     "bodyPart": "어깨",
     "equipment": "바벨",
-    "illustration": "illustrations/push-press.svg",
     "muscles": [
       "front-deltoids",
       "triceps",
       "quadriceps"
-    ]
+    ],
+    "illustration": "illustrations/push-press.svg"
   },
   {
     "id": "push-press---behind-the-neck",
@@ -5702,12 +5702,12 @@
     "name": "비하인드넥 푸시프레스",
     "bodyPart": "어깨",
     "equipment": "바벨",
-    "illustration": "illustrations/push-press---behind-the-neck.svg",
     "muscles": [
       "front-deltoids",
       "triceps",
       "quadriceps"
-    ]
+    ],
+    "illustration": "illustrations/push-press---behind-the-neck.svg"
   },
   {
     "id": "push-up-to-side-plank",
@@ -5715,13 +5715,13 @@
     "name": "푸시업 투 사이드플랭크",
     "bodyPart": "가슴",
     "equipment": "맨몸",
-    "illustration": "illustrations/push-up-to-side-plank.svg",
     "muscles": [
       "chest",
       "triceps",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/push-up-to-side-plank.svg"
   },
   {
     "id": "pushups-close-and-wide-hand-positions",
@@ -5750,13 +5750,13 @@
     "name": "밴드 랙풀",
     "bodyPart": "등",
     "equipment": "바벨",
-    "illustration": "illustrations/rack-pull-with-bands.svg",
     "muscles": [
       "upper-back",
       "lower-back",
       "gluteal",
       "hamstring"
-    ]
+    ],
+    "illustration": "illustrations/rack-pull-with-bands.svg"
   },
   {
     "id": "rack-pulls",
@@ -5764,13 +5764,13 @@
     "name": "랙풀",
     "bodyPart": "등",
     "equipment": "바벨",
-    "illustration": "illustrations/rack-pulls.svg",
     "muscles": [
       "upper-back",
       "lower-back",
       "gluteal",
       "hamstring"
-    ]
+    ],
+    "illustration": "illustrations/rack-pulls.svg"
   },
   {
     "id": "return-push-from-stance",
@@ -5792,13 +5792,13 @@
     "name": "리버스 밴드 박스스쿼트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/reverse-band-box-squat.svg",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/reverse-band-box-squat.svg"
   },
   {
     "id": "reverse-band-deadlift",
@@ -5813,13 +5813,13 @@
     "name": "리버스 밴드 파워스쿼트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/reverse-band-power-squat.svg",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/reverse-band-power-squat.svg"
   },
   {
     "id": "reverse-band-sumo-deadlift",
@@ -5827,13 +5827,13 @@
     "name": "리버스 밴드 스모 데드리프트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/reverse-band-sumo-deadlift.svg",
     "muscles": [
       "hamstring",
       "gluteal",
       "lower-back",
       "quadriceps"
-    ]
+    ],
+    "illustration": "illustrations/reverse-band-sumo-deadlift.svg"
   },
   {
     "id": "reverse-barbell-curl",
@@ -5841,12 +5841,12 @@
     "name": "리버스 바벨컬",
     "bodyPart": "팔",
     "equipment": "바벨",
-    "illustration": "illustrations/reverse-barbell-curl.svg",
     "gif": "gifs/reverse-barbell-curl.gif",
     "muscles": [
       "forearm",
       "biceps"
-    ]
+    ],
+    "illustration": "illustrations/reverse-barbell-curl.svg"
   },
   {
     "id": "reverse-barbell-preacher-curls",
@@ -5854,12 +5854,12 @@
     "name": "리버스 바벨 프리처컬",
     "bodyPart": "팔",
     "equipment": "바벨",
-    "illustration": "illustrations/reverse-barbell-preacher-curls.svg",
     "gif": "gifs/reverse-barbell-preacher-curls.gif",
     "muscles": [
       "forearm",
       "biceps"
-    ]
+    ],
+    "illustration": "illustrations/reverse-barbell-preacher-curls.svg"
   },
   {
     "id": "reverse-cable-curl",
@@ -5867,12 +5867,12 @@
     "name": "리버스 케이블 컬",
     "bodyPart": "팔",
     "equipment": "케이블",
-    "illustration": "illustrations/reverse-cable-curl.svg",
     "gif": "gifs/reverse-cable-curl.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/reverse-cable-curl.svg"
   },
   {
     "id": "reverse-crunch",
@@ -5880,12 +5880,12 @@
     "name": "리버스 크런치",
     "bodyPart": "코어",
     "equipment": "맨몸",
-    "illustration": "illustrations/reverse-crunch.svg",
     "gif": "gifs/reverse-crunch.gif",
     "muscles": [
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/reverse-crunch.svg"
   },
   {
     "id": "reverse-flyes-with-external-rotation",
@@ -5900,14 +5900,14 @@
     "name": "리버스그립 벤트오버 로우",
     "bodyPart": "등",
     "equipment": "바벨",
-    "illustration": "illustrations/reverse-grip-bent-over-rows.svg",
     "gif": "gifs/reverse-grip-bent-over-rows.gif",
     "muscles": [
       "upper-back",
       "lower-back",
       "biceps",
       "back-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/reverse-grip-bent-over-rows.svg"
   },
   {
     "id": "reverse-grip-triceps-pushdown",
@@ -5915,11 +5915,11 @@
     "name": "리버스그립 트라이셉스 푸시다운",
     "bodyPart": "팔",
     "equipment": "케이블",
-    "illustration": "illustrations/reverse-grip-triceps-pushdown.svg",
     "muscles": [
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/reverse-grip-triceps-pushdown.svg"
   },
   {
     "id": "reverse-hyperextension",
@@ -5927,13 +5927,13 @@
     "name": "리버스 하이퍼익스텐션",
     "bodyPart": "하체",
     "equipment": "머신",
-    "illustration": "illustrations/reverse-hyperextension.svg",
     "gif": "gifs/reverse-hyperextension.gif",
     "muscles": [
       "gluteal",
       "hamstring",
       "lower-back"
-    ]
+    ],
+    "illustration": "illustrations/reverse-hyperextension.svg"
   },
   {
     "id": "reverse-machine-flyes",
@@ -5976,12 +5976,12 @@
     "name": "링딥스",
     "bodyPart": "팔",
     "equipment": "기타",
-    "illustration": "illustrations/ring-dips.svg",
     "muscles": [
       "triceps",
       "chest",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/ring-dips.svg"
   },
   {
     "id": "rocket-jump",
@@ -6016,13 +6016,13 @@
     "name": "데피싯 루마니안 데드리프트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/romanian-deadlift-from-deficit.svg",
     "gif": "gifs/romanian-deadlift-from-deficit.gif",
     "muscles": [
       "hamstring",
       "gluteal",
       "lower-back"
-    ]
+    ],
+    "illustration": "illustrations/romanian-deadlift-from-deficit.svg"
   },
   {
     "id": "rope-climb",
@@ -6051,13 +6051,13 @@
     "name": "로프 스트레이트암 풀다운",
     "bodyPart": "등",
     "equipment": "케이블",
-    "illustration": "illustrations/rope-straight-arm-pulldown.svg",
     "gif": "gifs/rope-straight-arm-pulldown.gif",
     "muscles": [
       "upper-back",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/rope-straight-arm-pulldown.svg"
   },
   {
     "id": "sandbag-load",
@@ -6072,14 +6072,14 @@
     "name": "스캐풀러 풀업",
     "bodyPart": "등",
     "equipment": "기타",
-    "illustration": "illustrations/scapular-pull-up.svg",
     "muscles": [
       "upper-back",
       "trapezius",
       "forearm",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/scapular-pull-up.svg"
   },
   {
     "id": "scissors-jump",
@@ -6127,12 +6127,12 @@
     "name": "시티드 벤트오버 원암 덤벨 트라이셉스 익스텐션",
     "bodyPart": "팔",
     "equipment": "덤벨",
-    "illustration": "illustrations/seated-bent-over-one-arm-dumbbell-triceps-extension.svg",
     "gif": "gifs/seated-bent-over-one-arm-dumbbell-triceps-extension.gif",
     "muscles": [
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/seated-bent-over-one-arm-dumbbell-triceps-extension.svg"
   },
   {
     "id": "seated-bent-over-rear-delt-raise",
@@ -6140,13 +6140,13 @@
     "name": "시티드 벤트오버 리어델트 레이즈",
     "bodyPart": "어깨",
     "equipment": "덤벨",
-    "illustration": "illustrations/seated-bent-over-rear-delt-raise.svg",
     "gif": "gifs/seated-bent-over-rear-delt-raise.gif",
     "muscles": [
       "back-deltoids",
       "upper-back",
       "trapezius"
-    ]
+    ],
+    "illustration": "illustrations/seated-bent-over-rear-delt-raise.svg"
   },
   {
     "id": "seated-bent-over-two-arm-dumbbell-triceps-extension",
@@ -6154,12 +6154,12 @@
     "name": "시티드 벤트오버 투암 덤벨 트라이셉스 익스텐션",
     "bodyPart": "팔",
     "equipment": "덤벨",
-    "illustration": "illustrations/seated-bent-over-two-arm-dumbbell-triceps-extension.svg",
     "gif": "gifs/seated-bent-over-two-arm-dumbbell-triceps-extension.gif",
     "muscles": [
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/seated-bent-over-two-arm-dumbbell-triceps-extension.svg"
   },
   {
     "id": "seated-cable-shoulder-press",
@@ -6180,11 +6180,11 @@
     "name": "시티드 카프레이즈",
     "bodyPart": "하체",
     "equipment": "머신",
-    "illustration": "illustrations/seated-calf-raise.svg",
     "gif": "gifs/seated-calf-raise.gif",
     "muscles": [
       "calves"
-    ]
+    ],
+    "illustration": "illustrations/seated-calf-raise.svg"
   },
   {
     "id": "seated-close-grip-concentration-barbell-curl",
@@ -6204,12 +6204,12 @@
     "name": "시티드 덤벨 컬",
     "bodyPart": "팔",
     "equipment": "덤벨",
-    "illustration": "illustrations/seated-dumbbell-curl.svg",
     "gif": "gifs/seated-dumbbell-curl.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/seated-dumbbell-curl.svg"
   },
   {
     "id": "seated-dumbbell-inner-biceps-curl",
@@ -6217,12 +6217,12 @@
     "name": "시티드 이너바이셉스 덤벨 컬",
     "bodyPart": "팔",
     "equipment": "덤벨",
-    "illustration": "illustrations/seated-dumbbell-inner-biceps-curl.svg",
     "gif": "gifs/seated-dumbbell-inner-biceps-curl.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/seated-dumbbell-inner-biceps-curl.svg"
   },
   {
     "id": "seated-dumbbell-palms-down-wrist-curl",
@@ -6250,12 +6250,12 @@
     "name": "시티드 덤벨프레스",
     "bodyPart": "어깨",
     "equipment": "덤벨",
-    "illustration": "illustrations/seated-dumbbell-press.svg",
     "gif": "gifs/seated-dumbbell-press.gif",
     "muscles": [
       "front-deltoids",
       "triceps"
-    ]
+    ],
+    "illustration": "illustrations/seated-dumbbell-press.svg"
   },
   {
     "id": "seated-flat-bench-leg-pull-in",
@@ -6311,14 +6311,14 @@
     "name": "시티드 원암 케이블 풀리 로우",
     "bodyPart": "등",
     "equipment": "케이블",
-    "illustration": "illustrations/seated-one-arm-cable-pulley-rows.svg",
     "gif": "gifs/seated-one-arm-cable-pulley-rows.gif",
     "muscles": [
       "upper-back",
       "lower-back",
       "biceps",
       "back-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/seated-one-arm-cable-pulley-rows.svg"
   },
   {
     "id": "seated-palm-up-barbell-wrist-curl",
@@ -6326,11 +6326,11 @@
     "name": "시티드 바벨 리스트컬",
     "bodyPart": "팔",
     "equipment": "바벨",
-    "illustration": "illustrations/seated-palm-up-barbell-wrist-curl.svg",
     "gif": "gifs/seated-palm-up-barbell-wrist-curl.gif",
     "muscles": [
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/seated-palm-up-barbell-wrist-curl.svg"
   },
   {
     "id": "seated-palms-down-barbell-wrist-curl",
@@ -6338,11 +6338,11 @@
     "name": "시티드 바벨 리버스 리스트컬",
     "bodyPart": "팔",
     "equipment": "바벨",
-    "illustration": "illustrations/seated-palms-down-barbell-wrist-curl.svg",
     "gif": "gifs/seated-palms-down-barbell-wrist-curl.gif",
     "muscles": [
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/seated-palms-down-barbell-wrist-curl.svg"
   },
   {
     "id": "seated-side-lateral-raise",
@@ -6350,13 +6350,13 @@
     "name": "시티드 사이드 레터럴 레이즈",
     "bodyPart": "어깨",
     "equipment": "덤벨",
-    "illustration": "illustrations/seated-side-lateral-raise.svg",
     "gif": "gifs/seated-side-lateral-raise.gif",
     "muscles": [
       "front-deltoids",
       "upper-back",
       "trapezius"
-    ]
+    ],
+    "illustration": "illustrations/seated-side-lateral-raise.svg"
   },
   {
     "id": "seated-triceps-press",
@@ -6364,11 +6364,11 @@
     "name": "시티드 트라이셉스 프레스",
     "bodyPart": "팔",
     "equipment": "덤벨",
-    "illustration": "illustrations/seated-triceps-press.svg",
     "muscles": [
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/seated-triceps-press.svg"
   },
   {
     "id": "seated-two-arm-palms-up-low-pulley-wrist-curl",
@@ -6390,13 +6390,13 @@
     "name": "샷건 로우",
     "bodyPart": "등",
     "equipment": "케이블",
-    "illustration": "illustrations/shotgun-row.svg",
     "muscles": [
       "upper-back",
       "lower-back",
       "biceps",
       "back-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/shotgun-row.svg"
   },
   {
     "id": "shoulder-press---with-bands",
@@ -6444,12 +6444,12 @@
     "name": "사이드 레터럴 투 프론트 레이즈",
     "bodyPart": "어깨",
     "equipment": "덤벨",
-    "illustration": "illustrations/side-laterals-to-front-raise.svg",
     "gif": "gifs/side-laterals-to-front-raise.gif",
     "muscles": [
       "front-deltoids",
       "chest"
-    ]
+    ],
+    "illustration": "illustrations/side-laterals-to-front-raise.svg"
   },
   {
     "id": "side-standing-long-jump",
@@ -6478,11 +6478,11 @@
     "name": "원암 케이블 크로스오버",
     "bodyPart": "가슴",
     "equipment": "케이블",
-    "illustration": "illustrations/single-arm-cable-crossover.svg",
     "muscles": [
       "chest",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/single-arm-cable-crossover.svg"
   },
   {
     "id": "single-arm-linear-jammer",
@@ -6497,14 +6497,14 @@
     "name": "원암 푸시업",
     "bodyPart": "가슴",
     "equipment": "맨몸",
-    "illustration": "illustrations/single-arm-push-up.svg",
     "gif": "gifs/single-arm-push-up.gif",
     "muscles": [
       "chest",
       "triceps",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/single-arm-push-up.svg"
   },
   {
     "id": "single-cone-sprint-drill",
@@ -6540,10 +6540,10 @@
     "name": "싱글레그 레그 익스텐션",
     "bodyPart": "하체",
     "equipment": "머신",
-    "illustration": "illustrations/single-leg-leg-extension.svg",
     "muscles": [
       "quadriceps"
-    ]
+    ],
+    "illustration": "illustrations/single-leg-leg-extension.svg"
   },
   {
     "id": "single-leg-stride-jump",
@@ -6578,12 +6578,12 @@
     "name": "싱글레그 글루트 브릿지",
     "bodyPart": "하체",
     "equipment": "맨몸",
-    "illustration": "illustrations/single-leg-glute-bridge.svg",
     "gif": "gifs/single-leg-glute-bridge.gif",
     "muscles": [
       "gluteal",
       "hamstring"
-    ]
+    ],
+    "illustration": "illustrations/single-leg-glute-bridge.svg"
   },
   {
     "id": "single-leg-push-off",
@@ -6673,13 +6673,13 @@
     "name": "스미스머신 벤치프레스",
     "bodyPart": "가슴",
     "equipment": "머신",
-    "illustration": "illustrations/smith-machine-bench-press.svg",
     "gif": "gifs/smith-machine-bench-press.gif",
     "muscles": [
       "chest",
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/smith-machine-bench-press.svg"
   },
   {
     "id": "smith-machine-bent-over-row",
@@ -6687,14 +6687,14 @@
     "name": "스미스머신 벤트오버 로우",
     "bodyPart": "등",
     "equipment": "머신",
-    "illustration": "illustrations/smith-machine-bent-over-row.svg",
     "gif": "gifs/smith-machine-bent-over-row.gif",
     "muscles": [
       "upper-back",
       "lower-back",
       "biceps",
       "back-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/smith-machine-bent-over-row.svg"
   },
   {
     "id": "smith-machine-calf-raise",
@@ -6702,10 +6702,10 @@
     "name": "스미스머신 카프레이즈",
     "bodyPart": "하체",
     "equipment": "머신",
-    "illustration": "illustrations/smith-machine-calf-raise.svg",
     "muscles": [
       "calves"
-    ]
+    ],
+    "illustration": "illustrations/smith-machine-calf-raise.svg"
   },
   {
     "id": "smith-machine-close-grip-bench-press",
@@ -6759,13 +6759,13 @@
     "name": "스미스머신 인클라인 벤치프레스",
     "bodyPart": "가슴",
     "equipment": "머신",
-    "illustration": "illustrations/smith-machine-incline-bench-press.svg",
     "gif": "gifs/smith-machine-incline-bench-press.gif",
     "muscles": [
       "chest",
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/smith-machine-incline-bench-press.svg"
   },
   {
     "id": "smith-machine-leg-press",
@@ -6773,13 +6773,13 @@
     "name": "스미스머신 레그프레스",
     "bodyPart": "하체",
     "equipment": "머신",
-    "illustration": "illustrations/smith-machine-leg-press.svg",
     "gif": "gifs/smith-machine-leg-press.gif",
     "muscles": [
       "quadriceps",
       "gluteal",
       "hamstring"
-    ]
+    ],
+    "illustration": "illustrations/smith-machine-leg-press.svg"
   },
   {
     "id": "smith-machine-one-arm-upright-row",
@@ -6787,13 +6787,13 @@
     "name": "스미스머신 원암 업라이트 로우",
     "bodyPart": "어깨",
     "equipment": "머신",
-    "illustration": "illustrations/smith-machine-one-arm-upright-row.svg",
     "muscles": [
       "front-deltoids",
       "upper-back",
       "trapezius",
       "biceps"
-    ]
+    ],
+    "illustration": "illustrations/smith-machine-one-arm-upright-row.svg"
   },
   {
     "id": "smith-machine-overhead-shoulder-press",
@@ -6801,12 +6801,12 @@
     "name": "스미스머신 오버헤드 숄더프레스",
     "bodyPart": "어깨",
     "equipment": "머신",
-    "illustration": "illustrations/smith-machine-overhead-shoulder-press.svg",
     "gif": "gifs/smith-machine-overhead-shoulder-press.gif",
     "muscles": [
       "front-deltoids",
       "triceps"
-    ]
+    ],
+    "illustration": "illustrations/smith-machine-overhead-shoulder-press.svg"
   },
   {
     "id": "smith-machine-pistol-squat",
@@ -6814,13 +6814,13 @@
     "name": "스미스머신 피스톨 스쿼트",
     "bodyPart": "하체",
     "equipment": "머신",
-    "illustration": "illustrations/smith-machine-pistol-squat.svg",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/smith-machine-pistol-squat.svg"
   },
   {
     "id": "smith-machine-reverse-calf-raises",
@@ -6840,14 +6840,14 @@
     "name": "스미스머신 스쿼트",
     "bodyPart": "하체",
     "equipment": "머신",
-    "illustration": "illustrations/smith-machine-squat.svg",
     "gif": "gifs/smith-machine-squat.gif",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/smith-machine-squat.svg"
   },
   {
     "id": "smith-machine-stiff-legged-deadlift",
@@ -6862,13 +6862,13 @@
     "name": "스미스머신 업라이트 로우",
     "bodyPart": "등",
     "equipment": "머신",
-    "illustration": "illustrations/smith-machine-upright-row.svg",
     "muscles": [
       "front-deltoids",
       "upper-back",
       "trapezius",
       "biceps"
-    ]
+    ],
+    "illustration": "illustrations/smith-machine-upright-row.svg"
   },
   {
     "id": "smith-single-leg-split-squat",
@@ -6903,13 +6903,13 @@
     "name": "스내치 데드리프트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/snatch-deadlift.svg",
     "muscles": [
       "hamstring",
       "gluteal",
       "lower-back",
       "upper-back"
-    ]
+    ],
+    "illustration": "illustrations/snatch-deadlift.svg"
   },
   {
     "id": "snatch-pull",
@@ -6931,12 +6931,12 @@
     "name": "스내치 슈러그",
     "bodyPart": "등",
     "equipment": "바벨",
-    "illustration": "illustrations/snatch-shrug.svg",
     "muscles": [
       "upper-back",
       "trapezius",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/snatch-shrug.svg"
   },
   {
     "id": "snatch-from-blocks",
@@ -6958,13 +6958,13 @@
     "name": "스피드 박스스쿼트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/speed-box-squat.svg",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/speed-box-squat.svg"
   },
   {
     "id": "speed-squats",
@@ -6972,14 +6972,14 @@
     "name": "스피드 스쿼트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/speed-squats.svg",
     "gif": "gifs/speed-squats.gif",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/speed-squats.svg"
   },
   {
     "id": "spell-caster",
@@ -7007,12 +7007,12 @@
     "name": "스파이더 컬",
     "bodyPart": "팔",
     "equipment": "바벨",
-    "illustration": "illustrations/spider-curl.svg",
     "gif": "gifs/spider-curl.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/spider-curl.svg"
   },
   {
     "id": "split-clean",
@@ -7048,14 +7048,14 @@
     "name": "덤벨 스플릿 스쿼트",
     "bodyPart": "하체",
     "equipment": "덤벨",
-    "illustration": "illustrations/split-squat-with-dumbbells.svg",
     "gif": "gifs/split-squat-with-dumbbells.gif",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/split-squat-with-dumbbells.svg"
   },
   {
     "id": "squat-jerk",
@@ -7063,14 +7063,14 @@
     "name": "스쿼트 저크",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/squat-jerk.svg",
     "gif": "gifs/squat-jerk.gif",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/squat-jerk.svg"
   },
   {
     "id": "squat-with-bands",
@@ -7078,13 +7078,13 @@
     "name": "밴드 스쿼트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/squat-with-bands.svg",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/squat-with-bands.svg"
   },
   {
     "id": "squat-with-chains",
@@ -7092,13 +7092,13 @@
     "name": "체인 스쿼트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/squat-with-chains.svg",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/squat-with-chains.svg"
   },
   {
     "id": "squat-with-plate-movers",
@@ -7106,13 +7106,13 @@
     "name": "플레이트 무버 스쿼트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/squat-with-plate-movers.svg",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/squat-with-plate-movers.svg"
   },
   {
     "id": "squats---with-bands",
@@ -7134,13 +7134,13 @@
     "name": "스탠딩 얼터네이팅 덤벨 프레스",
     "bodyPart": "어깨",
     "equipment": "덤벨",
-    "illustration": "illustrations/standing-alternating-dumbbell-press.svg",
     "muscles": [
       "front-deltoids",
       "triceps",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/standing-alternating-dumbbell-press.svg"
   },
   {
     "id": "standing-barbell-calf-raise",
@@ -7174,12 +7174,12 @@
     "name": "스탠딩 벤트오버 원암 덤벨 트라이셉스 익스텐션",
     "bodyPart": "팔",
     "equipment": "덤벨",
-    "illustration": "illustrations/standing-bent-over-one-arm-dumbbell-triceps-extension.svg",
     "gif": "gifs/standing-bent-over-one-arm-dumbbell-triceps-extension.gif",
     "muscles": [
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/standing-bent-over-one-arm-dumbbell-triceps-extension.svg"
   },
   {
     "id": "standing-bent-over-two-arm-dumbbell-triceps-extension",
@@ -7187,12 +7187,12 @@
     "name": "스탠딩 벤트오버 투암 덤벨 트라이셉스 익스텐션",
     "bodyPart": "팔",
     "equipment": "덤벨",
-    "illustration": "illustrations/standing-bent-over-two-arm-dumbbell-triceps-extension.svg",
     "gif": "gifs/standing-bent-over-two-arm-dumbbell-triceps-extension.gif",
     "muscles": [
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/standing-bent-over-two-arm-dumbbell-triceps-extension.svg"
   },
   {
     "id": "standing-biceps-cable-curl",
@@ -7200,11 +7200,11 @@
     "name": "스탠딩 바이셉스 케이블 컬",
     "bodyPart": "팔",
     "equipment": "케이블",
-    "illustration": "illustrations/standing-biceps-cable-curl.svg",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/standing-biceps-cable-curl.svg"
   },
   {
     "id": "standing-bradford-press",
@@ -7252,12 +7252,12 @@
     "name": "스탠딩 컨센트레이션 컬",
     "bodyPart": "팔",
     "equipment": "덤벨",
-    "illustration": "illustrations/standing-concentration-curl.svg",
     "gif": "gifs/standing-concentration-curl.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/standing-concentration-curl.svg"
   },
   {
     "id": "standing-dumbbell-calf-raise",
@@ -7276,14 +7276,14 @@
     "name": "스탠딩 덤벨 프레스",
     "bodyPart": "어깨",
     "equipment": "덤벨",
-    "illustration": "illustrations/standing-dumbbell-press.svg",
     "gif": "gifs/standing-dumbbell-press.gif",
     "muscles": [
       "front-deltoids",
       "triceps",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/standing-dumbbell-press.svg"
   },
   {
     "id": "standing-dumbbell-reverse-curl",
@@ -7303,12 +7303,12 @@
     "name": "스탠딩 덤벨 스트레이트암 프론트 델트 레이즈 오버헤드",
     "bodyPart": "어깨",
     "equipment": "덤벨",
-    "illustration": "illustrations/standing-dumbbell-straight-arm-front-delt-raise-above-head.svg",
     "gif": "gifs/standing-dumbbell-straight-arm-front-delt-raise-above-head.gif",
     "muscles": [
       "front-deltoids",
       "chest"
-    ]
+    ],
+    "illustration": "illustrations/standing-dumbbell-straight-arm-front-delt-raise-above-head.svg"
   },
   {
     "id": "standing-dumbbell-upright-row",
@@ -7336,11 +7336,11 @@
     "name": "스탠딩 이너 바이셉스 컬",
     "bodyPart": "팔",
     "equipment": "덤벨",
-    "illustration": "illustrations/standing-inner-biceps-curl.svg",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/standing-inner-biceps-curl.svg"
   },
   {
     "id": "standing-leg-curl",
@@ -7348,11 +7348,11 @@
     "name": "스탠딩 레그컬",
     "bodyPart": "하체",
     "equipment": "머신",
-    "illustration": "illustrations/standing-leg-curl.svg",
     "muscles": [
       "hamstring",
       "calves"
-    ]
+    ],
+    "illustration": "illustrations/standing-leg-curl.svg"
   },
   {
     "id": "standing-long-jump",
@@ -7406,12 +7406,12 @@
     "name": "스탠딩 원암 케이블 컬",
     "bodyPart": "팔",
     "equipment": "케이블",
-    "illustration": "illustrations/standing-one-arm-cable-curl.svg",
     "gif": "gifs/standing-one-arm-cable-curl.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/standing-one-arm-cable-curl.svg"
   },
   {
     "id": "standing-one-arm-dumbbell-curl-over-incline-bench",
@@ -7419,12 +7419,12 @@
     "name": "스탠딩 원암 덤벨 컬 오버 인클라인 벤치",
     "bodyPart": "팔",
     "equipment": "덤벨",
-    "illustration": "illustrations/standing-one-arm-dumbbell-curl-over-incline-bench.svg",
     "gif": "gifs/standing-one-arm-dumbbell-curl-over-incline-bench.gif",
     "muscles": [
       "biceps",
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/standing-one-arm-dumbbell-curl-over-incline-bench.svg"
   },
   {
     "id": "standing-one-arm-dumbbell-triceps-extension",
@@ -7456,14 +7456,14 @@
     "name": "스탠딩 팜인 원암 덤벨 프레스",
     "bodyPart": "어깨",
     "equipment": "덤벨",
-    "illustration": "illustrations/standing-palm-in-one-arm-dumbbell-press.svg",
     "gif": "gifs/standing-palm-in-one-arm-dumbbell-press.gif",
     "muscles": [
       "front-deltoids",
       "triceps",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/standing-palm-in-one-arm-dumbbell-press.svg"
   },
   {
     "id": "standing-palms-in-dumbbell-press",
@@ -7471,14 +7471,14 @@
     "name": "스탠딩 팜인 덤벨 프레스",
     "bodyPart": "어깨",
     "equipment": "덤벨",
-    "illustration": "illustrations/standing-palms-in-dumbbell-press.svg",
     "gif": "gifs/standing-palms-in-dumbbell-press.gif",
     "muscles": [
       "front-deltoids",
       "triceps",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/standing-palms-in-dumbbell-press.svg"
   },
   {
     "id": "standing-palms-up-barbell-behind-the-back-wrist-curl",
@@ -7486,10 +7486,10 @@
     "name": "스탠딩 팜업 바벨 비하인드백 리스트컬",
     "bodyPart": "팔",
     "equipment": "바벨",
-    "illustration": "illustrations/standing-palms-up-barbell-behind-the-back-wrist-curl.svg",
     "muscles": [
       "forearm"
-    ]
+    ],
+    "illustration": "illustrations/standing-palms-up-barbell-behind-the-back-wrist-curl.svg"
   },
   {
     "id": "standing-rope-crunch",
@@ -7542,13 +7542,13 @@
     "name": "스티프레그 바벨 데드리프트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/stiff-legged-barbell-deadlift.svg",
     "muscles": [
       "hamstring",
       "gluteal",
       "lower-back",
       "upper-back"
-    ]
+    ],
+    "illustration": "illustrations/stiff-legged-barbell-deadlift.svg"
   },
   {
     "id": "stiff-legged-dumbbell-deadlift",
@@ -7610,14 +7610,14 @@
     "name": "스모 데드리프트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/sumo-deadlift.svg",
     "gif": "gifs/sumo-deadlift.gif",
     "muscles": [
       "hamstring",
       "gluteal",
       "lower-back",
       "quadriceps"
-    ]
+    ],
+    "illustration": "illustrations/sumo-deadlift.svg"
   },
   {
     "id": "sumo-deadlift-with-bands",
@@ -7625,14 +7625,14 @@
     "name": "밴드 스모 데드리프트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/sumo-deadlift-with-bands.svg",
     "gif": "gifs/sumo-deadlift-with-bands.gif",
     "muscles": [
       "hamstring",
       "gluteal",
       "lower-back",
       "quadriceps"
-    ]
+    ],
+    "illustration": "illustrations/sumo-deadlift-with-bands.svg"
   },
   {
     "id": "sumo-deadlift-with-chains",
@@ -7640,14 +7640,14 @@
     "name": "체인 스모 데드리프트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/sumo-deadlift-with-chains.svg",
     "gif": "gifs/sumo-deadlift-with-chains.gif",
     "muscles": [
       "hamstring",
       "gluteal",
       "lower-back",
       "quadriceps"
-    ]
+    ],
+    "illustration": "illustrations/sumo-deadlift-with-chains.svg"
   },
   {
     "id": "supine-chest-throw",
@@ -7703,14 +7703,14 @@
     "name": "서스펜디드 로우",
     "bodyPart": "등",
     "equipment": "기타",
-    "illustration": "illustrations/suspended-row.svg",
     "muscles": [
       "upper-back",
       "lower-back",
       "biceps",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/suspended-row.svg"
   },
   {
     "id": "suspended-split-squat",
@@ -7732,13 +7732,13 @@
     "name": "핸들 T바 로우",
     "bodyPart": "등",
     "equipment": "바벨",
-    "illustration": "illustrations/t-bar-row-with-handle.svg",
     "muscles": [
       "upper-back",
       "lower-back",
       "biceps",
       "back-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/t-bar-row-with-handle.svg"
   },
   {
     "id": "tate-press",
@@ -7787,13 +7787,13 @@
     "name": "트랩바 데드리프트",
     "bodyPart": "하체",
     "equipment": "기타",
-    "illustration": "illustrations/trap-bar-deadlift.svg",
     "muscles": [
       "hamstring",
       "gluteal",
       "lower-back",
       "quadriceps"
-    ]
+    ],
+    "illustration": "illustrations/trap-bar-deadlift.svg"
   },
   {
     "id": "tricep-dumbbell-kickback",
@@ -7801,12 +7801,12 @@
     "name": "트라이셉스 덤벨 킥백",
     "bodyPart": "팔",
     "equipment": "덤벨",
-    "illustration": "illustrations/tricep-dumbbell-kickback.svg",
     "gif": "gifs/tricep-dumbbell-kickback.gif",
     "muscles": [
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/tricep-dumbbell-kickback.svg"
   },
   {
     "id": "triceps-overhead-extension-with-rope",
@@ -7814,12 +7814,12 @@
     "name": "로프 트라이셉스 오버헤드 익스텐션",
     "bodyPart": "팔",
     "equipment": "케이블",
-    "illustration": "illustrations/triceps-overhead-extension-with-rope.svg",
     "gif": "gifs/triceps-overhead-extension-with-rope.gif",
     "muscles": [
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/triceps-overhead-extension-with-rope.svg"
   },
   {
     "id": "triceps-pushdown---rope-attachment",
@@ -7827,11 +7827,11 @@
     "name": "로프 트라이셉스 푸시다운",
     "bodyPart": "팔",
     "equipment": "케이블",
-    "illustration": "illustrations/triceps-pushdown---rope-attachment.svg",
     "muscles": [
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/triceps-pushdown---rope-attachment.svg"
   },
   {
     "id": "triceps-pushdown---v-bar-attachment",
@@ -7839,11 +7839,11 @@
     "name": "V바 트라이셉스 푸시다운",
     "bodyPart": "팔",
     "equipment": "케이블",
-    "illustration": "illustrations/triceps-pushdown---v-bar-attachment.svg",
     "muscles": [
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/triceps-pushdown---v-bar-attachment.svg"
   },
   {
     "id": "tuck-crunch",
@@ -7851,12 +7851,12 @@
     "name": "턱 크런치",
     "bodyPart": "코어",
     "equipment": "맨몸",
-    "illustration": "illustrations/tuck-crunch.svg",
     "gif": "gifs/tuck-crunch.gif",
     "muscles": [
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/tuck-crunch.svg"
   },
   {
     "id": "two-arm-dumbbell-preacher-curl",
@@ -7968,13 +7968,13 @@
     "name": "V바 풀업",
     "bodyPart": "등",
     "equipment": "맨몸",
-    "illustration": "illustrations/v-bar-pullup.svg",
     "muscles": [
       "upper-back",
       "biceps",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/v-bar-pullup.svg"
   },
   {
     "id": "vertical-swing",
@@ -8003,12 +8003,12 @@
     "name": "웨이트 벤치 딥스",
     "bodyPart": "팔",
     "equipment": "기타",
-    "illustration": "illustrations/weighted-bench-dip.svg",
     "muscles": [
       "triceps",
       "chest",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/weighted-bench-dip.svg"
   },
   {
     "id": "weighted-crunches",
@@ -8016,11 +8016,11 @@
     "name": "웨이트 크런치",
     "bodyPart": "코어",
     "equipment": "기타",
-    "illustration": "illustrations/weighted-crunches.svg",
     "muscles": [
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/weighted-crunches.svg"
   },
   {
     "id": "weighted-jump-squat",
@@ -8028,14 +8028,14 @@
     "name": "웨이트 점프 스쿼트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/weighted-jump-squat.svg",
     "gif": "gifs/weighted-jump-squat.gif",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/weighted-jump-squat.svg"
   },
   {
     "id": "weighted-pull-ups",
@@ -8043,11 +8043,11 @@
     "name": "웨이트 풀업",
     "bodyPart": "등",
     "equipment": "기타",
-    "illustration": "illustrations/weighted-pull-ups.svg",
     "muscles": [
       "upper-back",
       "biceps"
-    ]
+    ],
+    "illustration": "illustrations/weighted-pull-ups.svg"
   },
   {
     "id": "weighted-sissy-squat",
@@ -8055,13 +8055,13 @@
     "name": "웨이트 시시 스쿼트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/weighted-sissy-squat.svg",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/weighted-sissy-squat.svg"
   },
   {
     "id": "weighted-sit-ups---with-bands",
@@ -8083,13 +8083,13 @@
     "name": "와이드그립 바벨 벤치프레스",
     "bodyPart": "가슴",
     "equipment": "바벨",
-    "illustration": "illustrations/wide-grip-barbell-bench-press.svg",
     "gif": "gifs/wide-grip-barbell-bench-press.gif",
     "muscles": [
       "chest",
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/wide-grip-barbell-bench-press.svg"
   },
   {
     "id": "wide-grip-decline-barbell-bench-press",
@@ -8097,13 +8097,13 @@
     "name": "와이드그립 디클라인 바벨 벤치프레스",
     "bodyPart": "가슴",
     "equipment": "바벨",
-    "illustration": "illustrations/wide-grip-decline-barbell-bench-press.svg",
     "gif": "gifs/wide-grip-decline-barbell-bench-press.gif",
     "muscles": [
       "chest",
       "triceps",
       "front-deltoids"
-    ]
+    ],
+    "illustration": "illustrations/wide-grip-decline-barbell-bench-press.svg"
   },
   {
     "id": "wide-grip-decline-barbell-pullover",
@@ -8137,14 +8137,14 @@
     "name": "와이드그립 리어 풀업",
     "bodyPart": "등",
     "equipment": "맨몸",
-    "illustration": "illustrations/wide-grip-rear-pull-up.svg",
     "gif": "gifs/wide-grip-rear-pull-up.gif",
     "muscles": [
       "upper-back",
       "biceps",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/wide-grip-rear-pull-up.svg"
   },
   {
     "id": "wide-grip-standing-barbell-curl",
@@ -8165,14 +8165,14 @@
     "name": "와이드스탠스 바벨 스쿼트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/wide-stance-barbell-squat.svg",
     "gif": "gifs/wide-stance-barbell-squat.gif",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/wide-stance-barbell-squat.svg"
   },
   {
     "id": "wide-stance-stiff-legs",
@@ -8222,14 +8222,14 @@
     "name": "저처 스쿼트",
     "bodyPart": "하체",
     "equipment": "바벨",
-    "illustration": "illustrations/zercher-squats.svg",
     "gif": "gifs/zercher-squats.gif",
     "muscles": [
       "quadriceps",
       "gluteal",
       "abs",
       "obliques"
-    ]
+    ],
+    "illustration": "illustrations/zercher-squats.svg"
   },
   {
     "id": "zottman-curl",

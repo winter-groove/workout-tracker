@@ -109,10 +109,10 @@ for (const x of lib) {
   if (hit) { picks.set(x.id, hit.slug); stats.relaxed++; } else { stats.none++; }
 }
 
-// 프레임 1/2/3 모두 존재하는 항목만 유지 (하나라도 없으면 picks에서 제거)
+// 프레임 1/3만 존재하면 충분 (frame-2는 은퇴 — 히어로가 1↔3 왕복으로 전환)
 for (const [id, slug] of [...picks]) {
   let complete = true;
-  for (const frame of [1, 2, 3]) {
+  for (const frame of [1, 3]) {
     try { await access(`${TMP}/packages/workout-guide/assets/${slug}/frame-${frame}.svg`); }
     catch { complete = false; break; }
   }
@@ -123,12 +123,13 @@ await rm(OUT, { recursive: true, force: true });
 await mkdir(OUT, { recursive: true });
 for (const [id, slug] of picks) {
   await cp(`${TMP}/packages/workout-guide/assets/${slug}/frame-1.svg`, `${OUT}/${id}.svg`);
-  await cp(`${TMP}/packages/workout-guide/assets/${slug}/frame-2.svg`, `${OUT}/${id}-2.svg`);
   await cp(`${TMP}/packages/workout-guide/assets/${slug}/frame-3.svg`, `${OUT}/${id}-3.svg`);
 }
 
 const next = lib.map((x) => {
-  const { illustration: _dropIllu, muscles: _dropMuscles, ...rest } = x;
+  // illustration만 벗겨내고 재부여 — muscles는 GIF-only 항목(Task 1이 ExerciseDB에서 채움)에 대해
+  // 그대로 보존해야 한다. 매칭 픽에 한해서만 Everkinetic 근육을 우선 적용(아래 덮어쓰기).
+  const { illustration: _dropIllu, ...rest } = x;
   if (!picks.has(x.id)) return rest;
   const slug = picks.get(x.id);
   const m = bySlug.get(slug);

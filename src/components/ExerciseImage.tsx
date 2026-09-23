@@ -2,8 +2,9 @@ import { useState } from 'react';
 import type { Exercise } from '../types';
 import ExerciseIcon from './ExerciseIcon';
 
-// 일러스트가 있으면 그것만 렌더 — 실사(imagePath)는 더 이상 사용하지 않는다 (스펙: 실사 제거)
+// GIF 포스터(webp) > 일러스트 우선 렌더 — 실사(imagePath)는 더 이상 사용하지 않는다 (스펙: 실사 제거)
 export function exerciseImageUrl(ex: Exercise): string | undefined {
+  if (ex.gif) return import.meta.env.BASE_URL + ex.gif.replace(/\.gif$/, '.webp');
   return ex.illustration ? import.meta.env.BASE_URL + ex.illustration : undefined;
 }
 

@@ -54,8 +54,8 @@ test('기존 55개의 id·libId·이름이 보존된다', () => {
   }
 });
 
-test('일러스트 매칭 운동은 -2/-3 프레임 규약을 지킨다', () => {
-  // 파이프라인 산출물 규약: illustration이 있으면 애니 프레임 파일명이 유도 가능해야 함
+test('일러스트 매칭 운동은 -3 프레임 규약을 지킨다', () => {
+  // 파이프라인 산출물 규약: illustration이 있으면 애니 프레임(1↔3, frame-2는 은퇴) 파일명이 유도 가능해야 함
   const withIllu = library.filter((x) => x.illustration);
   expect(withIllu.length).toBeGreaterThan(0);
   for (const x of withIllu) {
