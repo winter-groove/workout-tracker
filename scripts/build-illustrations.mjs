@@ -88,6 +88,12 @@ function compatible(entry, m) {
   return part === entry.bodyPart && Array.isArray(equips) && equips.includes(entry.equipment);
 }
 
+// 라이브러리 항목 직렬화 키 순서 고정 — 어느 파이프라인을 재실행해도 diff가 나지 않게 한다
+function canonical(entry) {
+  const { illustration, muscles, gif, ...base } = entry;
+  return { ...base, ...(illustration ? { illustration } : {}), ...(muscles && muscles.length ? { muscles } : {}), ...(gif ? { gif } : {}) };
+}
+
 const stats = { alias: 0, exact: 0, relaxed: 0, excluded: 0, none: 0, framesMissing: 0 };
 const picks = new Map(); // our id → their slug
 
@@ -109,10 +115,10 @@ for (const x of lib) {
   if (hit) { picks.set(x.id, hit.slug); stats.relaxed++; } else { stats.none++; }
 }
 
-// 프레임 1/2/3 모두 존재하는 항목만 유지 (하나라도 없으면 picks에서 제거)
+// 프레임 1/3만 존재하면 충분 (frame-2는 은퇴 — 히어로가 1↔3 왕복으로 전환)
 for (const [id, slug] of [...picks]) {
   let complete = true;
-  for (const frame of [1, 2, 3]) {
+  for (const frame of [1, 3]) {
     try { await access(`${TMP}/packages/workout-guide/assets/${slug}/frame-${frame}.svg`); }
     catch { complete = false; break; }
   }
@@ -123,21 +129,21 @@ await rm(OUT, { recursive: true, force: true });
 await mkdir(OUT, { recursive: true });
 for (const [id, slug] of picks) {
   await cp(`${TMP}/packages/workout-guide/assets/${slug}/frame-1.svg`, `${OUT}/${id}.svg`);
-  await cp(`${TMP}/packages/workout-guide/assets/${slug}/frame-2.svg`, `${OUT}/${id}-2.svg`);
   await cp(`${TMP}/packages/workout-guide/assets/${slug}/frame-3.svg`, `${OUT}/${id}-3.svg`);
 }
 
 const next = lib.map((x) => {
-  const { illustration: _dropIllu, muscles: _dropMuscles, ...rest } = x;
-  if (!picks.has(x.id)) return rest;
+  // illustration만 갱신 — muscles는 GIF-only 항목(Task 1이 ExerciseDB에서 채움)에 대해
+  // 그대로 보존해야 한다. 매칭 픽에 한해서만 Everkinetic 근육을 우선 적용(아래 덮어쓰기).
+  if (!picks.has(x.id)) return canonical(x);
   const slug = picks.get(x.id);
   const m = bySlug.get(slug);
-  const muscles = regionsFor(m);
-  return {
-    ...rest,
+  const regionMuscles = regionsFor(m);
+  return canonical({
+    ...x,
     illustration: `illustrations/${x.id}.svg`,
-    ...(muscles.length > 0 ? { muscles } : {}),
-  };
+    muscles: regionMuscles.length > 0 ? regionMuscles : x.muscles,
+  });
 });
 await writeFile('src/data/exercise-library.json', `${JSON.stringify(next, null, 2)}\n`);
 

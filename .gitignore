@@ -3,3 +3,5 @@ dist/
 .superpowers/
 .DS_Store
 .tmp-workout-guide/
+.tmp-exercisedb/
+public/gifs/*.tmp

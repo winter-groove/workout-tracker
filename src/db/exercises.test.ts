@@ -142,16 +142,17 @@ test('setExerciseUnit이 단위를 저장하고 seedLibrary 재동기화에도 �
   expect(ex?.unit).toBe('lb'); // 동기화가 unit을 지우지 않음
 });
 
-test('seedLibrary v6 동기화가 illustration·muscles를 반영하고 사용자 필드를 보존한다', async () => {
+test('seedLibrary v7 동기화가 illustration·muscles·gif를 반영하고 사용자 필드를 보존한다', async () => {
   await seedLibrary();
   await setExerciseUnit('lib-bench-press', 'lb');
-  await db.exercises.update('lib-bench-press', { illustration: undefined, muscles: undefined, isFavorite: true });
+  await db.exercises.update('lib-bench-press', { illustration: undefined, muscles: undefined, gif: undefined, isFavorite: true });
   await db.meta.put({ key: 'libraryVersion', value: 0 });
   await seedLibrary();
   const ex = await db.exercises.get('lib-bench-press');
   // 라이브러리 json에 illustration이 있으면 반영된다 (T1 시점엔 별칭표가 비어도 bench-press는 자동 정확 일치)
   expect(ex?.illustration).toBe('illustrations/bench-press.svg');
   expect(ex?.muscles?.[0]).toBe('chest'); // bench-press의 주동근
+  expect(ex?.gif).toBe('gifs/bench-press.gif'); // T1 파이프라인에서 bench-press가 GIF 매칭됨
   expect(ex?.unit).toBe('lb');
   expect(ex?.isFavorite).toBe(true);
 });

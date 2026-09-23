@@ -114,3 +114,8 @@ test('마이 탭 하단에 일러스트 출처가 표기된다', async () => {
   expect(screen.getByText(/CC BY-SA 4\.0/)).toBeInTheDocument();
   expect(screen.getByText(/react-body-highlighter/)).toBeInTheDocument();
 });
+
+test('마이 탭 하단에 ExerciseDB 출처가 표기된다', async () => {
+  render(<MemoryRouter><ManageScreen /></MemoryRouter>);
+  expect(screen.getByText(/AscendAPI/)).toBeInTheDocument();
+});

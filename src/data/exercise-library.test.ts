@@ -3,6 +3,9 @@ import legacy from './legacy-55.json';
 import { BODY_PARTS, EQUIPMENTS } from '../types';
 import { MUSCLE_REGIONS } from './muscle-regions';
 
+// 파이프라인 산출물 목록 — 빌드 산출물이 아닌 테스트 전용 조회 (eager:false라 모듈은 로드되지 않음)
+const gifFiles = new Set(Object.keys(import.meta.glob('/public/gifs/*')).map((p) => p.split('/').pop()!));
+
 test('id와 libId가 중복 없이 유일하다', () => {
   const ids = library.map((x) => x.id);
   const libIds = library.map((x) => x.libId);
@@ -51,13 +54,29 @@ test('기존 55개의 id·libId·이름이 보존된다', () => {
   }
 });
 
-test('일러스트 매칭 운동은 -2/-3 프레임 규약을 지킨다', () => {
-  // 파이프라인 산출물 규약: illustration이 있으면 애니 프레임 파일명이 유도 가능해야 함
+test('일러스트 매칭 운동은 -3 프레임 규약을 지킨다', () => {
+  // 파이프라인 산출물 규약: illustration이 있으면 애니 프레임(1↔3, frame-2는 은퇴) 파일명이 유도 가능해야 함
   const withIllu = library.filter((x) => x.illustration);
   expect(withIllu.length).toBeGreaterThan(0);
   for (const x of withIllu) {
     expect(x.illustration).toMatch(/^illustrations\/[a-z0-9-]+\.svg$/);
   }
+});
+
+test('gif가 있으면 gifs/<id>.gif 형식이고 gif·webp 파일이 모두 존재한다', () => {
+  const withGif = library.filter((x) => x.gif);
+  expect(withGif.length).toBeGreaterThanOrEqual(350);
+  for (const x of withGif) {
+    expect(x.gif).toBe(`gifs/${x.id}.gif`);
+    expect(gifFiles.has(`${x.id}.gif`)).toBe(true);
+    expect(gifFiles.has(`${x.id}.webp`)).toBe(true);
+  }
+});
+
+test('public/gifs에 라이브러리가 참조하지 않는 고아 파일이 없다', () => {
+  const referenced = new Set(library.filter((x) => x.gif).flatMap((x) => [`${x.id}.gif`, `${x.id}.webp`]));
+  expect(gifFiles.size).toBeGreaterThan(0);
+  for (const f of gifFiles) expect(referenced.has(f)).toBe(true);
 });
 
 test('muscles 필드는 근육맵 영역 id 어휘만 사용하고 주동근이 첫 원소다', () => {
